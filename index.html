@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8"/>
+    <link rel="stylesheet" href="style/globals.css"/>
+    <link rel="stylesheet" href="style/travaux.css"/>
+    <script src="scripts/script.js"></script>
+
+</head>
+<body>
+    <header class="header">
+        <img class="logo" src="img/embellir.svg"/>
+        <nav class="menu">
+            <a class="btn btn-2" href="index.html">Travaux</a>
+            <a class="btn btn-2" href="contact.html">Contact</a>
+            <a class="btn btn-2" href="about.html">A propos</a>
+        </nav>
+        <div class="box-right">
+            <img class="button-light-mode" id="toggle-dark-mode-btn" src="img/light-mode.svg" alt="Toggle" onclick="toggleMode()">
+            <button class="button-appelez-moi button-header">
+                Appelez-moi
+            </button>
+        </div>
+    </header>
+
+    <div class="landing-page">
+        <div class="landing-group">
+            <h1>PAVAGE</h1>
+            <h1>DALLAGE</h1>
+            <h1>PORTAIL</h1>
+            <h1>CLÔTURE</h1>
+            <h1>ASSAINISSEMENT</h1>
+            <div class="bloc-landing">
+                <button class="button-voir-travaux">
+                    <img src="img/caretCircle.svg"/>
+                    Voir mes travaux
+                </button>
+            </div>
+        </div>
+        <img class="landing-logo" src="img/logoAnthony.svg" alt="logo"/>
+    </div>
+
+    <div class="travaux">
+        <h3>Pavage</h3>
+        <div id="cardContainer-Pavage" class="cardContainer"></div>
+
+        <h3>Dallage</h3>
+        <div id="cardContainer-Dallage" class="cardContainer"></div>
+
+        <h3>Portail</h3>
+        <div id="cardContainer-Portail" class="cardContainer"></div>
+
+        <h3>Clôture</h3>
+        <div id="cardContainer-Cloture" class="cardContainer"></div>
+
+        <h3>Assainissement</h3>
+        <div id="cardContainer-Assainissement" class="cardContainer"></div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-list">
+            <h3 class="footer-title">MENU</h3>
+            <h4>Travaux</h4>
+            <h4>A propos</h4>
+            <h4>Contact</h4>
+        </div>
+
+        <div class="footer-list">
+            <h3 class="footer-title">INFOS</h3>
+            <h4><img src="img/adresse.svg"/> Port Baudin, Villandry, 37510</h4>
+            <h4><img src="img/tel.svg"/> 06.68.63.07.16</h4>
+            <h4><img src="img/mail.svg"/> contact@embellir37.fr</h4>
+        </div>
+
+        <form>
+            <div class="footer-list">
+                <h3 class="footer-title">CONTACT</h3>
+                <div class="footer-contact-top">
+                    <input type="text" id="prenom" placeholder="Prénom nom">
+                    <input type="text" id="email" placeholder="E-mail">
+                </div>
+
+                <div>
+                    <textarea class="form-message" id="message" placeholder="Rédigez votre message ici..."></textarea>
+                </div>
+                <div class="footer-contact-top">
+                    <input class="button-envoyer" type="submit" value="Envoyer">
+
+                    <button class="button-appelez-moi">
+                        <div class="text-wrapper-2">Appelez-moi</div>
+                    </button>
+                </div>
+            </div>
+        </form>
+
+    </footer>
+
+
+</body>
+</html>

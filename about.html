@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8"/>
+    <link rel="stylesheet" href="style/globals.css"/>
+    <link rel="stylesheet" href="style/about.css"/>
+    <script src="scripts/script.js"></script>
+
+</head>
+<body>
+
+<header class="header">
+    <img class="logo" src="img/embellir.svg"/>
+    <nav class="menu">
+        <a class="btn btn-2" href="index.html">Travaux</a>
+        <a class="btn btn-2" href="contact.html">Contact</a>
+        <a class="btn btn-2" href="about.html">A propos</a>
+    </nav>
+    <div class="box-right">
+        <img class="button-light-mode" id="toggle-dark-mode-btn" src="img/light-mode.svg" alt="Toggle"
+             onclick="toggleMode()">
+        <button class="button-appelez-moi button-header">
+            Appelez-moi
+        </button>
+    </div>
+</header>
+
+
+<div class="about">
+    <img class="image" src="img/AnthonyPhoto.svg"/>
+    <p class="description">
+        <span class="span">BONJOUR ! <br/></span>
+        <br/>
+        Anthony CARIMALO, installé sur la commune de Villandry depuis 8 ans, vous propose désormais ses
+        services d’aménagements paysagers au travers de son entreprise EMBELLIR.
+        <br/><br/>Fort d’un bac pro « travaux paysagers » suivi d’un an de spécialisation dans la construction d’ouvrages paysagers, il a eu la
+        volonté de s’installer très tôt. Onze ans de création de jardins pour l’entreprise B.T.P.M.E et deux ans et
+        demi de vente de matériaux intérieur et extérieur pour sols et murs. Grâce à ses connaissances théorique et
+        pratique la société EMBELLIR est née.
+        <br/><br/>L’activité de l’entreprise concerne tout ce qui touche au
+        jardin excepté les végétaux : dallage, pavage, voies d’accès, portails, clôtures, assainissement,
+        terrassement.
+        <br/>Nul doute que vous aurez l’occasion de le croiser sur la commune ou alentours au volant
+        de son joli camion bleu !
+    </p>
+</div>
+
+
+<footer class="footer">
+    <div class="footer-list">
+        <h3 class="footer-title">MENU</h3>
+        <h4>Travaux</h4>
+        <h4>A propos</h4>
+        <h4>Contact</h4>
+    </div>
+
+    <div class="footer-list">
+        <h3 class="footer-title">INFOS</h3>
+        <h4><img src="img/adresse.svg"/> Port Baudin, Villandry, 37510</h4>
+        <h4><img src="img/tel.svg"/> 06.68.63.07.16</h4>
+        <h4><img src="img/mail.svg"/> contact@embellir37.fr</h4>
+    </div>
+
+    <form>
+        <div class="footer-list">
+            <h3 class="footer-title">CONTACT</h3>
+            <div class="footer-contact-top">
+                <input type="text" id="prenom" placeholder="Prénom nom">
+                <input type="text" id="email" placeholder="E-mail">
+            </div>
+
+            <div>
+                <textarea class="form-message" id="message" placeholder="Rédigez votre message ici..."></textarea>
+            </div>
+            <div class="footer-contact-top">
+                <input class="button-envoyer" type="submit" value="Envoyer">
+
+                <button class="button-appelez-moi">
+                    <div class="text-wrapper-2">Appelez-moi</div>
+                </button>
+            </div>
+        </div>
+    </form>
+
+</footer>
+
+
+</body>
+</html>

@@ -1,0 +1,74 @@
+
+/************************************ LANDING TOP ************************************/
+
+
+.landing-page {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    padding: 2% 10%;
+    background-color: var(--landing-page);
+    align-items: center;
+}
+
+.landing-group {
+    flex-direction: column;
+    margin: 20px 0;
+}
+
+
+.button-voir-travaux {
+    margin-top: 25px;
+    padding: 4px 25px 4px 10px;
+    display: flex;
+    justify-content: space-around;
+    flex-direction: row;
+    gap: 25px;
+    align-items: center;
+    background-color: var(--button-voir-travaux-background-color);
+    border-radius: 22px;
+
+    font-weight: 500;
+    color: var(--button-voir-travaux-color);
+    font-size: 21px;
+}
+
+
+.landing-logo {
+    width: 45%;
+    min-width: 300px;
+    margin: 15px;
+}
+
+
+/************************************ TRAVAUX ************************************/
+
+
+.travaux {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px 0 20px 6%;
+    background-color: var(--travaux);
+}
+
+
+.cardContainer {
+    overflow: auto; /* Ajoute une barre de défilement */
+    white-space: nowrap;
+}
+
+.card {
+    display: inline-block;
+    margin-right: 20px;
+    width: 28%;
+}
+
+.card img {
+    border-radius: 12px;
+    max-width: 100%;
+}
+
+.title {
+    margin: 10px 0 20px 0;
+}
+

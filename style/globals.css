@@ -1,0 +1,383 @@
+:root {
+    font-family: "Barlow-Bold", Helvetica, serif;
+    transition: background-color 1s;
+    --navy: #00184c;
+    --lapis: #27387a;
+    --chambray: #304595;
+    --chambray-light: #3E59BF;
+    --lavender: #889be2;
+    --sand: #ddc9af;
+    --floral-white: #FFF9F4;
+    --linen: #FFF1E1;
+    --inv: #fff;
+
+}
+
+body {
+    margin: 0;
+    padding: 0;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+* {
+    box-sizing: inherit;
+    transition-property: all;
+    transition-duration: .6s;
+    transition-timing-function: ease;
+}
+
+
+.dark-mode {
+    --h1: var(--floral-white);
+    --h2: var(--sand);
+    --h3: var(--floral-white);
+    --h4: var(--sand);
+    --h5: var(--sand);
+    --button-header: var(--sand);
+    --scrollbar-track: var(--sand);
+    --scrollbar-thumb: var(--chambray);
+    --scrollbar-thumb-hover: var(--navy);
+    --header: var(--navy);
+    --menu-color: var(--sand);
+    --button-appelez-moi-background-color : var(--chambray);
+    --button-appelez-moi-color : var(--sand);
+    --landing-page: var(--chambray);
+    --button-voir-travaux-background-color: var(--sand);
+    --button-voir-travaux-color: var(--chambray);
+    --travaux: var(--lapis);
+    --footer: var(--navy);
+    --input-background-color: var(--chambray);
+    --input-text: var(--lavender);
+    --input-envoyer-background-color: var(--sand);
+    --input-envoyer-color: var(--chambray);
+
+    --contact: var(--chambray);
+    --contact-input-background-color: var(--chambray-light);
+    --contact-input-envoyer-background-color: var(--chambray-light);
+    --contact-input-envoyer-color: var(--sand);
+}
+
+.light-mode {
+    --h1: var(--navy);
+    --h2: var(--chambray);
+    --h3: var(--navy);
+    --h4: var(--sand);
+    --h5: var(--chambray);
+    --button-header: var(--sand);
+    --scrollbar-track: var(--sand);
+    --scrollbar-thumb: var(--chambray);
+    --scrollbar-thumb-hover: var(--navy);
+    --header: var(--linen);
+    --menu-color: var(--chambray);
+    --button-appelez-moi-background-color : var(--sand);
+    --button-appelez-moi-color : var(--chambray);
+    --landing-page: var(--linen);
+    --button-voir-travaux-background-color: var(--sand);
+    --button-voir-travaux-color: var(--chambray);
+    --travaux: var(--linen);
+    --footer: var(--chambray);
+    --input-background-color: var(--chambray-light);
+    --input-text: var(--lavender);
+    --input-envoyer-background-color: var(--sand);
+    --input-envoyer-color: var(--chambray);
+
+    --contact: var(--linen);
+    --contact-input-background-color: var(--chambray-light);
+    --contact-input-envoyer-background-color: var(--chambray-light);
+    --contact-input-envoyer-color: var(--sand);
+}
+
+
+
+
+
+/* Text ************/
+
+h1 {
+    font-weight: 700;
+    color: var(--h1);
+    font-size: 44px;
+    margin: 0;
+}
+
+/* header menu */
+h2 {
+    color: var(--h2);
+    font-size: 24px;
+    margin: 15px;
+}
+
+/* travaux title section */
+h3 {
+    font-weight: 700;
+    color: var(--h3);
+    font-size: 32px;
+}
+
+h4 {
+    font-weight: 500;
+    color: var(--h4);
+    font-size: 21px;
+    margin: 0;
+}
+
+h5 {
+    font-weight: 500;
+    color: var(--h5);
+    font-size: 21px;
+    margin: 0;
+}
+
+
+
+
+
+
+
+
+
+
+/* SCROLLBAR ************/
+
+::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: var(--scrollbar-track);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: var(--scrollbar-thumb-hover);
+}
+
+
+
+/************************************ HEADER ************************************/
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding: 15px 5%;
+    background-color: var(--header);
+}
+
+.logo {
+    width: 158px;
+    height: 50px;
+    margin: 15px;
+}
+
+
+.menu {
+    flex-wrap: wrap;
+    flex-direction: row;
+    min-width: 375px;
+    width: 35%;
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    align-items: center;
+    text-align: center;
+}
+
+
+.box-right {
+    min-width: 100px;
+    width: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.button-light-mode {
+    margin: 25px 10px;
+    width: 25px;
+    height: 25px;
+}
+
+.button-header {
+    margin: 15px;
+}
+
+.button-appelez-moi {
+    justify-content: center;
+    align-items: center;
+    padding: 4px 13px;
+    background-color: var(--button-appelez-moi-background-color);
+    border-radius: 800px;
+    border: 2px solid var(--button-appelez-moi-color);
+    height: 35px;
+    font-weight: 500;
+    font-size: 15px;
+    color: var(--button-appelez-moi-color);
+}
+
+/* Button Menu ************/
+
+.btn {
+    justify-content: center;
+    cursor: pointer;
+    display: block;
+    font-size: 19px;
+    font-weight: 600;
+    line-height: 45px;
+    max-width: 160px;
+    text-decoration: none;
+    text-transform: uppercase;
+    color: var(--button-header);
+}
+
+.btn-2 {
+    letter-spacing: 1px;
+}
+
+.btn-2:hover,
+.btn-2:active {
+    letter-spacing: 5px;
+}
+
+.btn-2:after,
+.btn-2:before {
+    backface-visibility: hidden;
+    border: 1px solid rgba(255, 255, 255, 0);
+    bottom: 0;
+    content: " ";
+    display: block;
+    margin: 0 auto;
+    position: relative;
+    transition: all 280ms ease-in-out;
+    width: 0;
+}
+
+.btn-2:hover:after,
+.btn-2:hover:before {
+    backface-visibility: hidden;
+    border-color: #fff;
+    transition: width 350ms ease-in-out;
+    width: 70%;
+}
+
+.btn-2:hover:before {
+    bottom: auto;
+    top: 0;
+    width: 70%;
+}
+
+
+
+
+
+/************************************ FOOTER ************************************/
+
+
+.footer {
+    display: flex;
+    flex-flow: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 2% 8%;
+    background-color: var(--footer);
+}
+
+.footer-list {
+    display: flex;
+    flex-flow: column;
+    gap: 10px;
+}
+
+.footer-title {
+    margin: 10px 10px 10px 0;
+}
+
+
+input {
+    width: 48%;
+    height: 30px;
+    background-color: var(--input-background-color);
+    border-radius: 10px;
+    border-width: 0;
+}
+
+input[type=text] {
+    font-family: "Barlow-Medium", Helvetica, serif;
+    font-weight: 500;
+    color: var(--input-text);
+    font-size: 15px;
+    padding-inline: 20px;
+}
+
+input::placeholder {
+    font-weight: 500;
+    color: var(--input-text);
+    font-size: 15px;
+}
+
+textarea {
+    align-items: center;
+    box-sizing: border-box;
+    text-align: left;
+    width: 48%;
+    height: 30px;
+    max-width: 1000px;
+    min-width: 100%;
+    min-height: 100px;
+    background-color: var(--input-background-color);
+    border-radius: 10px;
+    border-width: 0;
+    font-family: "Barlow-Medium", Helvetica, serif;
+    font-weight: 500;
+    color: var(--input-text);
+    font-size: 15px;
+    padding-inline: 20px;
+    padding-block: 10px;
+}
+
+textarea::placeholder {
+    font-weight: 500;
+    color: var(--input-text);
+    font-size: 15px;
+}
+
+
+.footer-contact-top {
+    display: flex;
+    flex-flow: row;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+}
+
+.form-message {
+    align-items: center;
+    box-sizing: border-box;
+    width: 100%;
+    height: 80px;
+    text-align: left;
+}
+
+.button-envoyer {
+    justify-content: center;
+    border-radius: 15px;
+    background-color: var(--input-envoyer-background-color);
+    height: 35px;
+
+    font-weight: 500;
+    color: var(--input-envoyer-color);
+    font-size: 15px;
+}
+
+
