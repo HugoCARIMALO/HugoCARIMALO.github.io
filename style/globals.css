@@ -10,7 +10,7 @@
     --floral-white: #FFF9F4;
     --linen: #FFF1E1;
     --inv: #fff;
-
+    scroll-behavior: smooth;
 }
 
 body {

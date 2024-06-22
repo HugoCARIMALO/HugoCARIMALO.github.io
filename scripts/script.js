@@ -1,38 +1,81 @@
+/* Exécuter au chargement de la page */
 document.addEventListener("DOMContentLoaded", function () {
+    initLightDarkMode();
 
     // Ajouter le header et le footer
-    addHeader();
-    addFooter();
+    loadHeaderFooter().then(() => {console.log("Header et footer chargés")});
 
-    // si la page actuelle finit par index.html
+    // si la page est index.html
     if (window.location.pathname.endsWith("index.html")) {
         getMapImages().then(imageMap => {
             console.log(imageMap);
             createByType(imageMap);
             zoomImage();
         });
-    }
 
-    // dark mode - light mode
-    toggleMode();
+        document.getElementById('button-voir-travaux').addEventListener('click', function() {
+            const target = document.getElementById('travaux');
+            target.scrollIntoView({ behavior: 'smooth' });
+        });
+
+    }
 });
 
-function addHeader() {
-    fetch('header.html')
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById('header-container').innerHTML = data;
-        });
+/* Fonction pour charger le header.html et le footer.html */
+async function loadHeaderFooter() {
+    try {
+        headerData = await fetch('header.html').then(response => response.text());
+        footerData = await fetch('footer.html').then(response => response.text());
+
+        document.getElementById('header-container').innerHTML = headerData;
+        document.getElementById('footer-container').innerHTML = footerData;
+
+        // Gestion du bouton dans le header pour activer le mode sombre ou clair
+        let themeMode = localStorage.getItem("themeMode") || "dark-mode";
+        if (themeMode === "light-mode") {
+            const btn = document.getElementById("button-light-mode");
+            btn.src = `img/${themeMode}.svg`;
+        }
+
+
+    } catch (error) {
+        console.error("Erreur lors du chargement du header ou du footer", error);
+    }
 }
 
-function addFooter() {
-    fetch('footer.html')
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById('footer-container').innerHTML = data;
-        });
+/* Fonction pour initialiser le mode sombre ou clair */
+function initLightDarkMode() {
+    const body = document.body;
+    let themeMode = localStorage.getItem("themeMode") || "dark-mode";
+
+    body.classList.toggle("dark-mode", themeMode === "dark-mode");
+    body.classList.toggle("light-mode", themeMode === "light-mode");
+
+    localStorage.setItem("themeMode", themeMode);
 }
 
+
+
+/* Fonction pour activer le mode sombre ou clair */
+function toggleMode() {
+    const body = document.body;
+    const btn = document.getElementById("button-light-mode");
+    let themeMode = localStorage.getItem("themeMode") || "dark-mode";
+
+    themeMode = themeMode === "dark-mode" ? "light-mode" : "dark-mode";
+
+    btn.src = `img/${themeMode}.svg`;
+
+    localStorage.setItem("themeMode", themeMode);
+
+    body.classList.toggle("dark-mode");
+    body.classList.toggle("light-mode",);
+}
+
+
+/* Fonction pour créer les cards dynamiquement
+    * @param {Map} imageMap - Map contenant les images par type
+*/
 function createByType(imageMap) {
     for (const [type, imageList] of imageMap) {
         const cardContainer = document.getElementById("cardContainer-" + type);
@@ -62,74 +105,43 @@ function createByType(imageMap) {
     }
 }
 
-
-function toggleMode() {
-
-    let themeMode = localStorage.getItem("themeMode");
-    const body = document.body;
-    const btn = document.getElementById("toggle-dark-mode-btn");
-
-    if (themeMode === null) {
-        console.log("themeMode is null => set to dark-mode");
-        themeMode = "dark-mode";
-    }
-
-    if (!body.classList.contains("dark-mode") && !body.classList.contains("light-mode")) {
-        console.log("body has no class, setting theme to " + themeMode);
-        body.classList.toggle(themeMode);
-    } else {
-        // On inverse le mode du themeMode
-        body.classList.toggle("light-mode");
-        body.classList.toggle("dark-mode");
-        if (themeMode === "dark-mode") {
-            themeMode = "light-mode";
-        } else if (themeMode === "light-mode") {
-            themeMode = "dark-mode";
-        }
-    }
-    localStorage.setItem("themeMode", themeMode);
-    btn.src = "img/" + themeMode + ".svg";
-    console.log("mode set to " + themeMode);
-
-}
-
-function getMapImages() {
-    const xhr = new XMLHttpRequest();
+async function getMapImages() {
     const url = "https://api.github.com/repos/HugoCARIMALO/embellir37.fr/git/trees/main?recursive=true";
 
-    xhr.open("GET", url, true);
-    xhr.setRequestHeader("Accept", "application/vnd.github+json");
-    xhr.setRequestHeader("X-GitHub-Api-Version", "2022-11-28");
-
-    return new Promise((resolve, reject) => {
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4) {
-                if (xhr.status === 200) {
-                    try {
-                        const jsonData = JSON.parse(xhr.responseText);
-                        const imageMap = new Map();
-                        jsonData.tree.forEach(element => {
-                            if (element.type === "blob") {
-                                const fileName = element.path.split('/').pop();
-                                const directory = element.path.split('/')[0];
-                                if (!imageMap.has(directory)) {
-                                    imageMap.set(directory, []);
-                                }
-                                imageMap.get(directory).push(fileName.replace(/\.[^/.]+$/, ""));
-                            }
-                        });
-                        resolve(imageMap);
-                    } catch (error) {
-                        reject("Erreur lors de la conversion des données JSON");
-                    }
-                } else {
-                    reject("Erreur lors de la récupération des données: " + xhr.status);
-                }
-            }
-        };
-        xhr.send();
+    const response = await fetch(url, {
+        headers: {
+            "Accept": "application/vnd.github+json",
+            "X-GitHub-Api-Version": "2022-11-28"
+        }
     });
+
+    const jsonData = await response.json();
+    const imageMap = new Map();
+
+    if (response.status !== 200) {
+        throw new Error("Erreur lors de la récupération des données: " + jsonData.message);
+    }
+
+    try {
+        jsonData.tree.forEach(element => {
+            if (element.type === "blob") {
+                const fileName = element.path.split('/').pop();
+                const directory = element.path.split('/')[0];
+
+                if (!imageMap.has(directory)) {
+                    imageMap.set(directory, []);
+                }
+
+                imageMap.get(directory).push(fileName.replace(/\.[^/.]+$/, ""));
+            }
+        });
+
+        return imageMap;
+    } catch (error) {
+        throw new Error("Erreur lors de la conversion des données JSON: " + error.message);
+    }
 }
+
 
 function fileNameToURL(fileName) {
     // Remplace les espaces par %20 et retourne l'URL complète
@@ -137,38 +149,59 @@ function fileNameToURL(fileName) {
 }
 
 
-function zoomImage(){
-
-    // Récupérer les éléments nécessaires
+/* Fonction pour creer les events listeners pour le zoomer les images */
+function zoomImage() {
+    // CSS to apply on the zoomed images
     const overlay = document.getElementById('overlay');
     const zoomedImageBlock = document.getElementById('zoomed-image-block');
-    const zoomedImage = document.getElementById('zoomed-image')
+    const zoomedImage = document.getElementById('zoomed-image');
     const zoomedTitle = document.getElementById('zoomed-title');
-    const zoomTriggers = document.querySelectorAll('.zoom-trigger');
 
-    // Ajouter un gestionnaire d'événement pour chaque image
-    zoomTriggers.forEach(trigger => {
-        trigger.addEventListener('click', function() {
-            // Afficher le fond flouté
-            overlay.style.display = 'block';
+    // Get all card containers
+    const cardContainers = document.querySelectorAll('.cardContainer');
 
-            // Récupérer les attributs de l'image cliquée
-            const imageUrl = this.src;
-            const imageTitle = this.nextElementSibling.textContent;
+    // Error handling
+    if (!overlay || !zoomedImageBlock || !zoomedImage || !zoomedTitle || !cardContainers) {
+        console.error('One or more elements could not be found in the DOM.');
+        return;
+    }
 
-            // Mettre à jour l'image et le titre agrandi
-            zoomedImage.src = imageUrl;
-            zoomedTitle.textContent = imageTitle;
+    // Add an event listener to each card container
+    cardContainers.forEach(container => {
+        container.addEventListener('click', function(event) {
+            // Check if the clicked element is a zoom trigger
+            if (!event.target.classList.contains('zoom-trigger')) {
+                return;
+            }
 
-            // Afficher l'image agrandie
-            zoomedImageBlock.style.display = 'block';
+            // Retrieve the attributes of the clicked image
+            const imageUrl = event.target.src;
+            const imageTitle = event.target.nextElementSibling.textContent;
+
+            showZoomedImage(imageUrl, imageTitle, overlay, zoomedImage, zoomedImageBlock, zoomedTitle);
         });
     });
 
-    // Ajouter un gestionnaire d'événement pour masquer l'image agrandie lors du clic sur le fond flouté
+    // Add an event listener to hide the zoomed image when clicking on the overlay
     overlay.addEventListener('click', function() {
-        // Masquer le fond flouté et l'image agrandie
-        overlay.style.display = 'none';
-        zoomedImageBlock.style.display = 'none';
+        hideZoomedImage(overlay, zoomedImageBlock);
     });
+}
+
+
+
+function showZoomedImage(imageUrl, imageTitle, overlay, zoomedImage, zoomedImageBlock, zoomedTitle) {
+    // Update the zoomed image and title
+    zoomedImage.src = imageUrl;
+    zoomedTitle.textContent = imageTitle;
+
+    // Display the overlay and zoomed image
+    overlay.style.display = 'block';
+    zoomedImageBlock.style.display = 'block';
+}
+
+function hideZoomedImage(overlay, zoomedImageBlock) {
+    // Hide the overlay and zoomed image
+    overlay.style.display = 'none';
+    zoomedImageBlock.style.display = 'none';
 }

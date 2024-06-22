@@ -41,6 +41,14 @@
 }
 
 
+
+@keyframes scrollAnimation {
+    from {
+        scroll-behavior: smooth;
+    }
+}
+
+
 /************************************ TRAVAUX ************************************/
 
 
