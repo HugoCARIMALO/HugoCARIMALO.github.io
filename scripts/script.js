@@ -4,11 +4,12 @@ document.addEventListener("DOMContentLoaded", function () {
     addHeader();
     addFooter();
 
-    // si la page actuel fini par index.html
+    // si la page actuelle finit par index.html
     if (window.location.pathname.endsWith("index.html")) {
         getMapImages().then(imageMap => {
             console.log(imageMap);
             createByType(imageMap);
+            zoomImage();
         });
     }
 
@@ -33,32 +34,26 @@ function addFooter() {
 }
 
 function createByType(imageMap) {
-    // Si la map n'a pas le type de travaux, ne rien faire
     for (const [type, imageList] of imageMap) {
-        // Récupérer le conteneur des cartes
-        var cardContainer = document.getElementById("cardContainer-" + type);
+        const cardContainer = document.getElementById("cardContainer-" + type);
 
-        console.log("type: " + type);
-        // Parcourir la liste d'images et créer les cartes dynamiquement
-        imageList.forEach((imageURL, imageName) => {
-            // Créer un élément de carte
-            var card = document.createElement("div");
+        // Parcourir la liste d'images et créer les card dynamiquement
+        imageList.forEach(imageName => {
+
+            // Créer la card
+            const card = document.createElement("div");
             card.className = "card";
 
-            // Créer un élément d'image
-            var image = document.createElement("img");
-            image.src = imageURL; // Utiliser l'URL directe de l'image
-
-            // Ajouter l'image à la carte
+            // Image
+            const image = document.createElement("img");
+            image.src = fileNameToURL(type + '/' + imageName + '.jpg');
+            image.className = "zoom-trigger"
             card.appendChild(image);
 
-            // Créer un élément de titre
-            var title = document.createElement("h5");
-            // Utiliser le nom de l'image comme titre (vous pouvez ajuster selon vos besoins)
+            // Title
+            const title = document.createElement("h5");
             title.textContent = imageName;
             title.className = "title";
-
-            // Ajouter le titre à la carte
             card.appendChild(title);
 
             // Ajouter la carte au conteneur
@@ -116,12 +111,11 @@ function getMapImages() {
                         jsonData.tree.forEach(element => {
                             if (element.type === "blob") {
                                 const fileName = element.path.split('/').pop();
-                                const imageUrl = fileNameToURL(element.path);
                                 const directory = element.path.split('/')[0];
                                 if (!imageMap.has(directory)) {
-                                    imageMap.set(directory, new Map());
+                                    imageMap.set(directory, []);
                                 }
-                                imageMap.get(directory).set(fileName.replace(/\.[^/.]+$/, ""), imageUrl);
+                                imageMap.get(directory).push(fileName.replace(/\.[^/.]+$/, ""));
                             }
                         });
                         resolve(imageMap);
@@ -137,9 +131,44 @@ function getMapImages() {
     });
 }
 
-
-// Fonction pour convertir le nom de fichier en URL
 function fileNameToURL(fileName) {
     // Remplace les espaces par %20 et retourne l'URL complète
     return `https://raw.githubusercontent.com/HugoCARIMALO/embellir37.fr/main/${encodeURIComponent(fileName)}`;
+}
+
+
+function zoomImage(){
+
+    // Récupérer les éléments nécessaires
+    const overlay = document.getElementById('overlay');
+    const zoomedImageBlock = document.getElementById('zoomed-image-block');
+    const zoomedImage = document.getElementById('zoomed-image')
+    const zoomedTitle = document.getElementById('zoomed-title');
+    const zoomTriggers = document.querySelectorAll('.zoom-trigger');
+
+    // Ajouter un gestionnaire d'événement pour chaque image
+    zoomTriggers.forEach(trigger => {
+        trigger.addEventListener('click', function() {
+            // Afficher le fond flouté
+            overlay.style.display = 'block';
+
+            // Récupérer les attributs de l'image cliquée
+            const imageUrl = this.src;
+            const imageTitle = this.nextElementSibling.textContent;
+
+            // Mettre à jour l'image et le titre agrandi
+            zoomedImage.src = imageUrl;
+            zoomedTitle.textContent = imageTitle;
+
+            // Afficher l'image agrandie
+            zoomedImageBlock.style.display = 'block';
+        });
+    });
+
+    // Ajouter un gestionnaire d'événement pour masquer l'image agrandie lors du clic sur le fond flouté
+    overlay.addEventListener('click', function() {
+        // Masquer le fond flouté et l'image agrandie
+        overlay.style.display = 'none';
+        zoomedImageBlock.style.display = 'none';
+    });
 }
