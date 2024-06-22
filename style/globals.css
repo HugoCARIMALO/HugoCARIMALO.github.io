@@ -232,16 +232,16 @@ h5 {
     justify-content: center;
     cursor: pointer;
     display: block;
+    text-decoration: none;
+}
+
+.btn-2 {
     font-size: 19px;
     font-weight: 600;
     line-height: 45px;
     max-width: 160px;
-    text-decoration: none;
     text-transform: uppercase;
     color: var(--button-header);
-}
-
-.btn-2 {
     letter-spacing: 1px;
 }
 
@@ -303,6 +303,13 @@ h5 {
     margin: 10px 10px 10px 0;
 }
 
+
+.btn-3 {
+    font-weight: 500;
+    color: var(--h4);
+    font-size: 21px;
+    margin: 0;
+}
 
 input {
     width: 48%;

@@ -1,5 +1,9 @@
 document.addEventListener("DOMContentLoaded", function () {
 
+    // Ajouter le header et le footer
+    addHeader();
+    addFooter();
+
     // si la page actuel fini par index.html
     if (window.location.pathname.endsWith("index.html")) {
         getMapImages().then(imageMap => {
@@ -12,6 +16,21 @@ document.addEventListener("DOMContentLoaded", function () {
     toggleMode();
 });
 
+function addHeader() {
+    fetch('header.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('header-container').innerHTML = data;
+        });
+}
+
+function addFooter() {
+    fetch('footer.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('footer-container').innerHTML = data;
+        });
+}
 
 function createByType(imageMap) {
     // Si la map n'a pas le type de travaux, ne rien faire
@@ -20,7 +39,6 @@ function createByType(imageMap) {
         var cardContainer = document.getElementById("cardContainer-" + type);
 
         console.log("type: " + type);
-        console.log("imageList: " + imageList);
         // Parcourir la liste d'images et créer les cartes dynamiquement
         imageList.forEach((imageURL, imageName) => {
             // Créer un élément de carte
@@ -62,7 +80,7 @@ function toggleMode() {
     }
 
     if (!body.classList.contains("dark-mode") && !body.classList.contains("light-mode")) {
-        console.log("body has no class => set to " + themeMode);
+        console.log("body has no class, setting theme to " + themeMode);
         body.classList.toggle(themeMode);
     } else {
         // On inverse le mode du themeMode
