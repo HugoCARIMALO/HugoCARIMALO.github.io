@@ -351,6 +351,7 @@ textarea {
     font-size: 15px;
     padding-inline: 20px;
     padding-block: 10px;
+    resize: none;
 }
 
 textarea::placeholder {
@@ -387,4 +388,7 @@ textarea::placeholder {
     font-size: 15px;
 }
 
-
+input:-webkit-autofill,
+input:-webkit-autofill:focus {
+    transition: background-color 0s 600000s, color 0s 600000s !important;
+}

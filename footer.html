@@ -15,16 +15,18 @@
         <h4><img src="img/mail.svg"/> contact@embellir37.fr</h4>
     </div>
 
-    <form>
+    <form action="https://api.web3forms.com/submit" method="POST">
+
+        <input type="hidden" name="access_key" value="d03b2c98-db1b-4a94-aa64-879d9b6b4cdd">
         <div class="footer-list">
             <h3 class="footer-title">CONTACT</h3>
             <div class="footer-contact-top">
-                <input type="text" id="prenom" placeholder="Prénom nom">
-                <input type="text" id="email" placeholder="E-mail">
+                <input type="text" name="Prenom Nom" placeholder="Prénom nom" required>
+                <input type="text" name="email" placeholder="E-mail" required>
             </div>
 
             <div>
-                <textarea class="form-message" id="message" placeholder="Rédigez votre message ici..."></textarea>
+                <textarea class="form-message" maxlength="500" name="message" placeholder="Rédigez votre message ici..." required></textarea>
             </div>
             <div class="footer-contact-top">
                 <input class="button-envoyer" type="submit" value="Envoyer">

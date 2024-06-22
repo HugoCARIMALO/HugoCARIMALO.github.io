@@ -1,14 +1,8 @@
 CE QU'IL RESTE A FAIRE
 
-Dans le footer
-Le form n'est pas fonctionnel, il faut le rendre fonctionnel.
 
 Dans la page d'accueil
-Voir travaux doit desendre au l'endroit des travaux
 Tester avec plus d'images
-
-Fans le contact
-Le form n'est pas fonctionnel, il faut le rendre fonctionnel.
 
 Revoir l'ensemble du mode light
 

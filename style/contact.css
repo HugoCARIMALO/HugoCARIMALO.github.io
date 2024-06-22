@@ -23,10 +23,7 @@
 .contact input {
     width: 48%;
     height: 30px;
-    background-color: var(--contact-input-background-color);;
-}
-
-.contact input[type=text] {
+    background-color: var(--contact-input-background-color);
     color: var(--input-text);
     font-size: 20px;
     padding-inline: 15px;
@@ -65,5 +62,6 @@
     color: var(--contact-input-envoyer-color);
     font-size: 15px;
 }
+
 
 
