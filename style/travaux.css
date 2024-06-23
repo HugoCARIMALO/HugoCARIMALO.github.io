@@ -96,12 +96,12 @@
     backdrop-filter: brightness(140%); /* Augmentation de la luminosité */
 }
 
-.zoomed-buttons{
+.fullScreen-buttons{
     flex-direction: row;
     height: 10%;
 }
 
-.zoomed-image-block {
+.fullScreen-image-block {
     display: none;
     position: fixed;
     flex-direction: column;
@@ -113,7 +113,7 @@
     max-height: 70%; /* Taille maximale de l'image agrandie */
 }
 
-.zoomed-image {
+.fullScreen-image {
     width: 100%; /* Remplir complètement le conteneur */
     height: 100%;
     border-radius: 18px;
@@ -124,4 +124,12 @@
     color: #fff;
     text-align: start;
     margin-top: 10px;
+}
+
+.zoom-effect {
+    transform: scale(0.5); /* Change this value to adjust the initial size of the image */
+    transition: transform 0.5s ease-in-out;
+}
+.zoom-effect.zoomed {
+    transform: scale(1);
 }

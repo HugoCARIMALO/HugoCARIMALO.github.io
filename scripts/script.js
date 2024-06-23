@@ -10,7 +10,8 @@ document.addEventListener("DOMContentLoaded", function () {
         getMapImages().then(imageMap => {
             console.log(imageMap);
             createByType(imageMap);
-            zoomImage();
+            initZoomImage();
+            initLeftRightButtonForFullScreenImage(imageMap);
         });
 
         initScrollButtonVoirTravaux();
@@ -75,32 +76,28 @@ function toggleMode() {
 
 
 /* Fonction pour créer les cards dynamiquement
-    * @param {Map} imageMap - Map contenant les images par type
+    * @param {Object} imageMap - Objet contenant les images par type
 */
 function createByType(imageMap) {
-    for (const [type, imageList] of imageMap) {
+    for (const [type, imageList] of Object.entries(imageMap)) {
         const cardContainer = document.getElementById("cardContainer-" + type);
 
         // Parcourir la liste d'images et créer les card dynamiquement
-        imageList.forEach(imageName => {
+        imageList.forEach(imageObj => {
 
-            // Créer la card
             const card = document.createElement("div");
             card.className = "card";
 
-            // Image
             const image = document.createElement("img");
-            image.src = fileNameToURL(type + '/' + imageName + '.jpg');
+            image.src = imageObj.url;
             image.className = "zoom-trigger"
             card.appendChild(image);
 
-            // Title
             const title = document.createElement("h5");
-            title.textContent = imageName;
+            title.textContent = imageObj.name;
             title.className = "title";
             card.appendChild(title);
 
-            // Ajouter la carte au conteneur
             cardContainer.appendChild(card);
         });
     }
@@ -117,7 +114,7 @@ async function getMapImages() {
     });
 
     const jsonData = await response.json();
-    const imageMap = new Map();
+    const imageMap = {};
 
     if (response.status !== 200) {
         throw new Error("Erreur lors de la récupération des données: " + jsonData.message);
@@ -129,11 +126,15 @@ async function getMapImages() {
                 const fileName = element.path.split('/').pop();
                 const directory = element.path.split('/')[0];
 
-                if (!imageMap.has(directory)) {
-                    imageMap.set(directory, []);
+                if (!imageMap[directory]) {
+                    imageMap[directory] = [];
                 }
 
-                imageMap.get(directory).push(fileName.replace(/\.[^/.]+$/, ""));
+                const imageUrl = fileNameToURL(directory + '/' + fileName);
+                const imageName = fileName.replace(/\.[^/.]+$/, "");
+
+                // Ajouter l'URL de l'image à la liste globale
+                imageMap[directory].push({ name: imageName, url: imageUrl });
             }
         });
 
@@ -150,13 +151,24 @@ function fileNameToURL(fileName) {
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
 /* Fonction pour creer les events listeners pour le zoomer les images */
-function zoomImage() {
-    // CSS to apply on the zoomed images
+function initZoomImage() {
+    // CSS to apply on the image to zoom
     const overlay = document.getElementById('overlay');
-    const zoomedImageBlock = document.getElementById('zoomed-image-block');
-    const zoomedImage = document.getElementById('zoomed-image');
-    const zoomedTitle = document.getElementById('zoomed-title');
+    const zoomedImageBlock = document.getElementById('fullScreen-image-block');
+    const zoomedImage = document.getElementById('fullScreen-image');
+    const zoomedTitle = document.getElementById('image-title');
 
     // Get all card containers
     const cardContainers = document.querySelectorAll('.cardContainer');
@@ -179,39 +191,104 @@ function zoomImage() {
             const imageUrl = event.target.src;
             const imageTitle = event.target.nextElementSibling.textContent;
 
-            showZoomedImage(imageUrl, imageTitle, overlay, zoomedImage, zoomedImageBlock, zoomedTitle);
+            showFullScreenImage(imageUrl, imageTitle, overlay, zoomedImage, zoomedImageBlock, zoomedTitle);
         });
     });
 
     // Add an event listener to hide the zoomed image when clicking on the overlay
     overlay.addEventListener('click', function() {
-        hideZoomedImage(overlay, zoomedImageBlock);
+        hideFullScreenImage(overlay, zoomedImageBlock, zoomedImage);
+    });
+}
+
+
+/* Fonction pour afficher l'image en plein écran */
+function showFullScreenImage(imageUrl, imageTitle, overlay, zoomedImage, zoomedImageBlock, zoomedTitle) {
+    // Update the zoomed image and title
+    zoomedImage.src = imageUrl;
+    zoomedTitle.textContent = imageTitle;
+
+    // Add the zoom effect class
+    zoomedImage.classList.add('zoom-effect');
+
+    // Display the overlay and zoomed image
+    overlay.style.display = 'block';
+    zoomedImageBlock.style.display = 'block';
+
+    // After a small delay, add the zoomed class to start the transition
+    setTimeout(() => {
+        zoomedImage.classList.add('zoomed');
+    }, 100);
+}
+
+/* Fonction pour cacher l'image en plein écran */
+function hideFullScreenImage(overlay, zoomedImageBlock, zoomedImage) {
+    // Hide the overlay and zoomed image
+    overlay.style.display = 'none';
+    zoomedImageBlock.style.display = 'none';
+
+    // Remove the zoom effect classes
+    zoomedImage.classList.remove('zoom-effect', 'zoomed');
+}
+
+function initLeftRightButtonForFullScreenImage(imageMap) {
+    var leftButton = document.querySelector('img[src="img/caretCircleLeft.svg"]');
+    var rightButton = document.querySelector('img[src="img/caretCircleRight.svg"]');
+
+    var currentImage = document.getElementById('fullScreen-image');
+
+    // Ordonner les images par catégorie puis par ordre alphabétique
+    var orderedCategories = ["Pavage", "Dallage", "Portail", "Cloture", "Assainissement"];
+    var images = orderedCategories.flatMap(category => {
+        if (imageMap[category]) {
+            return imageMap[category].sort((a, b) => a.name.localeCompare(b.name)).map(imageObj => imageObj.url);
+        }
+        return [];
+    });
+
+    console.log(images);
+
+    var currentIndex = images.indexOf(currentImage.src);
+
+    leftButton.addEventListener('click', function() {
+        currentIndex--;
+        if (currentIndex < 0) {
+            currentIndex = images.length - 1;
+        }
+        currentImage.src = images[currentIndex];
+    });
+
+    rightButton.addEventListener('click', function() {
+        currentIndex++;
+        if (currentIndex >= images.length) {
+            currentIndex = 0;
+        }
+        currentImage.src = images[currentIndex];
     });
 }
 
 
 
-function showZoomedImage(imageUrl, imageTitle, overlay, zoomedImage, zoomedImageBlock, zoomedTitle) {
-    // Update the zoomed image and title
-    zoomedImage.src = imageUrl;
-    zoomedTitle.textContent = imageTitle;
 
-    // Display the overlay and zoomed image
-    overlay.style.display = 'block';
-    zoomedImageBlock.style.display = 'block';
-}
 
-function hideZoomedImage(overlay, zoomedImageBlock) {
-    // Hide the overlay and zoomed image
-    overlay.style.display = 'none';
-    zoomedImageBlock.style.display = 'none';
-}
+
+
+
+
+
+
+
+
+
+
+
 function initScrollButtonVoirTravaux() {
 document.getElementById('button-voir-travaux').addEventListener('click', function() {
     const target = document.getElementById('travaux');
     target.scrollIntoView({ behavior: 'smooth' });
 });
 }
+
 
 function CallMeButtonHightlight(callMeButton) {
     callMeButton.addEventListener('click', function() {
