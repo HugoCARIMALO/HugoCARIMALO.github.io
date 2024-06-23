@@ -8,7 +8,6 @@ document.addEventListener("DOMContentLoaded", function () {
     // si la page est index.html
     if (window.location.pathname.endsWith("index.html")) {
         getMapImages().then(imageMap => {
-            console.log(imageMap);
             createByType(imageMap);
             initZoomImage();
             initLeftRightButtonForFullScreenImage(imageMap);
@@ -93,6 +92,11 @@ function createByType(imageMap) {
             image.className = "zoom-trigger"
             card.appendChild(image);
 
+            const agrandir = document.createElement("div");
+            agrandir.textContent = "Agrandir";
+            agrandir.className = "agrandir";
+            card.appendChild(agrandir);
+
             const title = document.createElement("h5");
             title.textContent = imageObj.name;
             title.className = "title";
@@ -146,10 +150,12 @@ async function getMapImages() {
 
 
 function fileNameToURL(fileName) {
-    // Remplace les espaces par %20 et retourne l'URL complète
     return `https://raw.githubusercontent.com/HugoCARIMALO/embellir37.fr/main/${encodeURIComponent(fileName)}`;
 }
 
+function URLToFileName(url) {
+    return decodeURIComponent(url).split('/').pop().replace(/\.[^/.]+$/, "");
+}
 
 
 
@@ -189,7 +195,9 @@ function initZoomImage() {
 
             // Retrieve the attributes of the clicked image
             const imageUrl = event.target.src;
-            const imageTitle = event.target.nextElementSibling.textContent;
+
+            // get the title of the image
+            const imageTitle = URLToFileName(event.target.src);
 
             showFullScreenImage(imageUrl, imageTitle, overlay, zoomedImage, zoomedImageBlock, zoomedTitle);
         });
@@ -232,23 +240,21 @@ function hideFullScreenImage(overlay, zoomedImageBlock, zoomedImage) {
 }
 
 function initLeftRightButtonForFullScreenImage(imageMap) {
-    var leftButton = document.querySelector('img[src="img/caretCircleLeft.svg"]');
-    var rightButton = document.querySelector('img[src="img/caretCircleRight.svg"]');
+    const leftButton = document.querySelector('img[src="img/caretCircleLeft.svg"]');
+    const rightButton = document.querySelector('img[src="img/caretCircleRight.svg"]');
 
-    var currentImage = document.getElementById('fullScreen-image');
+    const currentImage = document.getElementById('fullScreen-image');
 
     // Ordonner les images par catégorie puis par ordre alphabétique
-    var orderedCategories = ["Pavage", "Dallage", "Portail", "Cloture", "Assainissement"];
-    var images = orderedCategories.flatMap(category => {
+    const orderedCategories = ["Pavage", "Dallage", "Portail", "Cloture", "Assainissement"];
+    const images = orderedCategories.flatMap(category => {
         if (imageMap[category]) {
             return imageMap[category].sort((a, b) => a.name.localeCompare(b.name)).map(imageObj => imageObj.url);
         }
         return [];
     });
 
-    console.log(images);
-
-    var currentIndex = images.indexOf(currentImage.src);
+    let currentIndex = images.indexOf(currentImage.src);
 
     leftButton.addEventListener('click', function() {
         currentIndex--;
