@@ -58,6 +58,7 @@ body {
     --contact-input-background-color: var(--chambray-light);
     --contact-input-envoyer-background-color: var(--chambray-light);
     --contact-input-envoyer-color: var(--sand);
+    --text-hover: var(--floral-white);
 }
 
 .light-mode {
@@ -88,6 +89,7 @@ body {
     --contact-input-background-color: var(--chambray-light);
     --contact-input-envoyer-background-color: var(--chambray-light);
     --contact-input-envoyer-color: var(--sand);
+    --text-hover: var(--floral-white);
 }
 
 
@@ -207,6 +209,7 @@ h5 {
     margin: 25px 10px;
     width: 25px;
     height: 25px;
+    cursor: pointer;
 }
 
 .button-header {
@@ -224,6 +227,12 @@ h5 {
     font-weight: 500;
     font-size: 15px;
     color: var(--button-appelez-moi-color);
+    cursor: pointer;
+}
+
+.button-appelez-moi:hover {
+    background-color: var(--button-appelez-moi-color);
+    color: var(--button-appelez-moi-background-color);
 }
 
 /* Button Menu ************/
@@ -303,12 +312,35 @@ h5 {
     margin: 10px 10px 10px 0;
 }
 
-
-.btn-3 {
+.footer-text {
     font-weight: 500;
     color: var(--h4);
     font-size: 21px;
     margin: 0;
+}
+
+.footer-text:hover::before {
+    transform: scale(1.1);
+    box-shadow: 0 0 15px var(--text-hover);
+}
+
+.footer-text:hover {
+    color: var(--text-hover);
+    text-shadow: 0 0 5px var(--text-hover);
+}
+
+.highlight {
+    color: var(--text-hover);
+    text-shadow: 0 0 5px var(--text-hover);
+}
+
+
+.footer-info-img{
+    vertical-align: middle;
+    width: 1%;
+    min-width: 21px;
+    height: 1%;
+    min-height: 21px;
 }
 
 input {
@@ -386,7 +418,15 @@ textarea::placeholder {
     font-weight: 500;
     color: var(--input-envoyer-color);
     font-size: 15px;
+    cursor: pointer;
 }
+
+.button-envoyer:hover {
+    background-color: var(--input-envoyer-color);
+    color: var(--input-envoyer-background-color);
+}
+
+
 
 input:-webkit-autofill,
 input:-webkit-autofill:focus {

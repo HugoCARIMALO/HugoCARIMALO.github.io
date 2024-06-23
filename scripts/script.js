@@ -13,20 +13,16 @@ document.addEventListener("DOMContentLoaded", function () {
             zoomImage();
         });
 
-        document.getElementById('button-voir-travaux').addEventListener('click', function() {
-            const target = document.getElementById('travaux');
-            target.scrollIntoView({ behavior: 'smooth' });
-        });
-
+        initScrollButtonVoirTravaux();
     }
 });
 
-/* Fonction pour charger le header.html et le footer.html */
+/* Fonction pour charger le header et le footer */
 async function loadHeaderFooter() {
     try {
+        // Recuperer le contenu du header et du footer et les ajouter dans les div correspondantes
         headerData = await fetch('header.html').then(response => response.text());
         footerData = await fetch('footer.html').then(response => response.text());
-
         document.getElementById('header-container').innerHTML = headerData;
         document.getElementById('footer-container').innerHTML = footerData;
 
@@ -37,6 +33,11 @@ async function loadHeaderFooter() {
             btn.src = `img/${themeMode}.svg`;
         }
 
+        // Gestion des butons appelez-moi (there is multiple)
+        const callMeButton = document.getElementsByName("button-appelez-moi")
+        for (let i = 0; i < callMeButton.length; i++) {
+            CallMeButtonHightlight(callMeButton[i]);
+        }
 
     } catch (error) {
         console.error("Erreur lors du chargement du header ou du footer", error);
@@ -204,4 +205,21 @@ function hideZoomedImage(overlay, zoomedImageBlock) {
     // Hide the overlay and zoomed image
     overlay.style.display = 'none';
     zoomedImageBlock.style.display = 'none';
+}
+function initScrollButtonVoirTravaux() {
+document.getElementById('button-voir-travaux').addEventListener('click', function() {
+    const target = document.getElementById('travaux');
+    target.scrollIntoView({ behavior: 'smooth' });
+});
+}
+
+function CallMeButtonHightlight(callMeButton) {
+    callMeButton.addEventListener('click', function() {
+        const telephone = document.getElementById('telephone');
+        telephone.scrollIntoView({ behavior: 'smooth' });
+        telephone.classList.add('highlight');
+        setTimeout(() => {
+            telephone.classList.remove('highlight');
+        }, 5000);
+    });
 }
