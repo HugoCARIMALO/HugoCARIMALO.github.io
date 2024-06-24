@@ -3,10 +3,15 @@ document.addEventListener("DOMContentLoaded", function () {
     initLightDarkMode();
 
     // Ajouter le header et le footer
-    loadHeaderFooter().then(() => {console.log("Header et footer chargés")});
+    loadHeaderFooter().then(() => {
+        setSVGColor(localStorage.getItem("themeMode") || "dark-mode");
+        console.log("Header et footer chargés")});
 
     // si la page est index.html
     if (window.location.pathname.endsWith("index.html")) {
+
+        hideFullScreenImage();
+
         getMapImages().then(imageMap => {
             createByType(imageMap);
             initZoomImage();
@@ -60,17 +65,27 @@ function initLightDarkMode() {
 /* Fonction pour activer le mode sombre ou clair */
 function toggleMode() {
     const body = document.body;
-    const btn = document.getElementById("button-light-mode");
     let themeMode = localStorage.getItem("themeMode") || "dark-mode";
 
     themeMode = themeMode === "dark-mode" ? "light-mode" : "dark-mode";
 
-    btn.src = `img/${themeMode}.svg`;
+    setSVGColor(themeMode);
 
     localStorage.setItem("themeMode", themeMode);
 
     body.classList.toggle("dark-mode");
     body.classList.toggle("light-mode",);
+}
+
+function setSVGColor(themeMode) {
+    let rootStyle = getComputedStyle(document.documentElement);
+    const style = rootStyle.getPropertyValue(themeMode === "dark-mode" ? '--sand' : '--navy').trim();
+
+    const btn = document.querySelector("#button-light-mode path");
+    const logoPaths = document.querySelectorAll("#logo path"); // Sélectionne tous les éléments 'path' dans le SVG
+
+    btn.style.fill = style;
+    logoPaths.forEach(path => path.style.fill = style); // Change la couleur de remplissage de chaque élément 'path'
 }
 
 
@@ -205,7 +220,7 @@ function initZoomImage() {
 
     // Add an event listener to hide the zoomed image when clicking on the overlay
     overlay.addEventListener('click', function() {
-        hideFullScreenImage(overlay, zoomedImageBlock, zoomedImage);
+        hideFullScreenImage();
     });
 }
 
@@ -221,7 +236,7 @@ function showFullScreenImage(imageUrl, imageTitle, overlay, zoomedImage, zoomedI
 
     // Display the overlay and zoomed image
     overlay.style.display = 'block';
-    zoomedImageBlock.style.display = 'block';
+    zoomedImageBlock.style.display = 'flex';
 
     // After a small delay, add the zoomed class to start the transition
     setTimeout(() => {
@@ -229,8 +244,11 @@ function showFullScreenImage(imageUrl, imageTitle, overlay, zoomedImage, zoomedI
     }, 100);
 }
 
-/* Fonction pour cacher l'image en plein écran */
-function hideFullScreenImage(overlay, zoomedImageBlock, zoomedImage) {
+function hideFullScreenImage() {
+    const overlay = document.getElementById('overlay');
+    const zoomedImageBlock = document.getElementById('fullScreen-image-block');
+    const zoomedImage = document.getElementById('fullScreen-image');
+
     // Hide the overlay and zoomed image
     overlay.style.display = 'none';
     zoomedImageBlock.style.display = 'none';
@@ -244,6 +262,7 @@ function initLeftRightButtonForFullScreenImage(imageMap) {
     const rightButton = document.querySelector('img[src="img/caretCircleRight.svg"]');
 
     const currentImage = document.getElementById('fullScreen-image');
+    const currentTitle = document.getElementById('image-title');
 
     // Ordonner les images par catégorie puis par ordre alphabétique
     const orderedCategories = ["Pavage", "Dallage", "Portail", "Cloture", "Assainissement"];
@@ -253,6 +272,7 @@ function initLeftRightButtonForFullScreenImage(imageMap) {
         }
         return [];
     });
+    console.log(images);
 
     let currentIndex = images.indexOf(currentImage.src);
 
@@ -262,6 +282,7 @@ function initLeftRightButtonForFullScreenImage(imageMap) {
             currentIndex = images.length - 1;
         }
         currentImage.src = images[currentIndex];
+        currentTitle.textContent = URLToFileName(images[currentIndex]);
     });
 
     rightButton.addEventListener('click', function() {
@@ -270,6 +291,7 @@ function initLeftRightButtonForFullScreenImage(imageMap) {
             currentIndex = 0;
         }
         currentImage.src = images[currentIndex];
+        currentTitle.textContent = URLToFileName(images[currentIndex]);
     });
 }
 

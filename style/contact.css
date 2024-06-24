@@ -7,6 +7,10 @@
     align-items: center;
 }
 
+.contact-title{
+    color : var(--contact-title-color);
+}
+
 .landing-logo {
     width: 35%;
     min-width: 300px;

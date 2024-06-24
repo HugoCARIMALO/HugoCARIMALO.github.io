@@ -36,60 +36,84 @@ body {
     --h3: var(--floral-white);
     --h4: var(--sand);
     --h5: var(--sand);
-    --button-header: var(--sand);
+
+
     --scrollbar-track: var(--sand);
     --scrollbar-thumb: var(--chambray);
     --scrollbar-thumb-hover: var(--navy);
+
     --header: var(--navy);
+    --menu-button-hover: var(--floral-white);
+    --button-header: var(--sand);
     --menu-color: var(--sand);
     --button-appelez-moi-background-color : var(--chambray);
     --button-appelez-moi-color : var(--sand);
+
     --landing-page: var(--chambray);
     --button-voir-travaux-background-color: var(--sand);
     --button-voir-travaux-color: var(--chambray);
     --travaux: var(--lapis);
+    --travaux-title: var(--floral-white);
+
     --footer: var(--navy);
+    --footer-title: var(--floral-white);
+
     --input-background-color: var(--chambray);
     --input-text: var(--lavender);
     --input-envoyer-background-color: var(--sand);
     --input-envoyer-color: var(--chambray);
 
     --contact: var(--chambray);
+    --contact-title-color: var(--floral-white);
     --contact-input-background-color: var(--chambray-light);
     --contact-input-envoyer-background-color: var(--chambray-light);
     --contact-input-envoyer-color: var(--sand);
     --text-hover: var(--floral-white);
+
+    --about-description: var(--floral-white);
 }
 
 .light-mode {
     --h1: var(--navy);
     --h2: var(--chambray);
-    --h3: var(--navy);
+    --h3: var(--sand);
     --h4: var(--sand);
     --h5: var(--chambray);
-    --button-header: var(--sand);
+
+
     --scrollbar-track: var(--sand);
     --scrollbar-thumb: var(--chambray);
     --scrollbar-thumb-hover: var(--navy);
+
     --header: var(--linen);
+    --menu-button-hover: var(--navy);
+    --button-header: var(--navy);
     --menu-color: var(--chambray);
     --button-appelez-moi-background-color : var(--sand);
     --button-appelez-moi-color : var(--chambray);
+
     --landing-page: var(--linen);
     --button-voir-travaux-background-color: var(--sand);
     --button-voir-travaux-color: var(--chambray);
     --travaux: var(--linen);
+    --travaux-title: var(--navy);
+
     --footer: var(--chambray);
+    --footer-title: var(--floral-white);
+
     --input-background-color: var(--chambray-light);
     --input-text: var(--lavender);
     --input-envoyer-background-color: var(--sand);
     --input-envoyer-color: var(--chambray);
 
     --contact: var(--linen);
+    --contact-title-color: var(--navy);
     --contact-input-background-color: var(--chambray-light);
     --contact-input-envoyer-background-color: var(--chambray-light);
     --contact-input-envoyer-color: var(--sand);
     --text-hover: var(--floral-white);
+
+    --about-description: var(--navy);
 }
 
 
@@ -115,13 +139,11 @@ h2 {
 /* travaux title section */
 h3 {
     font-weight: 700;
-    color: var(--h3);
     font-size: 32px;
 }
 
 h4 {
     font-weight: 500;
-    color: var(--h4);
     font-size: 21px;
     margin: 0;
 }
@@ -275,7 +297,7 @@ h5 {
 .btn-2:hover:after,
 .btn-2:hover:before {
     backface-visibility: hidden;
-    border-color: #fff;
+    border-color: var(--menu-button-hover);
     transition: width 350ms ease-in-out;
     width: 70%;
 }
@@ -310,6 +332,9 @@ h5 {
 
 .footer-title {
     margin: 10px 10px 10px 0;
+    font-weight: 700;
+    color: var(--footer-title);
+    font-size: 32px;
 }
 
 .footer-text {

@@ -13,7 +13,7 @@
 
 </head>
 <body>
-<!-- Conteneur pour le footer -->
+<!-- Conteneur pour le header  -->
 <div id="header-container"></div>
 
     <div class="landing-page">
@@ -34,19 +34,19 @@
     </div>
 
     <div id="travaux" class="travaux">
-        <h3>Pavage</h3>
+        <h3 class="travaux-title">Pavage</h3>
         <div id="cardContainer-Pavage" class="cardContainer"></div>
 
-        <h3>Dallage</h3>
+        <h3 class="travaux-title">Dallage</h3>
         <div id="cardContainer-Dallage" class="cardContainer"></div>
 
-        <h3>Portail</h3>
+        <h3 class="travaux-title">Portail</h3>
         <div id="cardContainer-Portail" class="cardContainer"></div>
 
-        <h3>Clôture</h3>
+        <h3 class="travaux-title">Clôture</h3>
         <div id="cardContainer-Cloture" class="cardContainer"></div>
 
-        <h3>Assainissement</h3>
+        <h3 class="travaux-title">Assainissement</h3>
         <div id="cardContainer-Assainissement" class="cardContainer"></div>
     </div>
 
@@ -55,12 +55,13 @@
 
 <!-- Image agrandie -->
 <div class="fullScreen-image-block" id="fullScreen-image-block">
-    <div class="fullScreen-buttons">
-        <img src="img/caretCircleLeft.svg" />
-        <img src="img/caretCircleRight.svg" />
+    <div class="fullScreen-header">
+        <img class="fullScreen-buttons" src="img/caretCircleLeft.svg" />
+        <p class="image-title" id="image-title"></p>
+        <img class="fullScreen-buttons" src="img/caretCircleRight.svg" />
     </div>
     <img src="" alt="Zoomed Image" id="fullScreen-image" class="fullScreen-image">
-    <p class="image-title" id="image-title"></p>
+
 </div>
 
 

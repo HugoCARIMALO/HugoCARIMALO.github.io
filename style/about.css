@@ -20,7 +20,7 @@
 .description {
     width: 60%;
     font-weight: 400;
-    color: #fff9f4;
+    color: var(--about-description);
     font-size: 20px;
 }
 
