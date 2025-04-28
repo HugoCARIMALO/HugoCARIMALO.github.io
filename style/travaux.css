@@ -109,11 +109,11 @@
     pointer-events: none;
 }
 
-
-
 .title {
     margin: 10px 0 20px 0;
 }
+
+
 
 /* Overlay avec transition de fond */
 .overlay {
@@ -197,8 +197,27 @@
     transition: opacity 0.3s ease;
 }
 
+.image-title.changing {
+    opacity: 0;
+}
+
+/* Conteneur d'image avec une meilleure transition */
+.fullScreen-image-container {
+    position: relative;
+    width: 80%;
+    max-width: 1200px;
+    height: 70vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    margin: 0 auto;
+    pointer-events: auto;
+}
+
 /* Image avec transitions améliorées */
 .fullScreen-image {
+    position: absolute;
     max-height: 80vh;
     max-width: 90vw;
     width: auto;
@@ -217,6 +236,42 @@
     transform: scale(1); /* Finit à l'échelle normale */
 }
 
+/* Animation pour l'image sortante vers la gauche */
+.fullScreen-image.exit-left {
+    opacity: 0;
+    transform: translate(-40px, 0) scale(0.85);
+    transition:
+            opacity 0.35s cubic-bezier(0.19, 1, 0.22, 1),
+            transform 0.35s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+/* Animation pour l'image sortante vers la droite */
+.fullScreen-image.exit-right {
+    opacity: 0;
+    transform: translate(40px, 0) scale(0.85);
+    transition:
+            opacity 0.35s cubic-bezier(0.19, 1, 0.22, 1),
+            transform 0.35s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+/* Animation pour l'image entrante depuis la gauche */
+.fullScreen-image.enter-left {
+    opacity: 0;
+    transform: translate(-40px, 0) scale(0.85);
+    transition:
+            opacity 0.45s cubic-bezier(0.19, 1, 0.22, 1),
+            transform 0.45s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+/* Animation pour l'image entrante depuis la droite */
+.fullScreen-image.enter-right {
+    opacity: 0;
+    transform: translate(40px, 0) scale(0.85);
+    transition:
+            opacity 0.45s cubic-bezier(0.19, 1, 0.22, 1),
+            transform 0.45s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
 /* Animation plus douce pour les boutons de navigation */
 .fullScreen-buttons {
     cursor: pointer;
@@ -230,4 +285,69 @@
 .fullScreen-buttons:hover {
     transform: scale(1.15);
     filter: drop-shadow(0 0 4px rgba(255, 249, 244, 0.6)); /* Halo clair au survol */
+}
+
+.fullScreen-buttons:active {
+    transform: scale(0.95);
+}
+
+/* Désactiver temporairement les boutons pendant les transitions */
+.fullScreen-buttons.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+    cursor: default;
+}
+
+.fullScreen-image {
+    opacity: 1;
+    transform: scale(1);
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+}
+
+.fullScreen-image.slide-out-left {
+    opacity: 0;
+    transform: translateX(-30px) scale(0.9);
+}
+
+.fullScreen-image.slide-out-right {
+    opacity: 0;
+    transform: translateX(30px) scale(0.9);
+}
+
+.fullScreen-image.slide-in {
+    animation: fadeIn 0.3s forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Améliorations des boutons de navigation */
+.fullScreen-buttons {
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.fullScreen-buttons:hover {
+    transform: scale(1.15);
+}
+
+.fullScreen-buttons:active {
+    transform: scale(0.95);
+}
+
+/* Effet du titre */
+.image-title {
+    transition: opacity 0.2s ease;
+}
+
+.image-title.changing {
+    opacity: 0;
 }

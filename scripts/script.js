@@ -191,10 +191,10 @@ function URLToFileName(url) {
 function initLeftRightButtonForFullScreenImage(imageMap) {
     const leftButton = document.querySelector('.fullScreen-header img[src="img/caretCircleLeft.svg"]');
     const rightButton = document.querySelector('.fullScreen-header img[src="img/caretCircleRight.svg"]');
-    const currentImage = document.getElementById('fullScreen-image');
-    const currentTitle = document.getElementById('image-title');
+    const fullScreenImage = document.getElementById('fullScreen-image');
+    const imageTitle = document.getElementById('image-title');
 
-    if (!leftButton || !rightButton || !currentImage || !currentTitle) {
+    if (!leftButton || !rightButton || !fullScreenImage || !imageTitle) {
         console.error('Navigation buttons or image elements not found');
         return;
     }
@@ -208,71 +208,138 @@ function initLeftRightButtonForFullScreenImage(imageMap) {
         return [];
     });
 
-    // Variable pour suivre l'index de l'image actuellement affichée
-    let currentIndex = 0;
+    console.log("Images disponibles pour la navigation:", images.length);
 
-    // Fonction pour mettre à jour l'image et le titre
-    function updateImage(index) {
-        currentImage.src = images[index].url;
-        currentTitle.textContent = images[index].name;
-        currentIndex = index;
+    let currentIndex = 0;
+    let isTransitioning = false;
+
+    // Fonction pour changer d'image avec une animation
+    function changeImage(direction) {
+        if (isTransitioning) return;
+        isTransitioning = true;
+
+        // Calculer le nouvel index
+        let newIndex;
+        if (direction === 'left') {
+            newIndex = currentIndex - 1;
+            if (newIndex < 0) newIndex = images.length - 1;
+            fullScreenImage.classList.add('slide-out-right');
+        } else {
+            newIndex = currentIndex + 1;
+            if (newIndex >= images.length) newIndex = 0;
+            fullScreenImage.classList.add('slide-out-left');
+        }
+
+        // Faire disparaître le titre
+        imageTitle.classList.add('changing');
+
+        // Attendre la fin de l'animation de sortie
+        setTimeout(() => {
+            // Changer l'image source
+            fullScreenImage.src = images[newIndex].url;
+
+            // Mettre à jour le titre
+            setTimeout(() => {
+                imageTitle.textContent = images[newIndex].name;
+                imageTitle.classList.remove('changing');
+            }, 100);
+
+            // Retirer les classes d'animation précédentes
+            fullScreenImage.classList.remove('slide-out-left', 'slide-out-right');
+
+            // Ajouter l'animation d'entrée
+            fullScreenImage.classList.add('slide-in');
+
+            // Sauvegarder le nouvel index
+            currentIndex = newIndex;
+
+            // Réinitialiser après la transition
+            setTimeout(() => {
+                fullScreenImage.classList.remove('slide-in');
+                isTransitioning = false;
+            }, 300);
+        }, 300);
     }
 
     // Événement pour le bouton gauche
     leftButton.addEventListener('click', function(event) {
-        event.stopPropagation(); // Empêcher la propagation du clic à l'overlay
+        event.stopPropagation();
 
         // Trouver l'index actuel basé sur l'URL de l'image
-        const currentUrl = currentImage.src;
-        currentIndex = images.findIndex(img => img.url === currentUrl);
-
-        // Naviguer vers l'image précédente
-        currentIndex--;
-        if (currentIndex < 0) {
-            currentIndex = images.length - 1;
+        if (!isTransitioning) {
+            const currentUrl = fullScreenImage.src;
+            currentIndex = images.findIndex(img => img.url === currentUrl);
+            if (currentIndex === -1) currentIndex = 0;
         }
 
-        updateImage(currentIndex);
+        changeImage('left');
     });
 
     // Événement pour le bouton droit
     rightButton.addEventListener('click', function(event) {
-        event.stopPropagation(); // Empêcher la propagation du clic à l'overlay
+        event.stopPropagation();
 
         // Trouver l'index actuel basé sur l'URL de l'image
-        const currentUrl = currentImage.src;
-        currentIndex = images.findIndex(img => img.url === currentUrl);
-
-        // Naviguer vers l'image suivante
-        currentIndex++;
-        if (currentIndex >= images.length) {
-            currentIndex = 0;
+        if (!isTransitioning) {
+            const currentUrl = fullScreenImage.src;
+            currentIndex = images.findIndex(img => img.url === currentUrl);
+            if (currentIndex === -1) currentIndex = 0;
         }
 
-        updateImage(currentIndex);
+        changeImage('right');
     });
 
-    // Ajouter également la navigation par flèches du clavier
+    // Navigation par flèches du clavier
     document.addEventListener('keydown', function(event) {
-        // Ne réagir que si l'overlay est visible
         const overlay = document.getElementById('overlay');
         if (overlay.style.display !== 'block') return;
 
         if (event.key === 'ArrowLeft') {
-            leftButton.click(); // Simuler un clic sur le bouton gauche
+            leftButton.click();
         } else if (event.key === 'ArrowRight') {
-            rightButton.click(); // Simuler un clic sur le bouton droit
+            rightButton.click();
         }
     });
 }
 
+// Bonus: Utiliser ce code pour déboguer les problèmes de navigation
+function debugImageNavigation(imageMap) {
+    console.log("--- Debug Image Navigation ---");
+
+    // Vérifier le contenu de imageMap
+    console.log("Categories in imageMap:", Object.keys(imageMap));
+
+    // Compter le total d'images
+    let totalImages = 0;
+    for (const category in imageMap) {
+        console.log(`Category ${category} has ${imageMap[category].length} images`);
+        totalImages += imageMap[category].length;
+    }
+    console.log(`Total images: ${totalImages}`);
+
+    // Vérifier les éléments du DOM
+    console.log("fullScreen-image element:", document.getElementById('fullScreen-image'));
+    console.log("Left button:", document.querySelector('.fullScreen-header img[src="img/caretCircleLeft.svg"]'));
+    console.log("Right button:", document.querySelector('.fullScreen-header img[src="img/caretCircleRight.svg"]'));
+
+    // Afficher la première image de chaque catégorie
+    for (const category in imageMap) {
+        if (imageMap[category].length > 0) {
+            console.log(`First image in ${category}:`, imageMap[category][0]);
+        }
+    }
+}
+
 /* Fonction pour afficher l'image en plein écran avec transitions améliorées */
 function showFullScreenImage(imageUrl, imageTitle, overlay, zoomedImage, zoomedImageBlock, zoomedTitle) {
+    // Réinitialiser les classes de l'image principale
+    zoomedImage.className = 'fullScreen-image';
+
     // Mettre à jour l'image et le titre
     zoomedImage.src = imageUrl;
     zoomedTitle.textContent = imageTitle;
 
-    // Afficher l'overlay et le bloc d'image d'abord
+    // Afficher l'overlay et le bloc d'image
     overlay.style.display = 'block';
     zoomedImageBlock.style.display = 'flex';
 
@@ -293,6 +360,9 @@ function showFullScreenImage(imageUrl, imageTitle, overlay, zoomedImage, zoomedI
     setTimeout(() => {
         zoomedImage.classList.add('visible');
     }, 50);
+
+    // Mise à jour de l'index courant dans initLeftRightButtonForFullScreenImage
+    // sera faite automatiquement lors du prochain clic sur les boutons de navigation
 }
 
 /* Fonction pour masquer l'image en plein écran avec transitions améliorées */
@@ -306,7 +376,7 @@ function hideFullScreenImage() {
         return; // Protection contre les erreurs
     }
 
-    // Supprimer d'abord les classes visible pour déclencher les transitions
+    // Supprimer les classes visible pour déclencher les transitions
     zoomedImage.classList.remove('visible');
     if (header) {
         header.classList.remove('visible');
@@ -321,11 +391,15 @@ function hideFullScreenImage() {
         setTimeout(() => {
             overlay.style.display = 'none';
             zoomedImageBlock.style.display = 'none';
+
+            // Nettoyer les images supplémentaires créées pendant la navigation
+            const extraImages = document.querySelectorAll('.fullScreen-image:not(#fullScreen-image)');
+            extraImages.forEach(img => img.remove());
         }, 400); // Correspond à la durée des transitions CSS
-    }, 100);
+    }, 150);
 }
 
-/* Mise à jour de l'initialisation pour utiliser les transitions améliorées */
+/* Initialisation adaptée pour utiliser les nouvelles transitions */
 function initZoomImage() {
     const overlay = document.getElementById('overlay');
     const zoomedImageBlock = document.getElementById('fullScreen-image-block');
@@ -359,7 +433,7 @@ function initZoomImage() {
         });
     });
 
-    // Event listener specifique pour l'overlay
+    // Add an event listener to hide the zoomed image when clicking on the overlay
     overlay.addEventListener('click', function(event) {
         // S'assurer que le clic est bien sur l'overlay et pas sur l'image ou les boutons
         if (event.target === overlay) {
@@ -374,13 +448,6 @@ function initZoomImage() {
         }
     });
 }
-
-
-
-
-
-
-
 
 
 
