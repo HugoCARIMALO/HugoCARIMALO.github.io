@@ -250,11 +250,16 @@ h5 {
     font-size: 15px;
     color: var(--button-appelez-moi-color);
     cursor: pointer;
+    transform: translateY(0);
+    transition: transform 0.3s ease, background-color 0.6s ease, color 0.6s ease, box-shadow 0.3s ease;
 }
+
 
 .button-appelez-moi:hover {
     background-color: var(--button-appelez-moi-color);
     color: var(--button-appelez-moi-background-color);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 /* Button Menu ************/

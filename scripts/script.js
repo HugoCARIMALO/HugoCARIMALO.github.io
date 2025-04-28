@@ -242,6 +242,16 @@ function showFullScreenImage(imageUrl, imageTitle, overlay, zoomedImage, zoomedI
     setTimeout(() => {
         zoomedImage.classList.add('zoomed');
     }, 100);
+
+    // Display the overlay and zoomed image
+    overlay.style.display = 'block';
+    zoomedImageBlock.style.display = 'flex';
+
+    // After a small delay, add the classes to start the transitions
+    setTimeout(() => {
+        overlay.classList.add('visible');
+        zoomedImage.classList.add('zoomed');
+    }, 50);
 }
 
 function hideFullScreenImage() {
@@ -249,12 +259,15 @@ function hideFullScreenImage() {
     const zoomedImageBlock = document.getElementById('fullScreen-image-block');
     const zoomedImage = document.getElementById('fullScreen-image');
 
-    // Hide the overlay and zoomed image
-    overlay.style.display = 'none';
-    zoomedImageBlock.style.display = 'none';
+    // Remove the zoom effect classes first
+    overlay.classList.remove('visible');
+    zoomedImage.classList.remove('zoomed');
 
-    // Remove the zoom effect classes
-    zoomedImage.classList.remove('zoom-effect', 'zoomed');
+    // Wait for the transition to complete before hiding elements
+    setTimeout(() => {
+        overlay.style.display = 'none';
+        zoomedImageBlock.style.display = 'none';
+    }, 600);
 }
 
 function initLeftRightButtonForFullScreenImage(imageMap) {
