@@ -187,10 +187,146 @@ function URLToFileName(url) {
 
 
 
+/* Fonction pour initialiser les boutons gauche/droite pour la navigation entre images */
+function initLeftRightButtonForFullScreenImage(imageMap) {
+    const leftButton = document.querySelector('.fullScreen-header img[src="img/caretCircleLeft.svg"]');
+    const rightButton = document.querySelector('.fullScreen-header img[src="img/caretCircleRight.svg"]');
+    const currentImage = document.getElementById('fullScreen-image');
+    const currentTitle = document.getElementById('image-title');
 
-/* Fonction pour creer les events listeners pour le zoomer les images */
+    if (!leftButton || !rightButton || !currentImage || !currentTitle) {
+        console.error('Navigation buttons or image elements not found');
+        return;
+    }
+
+    // Ordonner les images par catégorie puis par ordre alphabétique
+    const orderedCategories = ["Pavage", "Dallage", "Portail", "Cloture", "Assainissement"];
+    const images = orderedCategories.flatMap(category => {
+        if (imageMap[category]) {
+            return imageMap[category].sort((a, b) => a.name.localeCompare(b.name)).map(imageObj => imageObj);
+        }
+        return [];
+    });
+
+    // Variable pour suivre l'index de l'image actuellement affichée
+    let currentIndex = 0;
+
+    // Fonction pour mettre à jour l'image et le titre
+    function updateImage(index) {
+        currentImage.src = images[index].url;
+        currentTitle.textContent = images[index].name;
+        currentIndex = index;
+    }
+
+    // Événement pour le bouton gauche
+    leftButton.addEventListener('click', function(event) {
+        event.stopPropagation(); // Empêcher la propagation du clic à l'overlay
+
+        // Trouver l'index actuel basé sur l'URL de l'image
+        const currentUrl = currentImage.src;
+        currentIndex = images.findIndex(img => img.url === currentUrl);
+
+        // Naviguer vers l'image précédente
+        currentIndex--;
+        if (currentIndex < 0) {
+            currentIndex = images.length - 1;
+        }
+
+        updateImage(currentIndex);
+    });
+
+    // Événement pour le bouton droit
+    rightButton.addEventListener('click', function(event) {
+        event.stopPropagation(); // Empêcher la propagation du clic à l'overlay
+
+        // Trouver l'index actuel basé sur l'URL de l'image
+        const currentUrl = currentImage.src;
+        currentIndex = images.findIndex(img => img.url === currentUrl);
+
+        // Naviguer vers l'image suivante
+        currentIndex++;
+        if (currentIndex >= images.length) {
+            currentIndex = 0;
+        }
+
+        updateImage(currentIndex);
+    });
+
+    // Ajouter également la navigation par flèches du clavier
+    document.addEventListener('keydown', function(event) {
+        // Ne réagir que si l'overlay est visible
+        const overlay = document.getElementById('overlay');
+        if (overlay.style.display !== 'block') return;
+
+        if (event.key === 'ArrowLeft') {
+            leftButton.click(); // Simuler un clic sur le bouton gauche
+        } else if (event.key === 'ArrowRight') {
+            rightButton.click(); // Simuler un clic sur le bouton droit
+        }
+    });
+}
+
+/* Fonction pour afficher l'image en plein écran avec transitions améliorées */
+function showFullScreenImage(imageUrl, imageTitle, overlay, zoomedImage, zoomedImageBlock, zoomedTitle) {
+    // Mettre à jour l'image et le titre
+    zoomedImage.src = imageUrl;
+    zoomedTitle.textContent = imageTitle;
+
+    // Afficher l'overlay et le bloc d'image d'abord
+    overlay.style.display = 'block';
+    zoomedImageBlock.style.display = 'flex';
+
+    // Forcer un reflow pour que les transitions fonctionnent correctement
+    void overlay.offsetWidth;
+
+    // Ajouter les classes pour déclencher les transitions
+    overlay.classList.add('visible');
+    zoomedImageBlock.classList.add('visible');
+
+    // Récupérer l'en-tête et ajouter la classe visible
+    const header = document.querySelector('.fullScreen-header');
+    if (header) {
+        header.classList.add('visible');
+    }
+
+    // Ajouter la classe visible à l'image après un court délai
+    setTimeout(() => {
+        zoomedImage.classList.add('visible');
+    }, 50);
+}
+
+/* Fonction pour masquer l'image en plein écran avec transitions améliorées */
+function hideFullScreenImage() {
+    const overlay = document.getElementById('overlay');
+    const zoomedImageBlock = document.getElementById('fullScreen-image-block');
+    const zoomedImage = document.getElementById('fullScreen-image');
+    const header = document.querySelector('.fullScreen-header');
+
+    if (!overlay || !zoomedImageBlock || !zoomedImage) {
+        return; // Protection contre les erreurs
+    }
+
+    // Supprimer d'abord les classes visible pour déclencher les transitions
+    zoomedImage.classList.remove('visible');
+    if (header) {
+        header.classList.remove('visible');
+    }
+
+    // Attendre un peu avant de faire disparaître l'overlay
+    setTimeout(() => {
+        overlay.classList.remove('visible');
+        zoomedImageBlock.classList.remove('visible');
+
+        // Cacher complètement les éléments une fois les transitions terminées
+        setTimeout(() => {
+            overlay.style.display = 'none';
+            zoomedImageBlock.style.display = 'none';
+        }, 400); // Correspond à la durée des transitions CSS
+    }, 100);
+}
+
+/* Mise à jour de l'initialisation pour utiliser les transitions améliorées */
 function initZoomImage() {
-    // CSS to apply on the image to zoom
     const overlay = document.getElementById('overlay');
     const zoomedImageBlock = document.getElementById('fullScreen-image-block');
     const zoomedImage = document.getElementById('fullScreen-image');
@@ -200,14 +336,10 @@ function initZoomImage() {
     const cardContainers = document.querySelectorAll('.cardContainer');
 
     // Error handling
-    if (!overlay || !zoomedImageBlock || !zoomedImage || !zoomedTitle || !cardContainers.length === 0) {
+    if (!overlay || !zoomedImageBlock || !zoomedImage || !zoomedTitle || !cardContainers) {
         console.error('One or more elements could not be found in the DOM.');
         return;
     }
-
-    // S'assurer que l'overlay et l'image sont masqués initialement
-    overlay.style.display = 'none';
-    zoomedImageBlock.style.display = 'none';
 
     // Add an event listener to each card container
     cardContainers.forEach(container => {
@@ -227,98 +359,19 @@ function initZoomImage() {
         });
     });
 
-    // Add an event listener to hide the zoomed image when clicking on the overlay
-    overlay.addEventListener('click', function() {
-        hideFullScreenImage();
-    });
-}
-
-
-/* Fonction pour afficher l'image en plein écran */
-function showFullScreenImage(imageUrl, imageTitle, overlay, zoomedImage, zoomedImageBlock, zoomedTitle) {
-    // Update the zoomed image and title
-    zoomedImage.src = imageUrl;
-    zoomedTitle.textContent = imageTitle;
-
-    // Add the zoom effect class
-    zoomedImage.classList.add('zoom-effect');
-
-    // Display the overlay and zoomed image
-    overlay.style.display = 'block';
-    zoomedImageBlock.style.display = 'flex';
-
-    // After a small delay, add the zoomed class to start the transition
-    setTimeout(() => {
-        zoomedImage.classList.add('zoomed');
-    }, 100);
-}
-
-function hideFullScreenImage() {
-    const overlay = document.getElementById('overlay');
-    const zoomedImageBlock = document.getElementById('fullScreen-image-block');
-    const zoomedImage = document.getElementById('fullScreen-image');
-
-    // S'assurer que les éléments existent
-    if (!overlay || !zoomedImageBlock || !zoomedImage) return;
-
-    // Hide the overlay and zoomed image
-    overlay.style.display = 'none';
-    zoomedImageBlock.style.display = 'none';
-
-    // Remove the zoom effect classes
-    zoomedImage.classList.remove('zoom-effect', 'zoomed');
-}
-
-function initLeftRightButtonForFullScreenImage(imageMap) {
-    const leftButton = document.querySelector('img[src="img/caretCircleLeft.svg"]');
-    const rightButton = document.querySelector('img[src="img/caretCircleRight.svg"]');
-    const currentImage = document.getElementById('fullScreen-image');
-    const currentTitle = document.getElementById('image-title');
-
-    // Vérification de l'existence des éléments
-    if (!leftButton || !rightButton || !currentImage || !currentTitle) {
-        console.error('Les boutons ou l\'image en plein écran n\'ont pas été trouvés.');
-        return;
-    }
-
-    // Ordonner les images par catégorie puis par ordre alphabétique
-    const orderedCategories = ["Pavage", "Dallage", "Portail", "Cloture", "Assainissement"];
-    const images = orderedCategories.flatMap(category => {
-        if (imageMap[category]) {
-            return imageMap[category].sort((a, b) => a.name.localeCompare(b.name)).map(imageObj => imageObj.url);
+    // Event listener specifique pour l'overlay
+    overlay.addEventListener('click', function(event) {
+        // S'assurer que le clic est bien sur l'overlay et pas sur l'image ou les boutons
+        if (event.target === overlay) {
+            hideFullScreenImage();
         }
-        return [];
     });
 
-    if (images.length === 0) {
-        console.error('Aucune image disponible dans imageMap.');
-        return;
-    }
-
-    // Initialiser l'index à 0 au lieu de chercher l'index initial
-    // Cela évitera l'erreur si currentImage.src est vide initialement
-    let currentIndex = 0;
-
-    leftButton.addEventListener('click', function(e) {
-        e.stopPropagation(); // Empêcher la propagation pour éviter de fermer l'overlay
-
-        currentIndex--;
-        if (currentIndex < 0) {
-            currentIndex = images.length - 1;
+    // Ajout d'un écouteur d'événement pour la touche Échap
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape' && overlay.style.display === 'block') {
+            hideFullScreenImage();
         }
-        currentImage.src = images[currentIndex];
-        currentTitle.textContent = URLToFileName(images[currentIndex]);
-    });
-
-    rightButton.addEventListener('click', function(e) {
-        e.stopPropagation(); // Empêcher la propagation pour éviter de fermer l'overlay
-
-        currentIndex++;
-        if (currentIndex >= images.length) {
-            currentIndex = 0;
-        }
-        currentImage.src = images[currentIndex];
-        currentTitle.textContent = URLToFileName(images[currentIndex]);
     });
 }
 

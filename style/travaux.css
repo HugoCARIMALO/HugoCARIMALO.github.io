@@ -115,7 +115,7 @@
     margin: 10px 0 20px 0;
 }
 
-
+/* Overlay avec transition de fond */
 .overlay {
     display: none;
     position: fixed;
@@ -123,20 +123,21 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 100, 0.55);
+    background: rgba(0, 24, 76, 0); /* Commence transparent */
     z-index: 1;
-    backdrop-filter: brightness(140%);
+    backdrop-filter: blur(0px); /* Commence sans flou */
+    cursor: pointer;
+    transition: background 0.4s ease-in-out, backdrop-filter 0.4s ease-in-out;
 }
 
 .overlay.visible {
-    opacity: 1;
-    background: rgba(0, 0, 100, 0.55);
-    backdrop-filter: blur(4px) brightness(140%);
+    background: rgba(0, 24, 76, 0.7); /* Finit avec l'opacité complète */
+    backdrop-filter: blur(3px); /* Finit avec le flou complet */
 }
 
+/* Bloc d'image avec transition d'opacité */
 .fullScreen-image-block {
     display: none;
-    pointer-events: none;
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -146,45 +147,87 @@
     right: 0;
     bottom: 0;
     z-index: 2;
+    pointer-events: none;
+    opacity: 0; /* Commence transparent */
+    transition: opacity 0.4s ease-in-out;
 }
 
+.fullScreen-image-block.visible {
+    opacity: 1; /* Finit complètement visible */
+}
+
+/* En-tête avec transition */
 .fullScreen-header {
-    pointer-events: auto;
-    height: 10%;
-    width: 50%;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 80%;
+    max-width: 900px;
+    padding: 15px 20px;
+    margin-bottom: 15px;
+    background-color: rgba(0, 24, 76, 0.9); /* Fond plus opaque */
+    border: 2px solid var(--sand); /* Bordure pour mieux se démarquer */
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); /* Ombre portée plus prononcée */
+    pointer-events: auto;
+    z-index: 3;
+    transform: translateY(-20px);
+    opacity: 0;
+    transition: transform 0.4s ease-out, opacity 0.4s ease-out;
 }
 
-.fullScreen-image {
-    pointer-events: auto;
-    border-radius: 18px;
-    height: 87%;
-    width: auto;
-    object-fit: contain;
-    margin-bottom: 10px;
+.fullScreen-header.visible {
+    transform: translateY(0);
+    opacity: 1;
 }
 
 .image-title {
-    color: var(--floral-white);
-    font-size: 2em;
-    max-width: 75%;
+    color: var(--sand);
+    font-size: 1.4em; /* Taille réduite */
+    font-weight: 600;
+    text-align: center;
+    margin: 0;
+    padding: 5px 15px;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 70%;
+    letter-spacing: 0.5px;
+    transition: opacity 0.3s ease;
 }
 
+/* Image avec transitions améliorées */
+.fullScreen-image {
+    max-height: 80vh;
+    max-width: 90vw;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 8px;
+    pointer-events: auto;
+    opacity: 0; /* Commence transparent */
+    transform: scale(0.85); /* Commence légèrement plus petit */
+    transition: transform 0.45s cubic-bezier(0.19, 1, 0.22, 1),
+    opacity 0.45s ease-in-out;
+}
+
+.fullScreen-image.visible {
+    opacity: 1;
+    transform: scale(1); /* Finit à l'échelle normale */
+}
+
+/* Animation plus douce pour les boutons de navigation */
 .fullScreen-buttons {
     cursor: pointer;
+    width: 40px; /* Légèrement plus grands */
+    height: 40px;
+    padding: 5px;
+    filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.4)); /* Ombre portée sur les icônes */
+    transition: transform 0.2s ease, opacity 0.2s ease, filter 0.3s ease;
 }
 
-
-.zoom-effect {
-    transform: scale(0.5);
-    transition: transform 0.3s ease-in-out;
-    opacity: 0;
-    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
-}
-
-.zoom-effect.zoomed {
-    transform: scale(1);
-    opacity: 1;
+.fullScreen-buttons:hover {
+    transform: scale(1.15);
+    filter: drop-shadow(0 0 4px rgba(255, 249, 244, 0.6)); /* Halo clair au survol */
 }
