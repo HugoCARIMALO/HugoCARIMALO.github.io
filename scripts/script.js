@@ -8,9 +8,13 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log("Header et footer chargés")});
 
     // si la page est index.html
-    if (window.location.pathname.endsWith("index.html")) {
+    if (window.location.pathname.endsWith("index.html") || window.location.pathname === "/" || window.location.pathname === "") {
+        // Masquer immédiatement les éléments de l'overlay au chargement
+        const overlay = document.getElementById('overlay');
+        const zoomedImageBlock = document.getElementById('fullScreen-image-block');
 
-        hideFullScreenImage();
+        if (overlay) overlay.style.display = 'none';
+        if (zoomedImageBlock) zoomedImageBlock.style.display = 'none';
 
         getMapImages().then(imageMap => {
             createByType(imageMap);
@@ -95,6 +99,7 @@ function setSVGColor(themeMode) {
 function createByType(imageMap) {
     for (const [type, imageList] of Object.entries(imageMap)) {
         const cardContainer = document.getElementById("cardContainer-" + type);
+        if (!cardContainer) continue;
 
         // Parcourir la liste d'images et créer les card dynamiquement
         imageList.forEach(imageObj => {
@@ -195,10 +200,14 @@ function initZoomImage() {
     const cardContainers = document.querySelectorAll('.cardContainer');
 
     // Error handling
-    if (!overlay || !zoomedImageBlock || !zoomedImage || !zoomedTitle || !cardContainers) {
+    if (!overlay || !zoomedImageBlock || !zoomedImage || !zoomedTitle || !cardContainers.length === 0) {
         console.error('One or more elements could not be found in the DOM.');
         return;
     }
+
+    // S'assurer que l'overlay et l'image sont masqués initialement
+    overlay.style.display = 'none';
+    zoomedImageBlock.style.display = 'none';
 
     // Add an event listener to each card container
     cardContainers.forEach(container => {
@@ -242,16 +251,6 @@ function showFullScreenImage(imageUrl, imageTitle, overlay, zoomedImage, zoomedI
     setTimeout(() => {
         zoomedImage.classList.add('zoomed');
     }, 100);
-
-    // Display the overlay and zoomed image
-    overlay.style.display = 'block';
-    zoomedImageBlock.style.display = 'flex';
-
-    // After a small delay, add the classes to start the transitions
-    setTimeout(() => {
-        overlay.classList.add('visible');
-        zoomedImage.classList.add('zoomed');
-    }, 50);
 }
 
 function hideFullScreenImage() {
@@ -259,23 +258,28 @@ function hideFullScreenImage() {
     const zoomedImageBlock = document.getElementById('fullScreen-image-block');
     const zoomedImage = document.getElementById('fullScreen-image');
 
-    // Remove the zoom effect classes first
-    overlay.classList.remove('visible');
-    zoomedImage.classList.remove('zoomed');
+    // S'assurer que les éléments existent
+    if (!overlay || !zoomedImageBlock || !zoomedImage) return;
 
-    // Wait for the transition to complete before hiding elements
-    setTimeout(() => {
-        overlay.style.display = 'none';
-        zoomedImageBlock.style.display = 'none';
-    }, 600);
+    // Hide the overlay and zoomed image
+    overlay.style.display = 'none';
+    zoomedImageBlock.style.display = 'none';
+
+    // Remove the zoom effect classes
+    zoomedImage.classList.remove('zoom-effect', 'zoomed');
 }
 
 function initLeftRightButtonForFullScreenImage(imageMap) {
     const leftButton = document.querySelector('img[src="img/caretCircleLeft.svg"]');
     const rightButton = document.querySelector('img[src="img/caretCircleRight.svg"]');
-
     const currentImage = document.getElementById('fullScreen-image');
     const currentTitle = document.getElementById('image-title');
+
+    // Vérification de l'existence des éléments
+    if (!leftButton || !rightButton || !currentImage || !currentTitle) {
+        console.error('Les boutons ou l\'image en plein écran n\'ont pas été trouvés.');
+        return;
+    }
 
     // Ordonner les images par catégorie puis par ordre alphabétique
     const orderedCategories = ["Pavage", "Dallage", "Portail", "Cloture", "Assainissement"];
@@ -285,11 +289,19 @@ function initLeftRightButtonForFullScreenImage(imageMap) {
         }
         return [];
     });
-    console.log(images);
 
-    let currentIndex = images.indexOf(currentImage.src);
+    if (images.length === 0) {
+        console.error('Aucune image disponible dans imageMap.');
+        return;
+    }
 
-    leftButton.addEventListener('click', function() {
+    // Initialiser l'index à 0 au lieu de chercher l'index initial
+    // Cela évitera l'erreur si currentImage.src est vide initialement
+    let currentIndex = 0;
+
+    leftButton.addEventListener('click', function(e) {
+        e.stopPropagation(); // Empêcher la propagation pour éviter de fermer l'overlay
+
         currentIndex--;
         if (currentIndex < 0) {
             currentIndex = images.length - 1;
@@ -298,7 +310,9 @@ function initLeftRightButtonForFullScreenImage(imageMap) {
         currentTitle.textContent = URLToFileName(images[currentIndex]);
     });
 
-    rightButton.addEventListener('click', function() {
+    rightButton.addEventListener('click', function(e) {
+        e.stopPropagation(); // Empêcher la propagation pour éviter de fermer l'overlay
+
         currentIndex++;
         if (currentIndex >= images.length) {
             currentIndex = 0;
@@ -324,16 +338,23 @@ function initLeftRightButtonForFullScreenImage(imageMap) {
 
 
 function initScrollButtonVoirTravaux() {
-document.getElementById('button-voir-travaux').addEventListener('click', function() {
-    const target = document.getElementById('travaux');
-    target.scrollIntoView({ behavior: 'smooth' });
-});
+    const button = document.getElementById('button-voir-travaux');
+    if (!button) return;
+
+    button.addEventListener('click', function() {
+        const target = document.getElementById('travaux');
+        if (target) {
+            target.scrollIntoView({ behavior: 'smooth' });
+        }
+    });
 }
 
 
 function CallMeButtonHightlight(callMeButton) {
     callMeButton.addEventListener('click', function() {
         const telephone = document.getElementById('telephone');
+        if (!telephone) return;
+
         telephone.scrollIntoView({ behavior: 'smooth' });
         telephone.classList.add('highlight');
         setTimeout(() => {
