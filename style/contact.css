@@ -90,4 +90,28 @@
     transform: translateY(1px);
 }
 
+.contact input {
+    background-color: var(--contact-input-background-color);
+    color: var(--contact-input-text); /* Ajustez la couleur du texte pour qu'il soit visible sur fond sand */
+}
 
+.contact input::placeholder {
+    color: var(--contact-input-text); /* Ajustez la couleur du placeholder pour qu'il soit visible sur fond sand */
+    opacity: 0.7; /* Rendre le placeholder légèrement transparent */
+}
+
+.contact textarea {
+    background-color: var(--contact-input-background-color);
+    color: var(--contact-input-text); /* Couleur de texte assortie */
+}
+
+.contact textarea::placeholder {
+    color: var(--contact-input-text); /* Couleur de placeholder assortie */
+    opacity: 0.7;
+}
+
+.contact .button-envoyer {
+    background-color: var(--contact-input-envoyer-background-color);
+    color: var(--contact-input-text);
+    border-color: var(--contact-input-envoyer-border-color);
+}

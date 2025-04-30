@@ -49,6 +49,12 @@ body {
     --button-appelez-moi-background-color : var(--chambray);
     --button-appelez-moi-color : var(--sand);
 
+    --toggle-background: var(--navy);
+    --toggle-button: var(--sand);
+    --toggle-icon-active: var(--floral-white);
+    --toggle-icon-inactive: var(--lavender);
+    --toggle-hover-glow: var(--lavender);
+
     --landing-page: var(--chambray);
     --button-voir-travaux-background-color: var(--sand);
     --button-voir-travaux-color: var(--chambray);
@@ -67,7 +73,9 @@ body {
     --contact-title-color: var(--floral-white);
     --contact-input-background-color: var(--chambray-light);
     --contact-input-envoyer-background-color: var(--chambray-light);
+    --contact-input-envoyer-border-color: var(--sand);
     --contact-input-envoyer-color: var(--sand);
+    --contact-input-text: var(--lavender);
     --text-hover: var(--floral-white);
 
     --about-description: var(--floral-white);
@@ -92,10 +100,16 @@ body {
     --button-appelez-moi-background-color : var(--sand);
     --button-appelez-moi-color : var(--chambray);
 
+    --toggle-background: var(--lavender);
+    --toggle-button: var(--sand);
+    --toggle-icon-active: var(--floral-white);
+    --toggle-icon-inactive: var(--navy);
+    --toggle-hover-glow: var(--chambray);
+
     --landing-page: var(--linen);
     --button-voir-travaux-background-color: var(--sand);
     --button-voir-travaux-color: var(--chambray);
-    --travaux: var(--linen);
+    --travaux: var(--floral-white);
     --travaux-title: var(--navy);
 
     --footer: var(--chambray);
@@ -108,9 +122,11 @@ body {
 
     --contact: var(--linen);
     --contact-title-color: var(--navy);
-    --contact-input-background-color: var(--chambray-light);
-    --contact-input-envoyer-background-color: var(--chambray-light);
+    --contact-input-background-color: var(--sand);
+    --contact-input-envoyer-background-color: var(--sand);
+    --contact-input-envoyer-border-color: var(--navy);
     --contact-input-envoyer-color: var(--sand);
+    --contact-input-text: var(--navy);
     --text-hover: var(--floral-white);
 
     --about-description: var(--navy);
@@ -260,6 +276,141 @@ h5 {
     color: var(--button-appelez-moi-background-color);
     transform: translateY(-3px);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Style pour le switch de thème */
+.theme-switch-wrapper {
+    display: flex;
+    align-items: center;
+    margin: 25px 10px;
+}
+
+.theme-switch {
+    display: inline-block;
+    height: 26px;
+    position: relative;
+    width: 50px;
+}
+
+.theme-switch input {
+    display: none;
+}
+
+.slider {
+    background-color: var(--toggle-background);
+    bottom: 0;
+    cursor: pointer;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: .4s;
+}
+
+.slider:before {
+    background-color: var(--toggle-button);
+    bottom: 4px;
+    content: "";
+    height: 18px;
+    left: 4px;
+    position: absolute;
+    transition: .4s;
+    width: 18px;
+    z-index: 2;
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* Position du curseur selon le mode */
+input:checked + .slider:before {
+    transform: translateX(24px);
+}
+
+/* Style pour les icônes dans le switch */
+.toggle-icons {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 5px;
+    box-sizing: border-box;
+    pointer-events: none;
+}
+
+.sun-icon, .moon-icon {
+    width: 16px;
+    height: 16px;
+}
+
+.sun-icon {
+    color: var(--toggle-icon-active);
+}
+
+.moon-icon {
+    color: var(--toggle-icon-active);
+}
+
+/* Animation pour les icônes */
+.sun-icon, .moon-icon {
+    transition: opacity 0.3s ease, transform 0.5s ease;
+}
+
+.dark-mode .sun-icon {
+    opacity: 0.5;
+    transform: scale(0.8);
+    color: var(--toggle-icon-inactive);
+}
+
+.dark-mode .moon-icon {
+    opacity: 1;
+    transform: scale(1);
+    color: var(--toggle-icon-active);
+}
+
+.light-mode .sun-icon {
+    opacity: 1;
+    transform: scale(1);
+    color: var(--toggle-icon-active);
+}
+
+.light-mode .moon-icon {
+    opacity: 0.5;
+    transform: scale(0.8);
+    color: var(--toggle-icon-inactive);
+}
+
+/* Animation supplémentaire pour le switch lors du changement */
+.slider {
+    transition: background-color 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+.slider:before {
+    transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+/* Animation quand on survole le switch */
+.slider:hover {
+    box-shadow: 0 0 8px var(--toggle-hover-glow);
+}
+
+.slider:active:before {
+    transform: scale(1.15);
+}
+
+/* Assurez-vous que le toggle est bien aligné dans le header */
+.box-right {
+    display: flex;
+    align-items: center;
 }
 
 /* Button Menu ************/

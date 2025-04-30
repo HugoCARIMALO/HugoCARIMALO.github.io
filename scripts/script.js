@@ -5,16 +5,12 @@ document.addEventListener("DOMContentLoaded", function () {
     // Ajouter le header et le footer
     loadHeaderFooter().then(() => {
         setSVGColor(localStorage.getItem("themeMode") || "dark-mode");
-        console.log("Header et footer chargés")});
+        console.log("Header et footer chargés")
+    });
 
     // si la page est index.html
-    if (window.location.pathname.endsWith("index.html") || window.location.pathname === "/" || window.location.pathname === "") {
-        // Masquer immédiatement les éléments de l'overlay au chargement
-        const overlay = document.getElementById('overlay');
-        const zoomedImageBlock = document.getElementById('fullScreen-image-block');
-
-        if (overlay) overlay.style.display = 'none';
-        if (zoomedImageBlock) zoomedImageBlock.style.display = 'none';
+    if (window.location.pathname.endsWith("index.html") || window.location.pathname === "/") {
+        hideFullScreenImage();
 
         getMapImages().then(imageMap => {
             createByType(imageMap);
@@ -26,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-/* Fonction pour charger le header et le footer */
+/* Fonction pour charger le header et le footer avec le nouveau toggle */
 async function loadHeaderFooter() {
     try {
         // Recuperer le contenu du header et du footer et les ajouter dans les div correspondantes
@@ -35,12 +31,19 @@ async function loadHeaderFooter() {
         document.getElementById('header-container').innerHTML = headerData;
         document.getElementById('footer-container').innerHTML = footerData;
 
-        // Gestion du bouton dans le header pour activer le mode sombre ou clair
-        let themeMode = localStorage.getItem("themeMode") || "dark-mode";
-        if (themeMode === "light-mode") {
-            const btn = document.getElementById("button-light-mode");
-            btn.src = `img/${themeMode}.svg`;
+        // Initialiser l'état du toggle switch
+        const checkbox = document.getElementById('checkbox');
+        if (checkbox) {
+            let themeMode = localStorage.getItem("themeMode") || "dark-mode";
+            checkbox.checked = themeMode === "light-mode";
+
+            // Ajouter un écouteur d'événement pour le toggle
+            checkbox.addEventListener('change', toggleMode);
         }
+
+        // Appliquer les couleurs au logo SVG après que le header est chargé
+        let themeMode = localStorage.getItem("themeMode") || "dark-mode";
+        setSVGColor(themeMode);
 
         // Gestion des butons appelez-moi (there is multiple)
         const callMeButton = document.getElementsByName("button-appelez-moi")
@@ -53,7 +56,7 @@ async function loadHeaderFooter() {
     }
 }
 
-/* Fonction pour initialiser le mode sombre ou clair */
+/* Fonction pour initialiser le mode sombre ou clair avec le nouveau toggle */
 function initLightDarkMode() {
     const body = document.body;
     let themeMode = localStorage.getItem("themeMode") || "dark-mode";
@@ -61,35 +64,55 @@ function initLightDarkMode() {
     body.classList.toggle("dark-mode", themeMode === "dark-mode");
     body.classList.toggle("light-mode", themeMode === "light-mode");
 
+    // Synchroniser l'état du toggle avec le mode actuel
+    const checkbox = document.getElementById('checkbox');
+    if (checkbox) {
+        checkbox.checked = themeMode === "light-mode";
+    }
+
     localStorage.setItem("themeMode", themeMode);
 }
 
-
-
-/* Fonction pour activer le mode sombre ou clair */
+/* Fonction pour activer le mode sombre ou clair avec le nouveau toggle */
 function toggleMode() {
     const body = document.body;
     let themeMode = localStorage.getItem("themeMode") || "dark-mode";
 
     themeMode = themeMode === "dark-mode" ? "light-mode" : "dark-mode";
 
-    setSVGColor(themeMode);
-
     localStorage.setItem("themeMode", themeMode);
 
     body.classList.toggle("dark-mode");
-    body.classList.toggle("light-mode",);
+    body.classList.toggle("light-mode");
+
+    // Synchroniser l'état du toggle avec le mode actuel
+    const checkbox = document.getElementById('checkbox');
+    if (checkbox) {
+        checkbox.checked = themeMode === "light-mode";
+    }
+
+    // Mettre à jour les couleurs SVG
+    setSVGColor(themeMode);
 }
 
 function setSVGColor(themeMode) {
     let rootStyle = getComputedStyle(document.documentElement);
     const style = rootStyle.getPropertyValue(themeMode === "dark-mode" ? '--sand' : '--navy').trim();
 
-    const btn = document.querySelector("#button-light-mode path");
-    const logoPaths = document.querySelectorAll("#logo path"); // Sélectionne tous les éléments 'path' dans le SVG
+    // Sélectionner tous les éléments 'path' dans le logo SVG
+    const logoPaths = document.querySelectorAll("#logo path");
 
-    btn.style.fill = style;
-    logoPaths.forEach(path => path.style.fill = style); // Change la couleur de remplissage de chaque élément 'path'
+    // Vérifier si les éléments path du logo existent
+    if (logoPaths && logoPaths.length > 0) {
+        // Changer la couleur de remplissage de chaque élément 'path'
+        logoPaths.forEach(path => {
+            path.style.fill = style;
+        });
+    } else {
+        console.log("Logo paths not found, will try again later");
+        // Si les éléments path ne sont pas encore chargés, réessayer après un court délai
+        setTimeout(() => setSVGColor(themeMode), 100);
+    }
 }
 
 
