@@ -49,11 +49,12 @@ body {
     --button-appelez-moi-background-color : var(--chambray);
     --button-appelez-moi-color : var(--sand);
 
-    --toggle-background: var(--navy);
-    --toggle-button: var(--sand);
-    --toggle-icon-active: var(--floral-white);
-    --toggle-icon-inactive: var(--lavender);
-    --toggle-hover-glow: var(--lavender);
+    --toggle-background: var(--chambray);        /* Plus clair que navy pour mieux ressortir */
+    --toggle-button: var(--floral-white);        /* Blanc cassé au lieu de sable pour plus de contraste */
+    --toggle-icon-active: var(--floral-white);   /* Garde la couleur blanche pour les icônes actives */
+    --toggle-icon-inactive: var(--lavender);     /* Garde le lavande pour les icônes inactives */
+    --toggle-hover-glow: var(--floral-white);    /* Effet de lueur plus visible en blanc cassé */
+    --toggle-border: var(--sand);                /* Nouvelle variable pour la bordure */
 
     --landing-page: var(--chambray);
     --button-voir-travaux-background-color: var(--sand);
@@ -100,11 +101,12 @@ body {
     --button-appelez-moi-background-color : var(--sand);
     --button-appelez-moi-color : var(--chambray);
 
-    --toggle-background: var(--lavender);
-    --toggle-button: var(--sand);
-    --toggle-icon-active: var(--floral-white);
-    --toggle-icon-inactive: var(--navy);
-    --toggle-hover-glow: var(--chambray);
+    --toggle-background: var(--chambray);        /* Bleu plus foncé pour plus de contraste avec le fond clair */
+    --toggle-button: var(--floral-white);        /* Blanc cassé pour contraster avec le fond bleu */
+    --toggle-icon-active: var(--floral-white);   /* Garde la couleur blanche pour les icônes actives */
+    --toggle-icon-inactive: var(--sand);         /* Utilise le sable pour les icônes inactives en mode clair */
+    --toggle-hover-glow: var(--floral-white);    /* Effet de lueur en blanc cassé */
+    --toggle-border: var(--sand);                /* Nouvelle variable pour la bordure */
 
     --landing-page: var(--linen);
     --button-voir-travaux-background-color: var(--sand);
@@ -278,7 +280,10 @@ h5 {
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
-/* Style pour le switch de thème */
+
+/* Solution finale pour le slider de changement de thème */
+
+/* Conteneur du switch */
 .theme-switch-wrapper {
     display: flex;
     align-items: center;
@@ -287,52 +292,51 @@ h5 {
 
 .theme-switch {
     display: inline-block;
-    height: 26px;
+    height: 28px;
     position: relative;
-    width: 50px;
+    width: 54px;
+    margin-right: 10px;
 }
 
 .theme-switch input {
     display: none;
 }
 
+/* Style du slider - base solide */
 .slider {
     background-color: var(--toggle-background);
-    bottom: 0;
-    cursor: pointer;
-    left: 0;
     position: absolute;
-    right: 0;
     top: 0;
-    transition: .4s;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 34px;
+    border: 2px solid var(--toggle-border);
+    transition: background-color 0.4s ease;
 }
 
+/* Style du rond du slider - ajustement vertical */
 .slider:before {
     background-color: var(--toggle-button);
-    bottom: 4px;
     content: "";
-    height: 18px;
-    left: 4px;
     position: absolute;
-    transition: .4s;
-    width: 18px;
-    z-index: 2;
-}
-
-.slider.round {
-    border-radius: 34px;
-}
-
-.slider.round:before {
+    height: 20px;
+    width: 20px;
+    left: 3px;
+    top: 50%;                    /* Centrer verticalement */
+    transform: translateY(-50%); /* Centrer verticalement */
     border-radius: 50%;
+    transition: all 0.4s ease;   /* Transition pour toutes les propriétés */
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+    z-index: 3;                  /* Augmenter le z-index pour que le rond soit au-dessus des icônes */
 }
 
-/* Position du curseur selon le mode */
+/* Position du rond quand le checkbox est coché */
 input:checked + .slider:before {
-    transform: translateX(24px);
+    transform: translateY(-50%) translateX(26px); /* Maintenir le centrage vertical */
 }
 
-/* Style pour les icônes dans le switch */
+/* Conteneur des icônes - ajustement pour qu'elles ne soient pas visibles à travers le rond */
 .toggle-icons {
     position: absolute;
     top: 0;
@@ -342,29 +346,39 @@ input:checked + .slider:before {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 5px;
+    padding: 0 6px;
     box-sizing: border-box;
     pointer-events: none;
+    z-index: 1;  /* S'assurer que les icônes sont en dessous du rond */
 }
 
+/* Augmentation de l'espacement des icônes pour éviter qu'elles soient sous le rond */
+.toggle-icons svg:first-child {
+    margin-left: 2px;
+}
+
+.toggle-icons svg:last-child {
+    margin-right: 2px;
+}
+
+/* Style des icônes */
 .sun-icon, .moon-icon {
-    width: 16px;
-    height: 16px;
+    width: 14px; /* Légèrement plus petites */
+    height: 14px;
+    transition: opacity 0.3s ease, transform 0.5s ease;
 }
 
 .sun-icon {
     color: var(--toggle-icon-active);
+    margin-left: 5px; /* Éloigner du centre */
 }
 
 .moon-icon {
     color: var(--toggle-icon-active);
+    margin-right: 5px; /* Éloigner du centre */
 }
 
-/* Animation pour les icônes */
-.sun-icon, .moon-icon {
-    transition: opacity 0.3s ease, transform 0.5s ease;
-}
-
+/* États des icônes selon le mode */
 .dark-mode .sun-icon {
     opacity: 0.5;
     transform: scale(0.8);
@@ -389,25 +403,19 @@ input:checked + .slider:before {
     color: var(--toggle-icon-inactive);
 }
 
-/* Animation supplémentaire pour le switch lors du changement */
-.slider {
-    transition: background-color 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-}
-
-.slider:before {
-    transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-}
-
-/* Animation quand on survole le switch */
+/* Effet de survol */
 .slider:hover {
     box-shadow: 0 0 8px var(--toggle-hover-glow);
+    opacity: 0.95;
 }
 
+/* Effet au clic */
 .slider:active:before {
-    transform: scale(1.15);
+    width: 22px;
+    height: 22px;
 }
 
-/* Assurez-vous que le toggle est bien aligné dans le header */
+
 .box-right {
     display: flex;
     align-items: center;
