@@ -1,0 +1,166 @@
+/* Styles spécifiques pour améliorer l'expérience tactile sur mobile */
+
+/* Améliorer le feedback tactile */
+@media (hover: none) and (pointer: coarse) {
+    /* Style pour le feedback lors du toucher */
+    .btn:active, .button-appelez-moi:active, .button-envoyer:active {
+        transform: scale(0.95);
+        transition: transform 0.1s;
+    }
+
+    /* Empêcher le comportement de survol sur mobile */
+    .btn:hover::after, .btn:hover::before {
+        width: 0 !important;
+    }
+
+    /* Feedback visuel pour le toucher du bouton "Voir travaux" */
+    .button-touch-active {
+        background-color: var(--navy) !important;
+        color: var(--floral-white) !important;
+        transform: scale(0.95) !important;
+    }
+
+    /* Amélioration de la navigation dans les cards */
+    .cardContainer {
+        -webkit-overflow-scrolling: touch; /* Défilement fluide sur iOS */
+        scrollbar-width: none; /* Masquer la scrollbar sur Firefox */
+        -ms-overflow-style: none; /* Masquer la scrollbar sur IE/Edge */
+        scroll-snap-type: x mandatory; /* Snap sur les cards */
+        padding: 10px 0;
+    }
+
+    .cardContainer::-webkit-scrollbar {
+        display: none; /* Masquer la scrollbar sur Chrome/Safari */
+    }
+
+    .card {
+        scroll-snap-align: center; /* Centrer les cards au défilement */
+        width: 80%; /* Plus large pour mobile */
+        margin-right: 15px;
+    }
+
+    /* Message d'aide pour zoomer sur les images */
+    .mobile-zoom-tip {
+        display: none;
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: rgba(0, 24, 76, 0.7);
+        color: var(--floral-white);
+        padding: 10px 15px;
+        border-radius: 20px;
+        font-size: 14px;
+        text-align: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .mobile-zoom-tip.show {
+        display: block;
+        opacity: 1;
+    }
+
+    /* Style pour la section mise en évidence après le défilement */
+    .highlight-section {
+        animation: highlight-pulse 1s ease-out;
+    }
+
+    @keyframes highlight-pulse {
+        0% { box-shadow: 0 0 0 0 rgba(221, 201, 175, 0.3); }
+        70% { box-shadow: 0 0 0 20px rgba(221, 201, 175, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(221, 201, 175, 0); }
+    }
+
+    /* Style amélioré pour le fullscreen sur mobile */
+    .fullScreen-image {
+        touch-action: pinch-zoom; /* Permettre le zoom par pincer */
+        transition: transform 0.3s ease;
+    }
+
+    /* Augmenter la taille des boutons de navigation pour qu'ils soient plus faciles à toucher */
+    .fullScreen-buttons {
+        width: 44px;
+        height: 44px;
+        padding: 10px;
+    }
+
+    /* Améliorer la lisibilité du texte du footer sur mobile */
+    .footer-text {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 0;
+    }
+
+    .footer-info-img {
+        min-width: 24px;
+        min-height: 24px;
+    }
+
+    /* Style pour le copyright du footer */
+    .footer-copyright {
+        width: 100%;
+        text-align: center;
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 1px solid rgba(221, 201, 175, 0.2);
+        font-size: 14px;
+        color: var(--h4);
+    }
+
+    .footer-copyright a {
+        color: var(--h4);
+        text-decoration: none;
+    }
+
+    .footer-copyright a:active {
+        color: var(--floral-white);
+    }
+
+    /* Formulaire de contact adapté au mobile */
+    .footer-form {
+        width: 100%;
+    }
+}
+
+/* Spécifique aux téléphones en mode portrait */
+@media screen and (max-width: 480px) {
+    .card {
+        width: 85%;
+    }
+
+    .landing-page h1 {
+        font-size: 28px;
+        line-height: 1.2;
+    }
+
+    .fullScreen-header {
+        padding: 8px;
+    }
+
+    .image-title {
+        font-size: 16px;
+        max-width: 55%;
+    }
+
+    .mobile-zoom-tip {
+        font-size: 12px;
+        bottom: 15px;
+    }
+}
+
+/* Améliorer l'accessibilité pour les tablettes */
+@media screen and (min-width: 481px) and (max-width: 768px) {
+    .card {
+        width: 70%;
+    }
+
+    .landing-logo {
+        width: 60%;
+    }
+
+    .menu {
+        gap: 30px;
+    }
+}

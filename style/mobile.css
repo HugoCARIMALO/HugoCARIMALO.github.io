@@ -1,0 +1,193 @@
+/* Styles mobiles pour embellir37.fr */
+
+/* Styles globaux pour mobile */
+@media screen and (max-width: 768px) {
+    /* Header mobile */
+    .header {
+        flex-direction: column;
+        padding: 10px 5%;
+    }
+
+    .logo {
+        margin: 10px auto;
+    }
+
+    .menu {
+        width: 100%;
+        min-width: 100%;
+        gap: 15px;
+        margin: 10px 0;
+        justify-content: center;
+    }
+
+    .btn-2 {
+        font-size: 16px;
+        line-height: 35px;
+    }
+
+    .box-right {
+        width: 100%;
+        justify-content: center;
+        margin-top: 10px;
+    }
+
+    /* Page d'accueil - Landing page */
+    .landing-page {
+        flex-direction: column;
+        padding: 5% 5%;
+        text-align: center;
+    }
+
+    .landing-group {
+        width: 100%;
+        margin: 10px 0;
+        order: 2;
+    }
+
+    .landing-logo {
+        width: 80%;
+        min-width: 250px;
+        margin: 10px auto;
+        order: 1;
+    }
+
+    h1 {
+        font-size: 32px;
+    }
+
+    .button-voir-travaux {
+        margin: 20px auto;
+    }
+
+    /* Travaux section */
+    .travaux {
+        padding: 15px 0 15px 4%;
+    }
+
+    .travaux-title {
+        font-size: 28px;
+        margin-left: 10px;
+    }
+
+    .cardContainer {
+        padding-bottom: 15px;
+    }
+
+    .card {
+        width: 80%;
+        margin-right: 15px;
+    }
+
+    /* Image plein écran */
+    .fullScreen-header {
+        width: 95%;
+        padding: 10px;
+    }
+
+    .fullScreen-buttons {
+        width: 35px;
+        height: 35px;
+    }
+
+    .image-title {
+        font-size: 1.2em;
+        max-width: 60%;
+    }
+
+    .fullScreen-image {
+        max-width: 95vw;
+    }
+
+    /* Footer responsive */
+    .footer {
+        flex-direction: column;
+        padding: 5% 5%;
+    }
+
+    .footer-list {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .footer-contact-top {
+        flex-direction: column;
+    }
+
+    .footer-contact-top input {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    input, textarea {
+        width: 100%;
+    }
+
+    .button-appelez-moi, .button-envoyer {
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    /* Page Contact */
+    .contact {
+        flex-direction: column-reverse;
+        padding: 5%;
+    }
+
+    .contact .footer-list {
+        width: 100%;
+    }
+
+    .contact .landing-logo {
+        width: 80%;
+        margin: 20px auto;
+    }
+
+    /* Page à propos */
+    .about {
+        flex-direction: column;
+        padding: 5%;
+        text-align: center;
+    }
+
+    .about .image {
+        width: 80%;
+        margin: 0 auto 20px;
+    }
+
+    .about .description {
+        width: 100%;
+        font-size: 18px;
+    }
+}
+
+/* Ajustements spécifiques pour petits écrans */
+@media screen and (max-width: 480px) {
+    .card {
+        width: 85%;
+    }
+
+    h1 {
+        font-size: 28px;
+    }
+
+    .menu {
+        gap: 10px;
+    }
+
+    .btn-2 {
+        font-size: 14px;
+        line-height: 30px;
+    }
+
+    .travaux-title {
+        font-size: 24px;
+    }
+
+    .footer-title {
+        font-size: 26px;
+    }
+
+    .footer-text {
+        font-size: 18px;
+    }
+}

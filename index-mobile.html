@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8"/>
+    <title>Embellir</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <meta name="description" content="Entreprise d'aménagements paysagers : pavage, dallage, portail, clôture, assainissement à Villandry et alentours" />
+    <link rel="icon" href="img/icon.svg">
+
+    <!-- Styles partagés -->
+    <link rel="stylesheet" href="style/globals.css"/>
+
+    <!-- Styles spécifiques pour les différentes pages -->
+    <link rel="stylesheet" href="style/travaux.css"/>
+    <link rel="stylesheet" href="style/contact.css"/>
+    <link rel="stylesheet" href="style/about.css"/>
+
+    <!-- Styles pour l'affichage mobile -->
+    <link rel="stylesheet" href="style/mobile.css"/>
+    <link rel="stylesheet" href="style/hamburger.css"/>
+
+    <!-- Scripts -->
+    <script src="scripts/ajax-navigation.js"></script>
+    <script src="scripts/script.js"></script>
+    <script src="scripts/mobile.js"></script>
+</head>
+<body>
+<!-- Conteneur pour le header  -->
+<div id="header-container"></div>
+
+<div class="landing-page">
+    <div class="landing-group">
+        <h1>PAVAGE</h1>
+        <h1>DALLAGE</h1>
+        <h1>PORTAIL</h1>
+        <h1>CLÔTURE</h1>
+        <h1>ASSAINISSEMENT</h1>
+        <div class="bloc-landing">
+            <button id="button-voir-travaux" class="button-voir-travaux">
+                <img src="img/caretCircleDown.svg" alt="flèche vers le bas"/>
+                <span class="button-text">Voir mes travaux</span>
+            </button>
+        </div>
+    </div>
+    <img class="landing-logo" src="img/logoAnthony.svg" alt="logo"/>
+</div>
+
+<div id="travaux" class="travaux">
+    <h3 class="travaux-title">Pavage</h3>
+    <div id="cardContainer-Pavage" class="cardContainer"></div>
+    <!-- Indicateur de défilement sera ajouté en JS -->
+
+    <h3 class="travaux-title">Dallage</h3>
+    <div id="cardContainer-Dallage" class="cardContainer"></div>
+    <!-- Indicateur de défilement sera ajouté en JS -->
+
+    <h3 class="travaux-title">Portail</h3>
+    <div id="cardContainer-Portail" class="cardContainer"></div>
+    <!-- Indicateur de défilement sera ajouté en JS -->
+
+    <h3 class="travaux-title">Clôture</h3>
+    <div id="cardContainer-Cloture" class="cardContainer"></div>
+    <!-- Indicateur de défilement sera ajouté en JS -->
+
+    <h3 class="travaux-title">Assainissement</h3>
+    <div id="cardContainer-Assainissement" class="cardContainer"></div>
+    <!-- Indicateur de défilement sera ajouté en JS -->
+</div>
+
+<!-- Fond flouté -->
+<div class="overlay" id="overlay"></div>
+
+<!-- Image agrandie avec contrôles tactiles -->
+<div class="fullScreen-image-block" id="fullScreen-image-block">
+    <div class="fullScreen-header">
+        <img class="fullScreen-buttons" src="img/caretCircleLeft.svg" alt="image précédente" />
+        <p class="image-title" id="image-title"></p>
+        <img class="fullScreen-buttons" src="img/caretCircleRight.svg" alt="image suivante" />
+    </div>
+    <img src="" alt="Image agrandie" id="fullScreen-image" class="fullScreen-image">
+    <div class="mobile-zoom-tip">Touchez deux fois pour zoomer</div>
+</div>
+
+
+<!-- Conteneur pour le footer -->
+<div id="footer-container"></div>
+
+
+</body>
+</html>

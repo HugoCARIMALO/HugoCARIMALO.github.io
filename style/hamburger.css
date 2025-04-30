@@ -1,0 +1,133 @@
+/* Styles pour le menu hamburger et la navigation mobile */
+
+/* Menu hamburger - caché par défaut en desktop */
+.hamburger-menu {
+    display: none;
+    cursor: pointer;
+    padding: 10px;
+    z-index: 100;
+}
+
+.hamburger-icon {
+    width: 30px;
+    height: 24px;
+    position: relative;
+    margin: 0 auto;
+}
+
+.hamburger-icon span {
+    display: block;
+    position: absolute;
+    height: 3px;
+    width: 100%;
+    background: var(--button-header);
+    border-radius: 3px;
+    opacity: 1;
+    left: 0;
+    transform: rotate(0deg);
+    transition: .25s ease-in-out;
+}
+
+.hamburger-icon span:nth-child(1) {
+    top: 0;
+}
+
+.hamburger-icon span:nth-child(2) {
+    top: 10px;
+}
+
+.hamburger-icon span:nth-child(3) {
+    top: 20px;
+}
+
+/* Animation du hamburger quand actif */
+.hamburger-menu.active .hamburger-icon span:nth-child(1) {
+    top: 10px;
+    transform: rotate(135deg);
+}
+
+.hamburger-menu.active .hamburger-icon span:nth-child(2) {
+    opacity: 0;
+    left: -60px;
+}
+
+.hamburger-menu.active .hamburger-icon span:nth-child(3) {
+    top: 10px;
+    transform: rotate(-135deg);
+}
+
+/* Style du menu quand caché en mobile */
+.menu-hidden {
+    display: none !important;
+}
+
+/* Indicateurs de défilement pour les galeries d'images */
+.scroll-indicator {
+    display: none;
+    justify-content: center;
+    margin: 10px 0 20px;
+}
+
+.scroll-indicator span {
+    width: 8px;
+    height: 8px;
+    background-color: var(--sand);
+    border-radius: 50%;
+    margin: 0 5px;
+    opacity: 0.5;
+}
+
+.scroll-indicator span:nth-child(2) {
+    opacity: 1;
+}
+
+/* Styles spécifiques pour la vue mobile */
+@media screen and (max-width: 768px) {
+    .hamburger-menu {
+        display: block;
+        position: absolute;
+        top: 15px;
+        right: 20px;
+    }
+
+    .header {
+        position: relative;
+        padding-top: 50px;
+    }
+
+    .menu {
+        flex-direction: column;
+        background-color: var(--header);
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        z-index: 99;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        padding: 10px 0;
+        border-top: 1px solid var(--sand);
+    }
+
+    .menu a {
+        padding: 8px 0;
+    }
+
+    .box-right {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .button-appelez-moi {
+        margin-top: 10px;
+    }
+
+    /* Ajustements pour le full-screen en mobile */
+    .fullScreen-image-block {
+        touch-action: manipulation; /* Améliore le comportement tactile */
+    }
+
+    /* Indicateur de défilement visible en mobile */
+    .scroll-indicator {
+        display: flex;
+    }
+}
