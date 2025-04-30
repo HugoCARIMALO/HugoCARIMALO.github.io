@@ -122,7 +122,6 @@ function setSVGColor(themeMode) {
 function createByType(imageMap) {
     for (const [type, imageList] of Object.entries(imageMap)) {
         const cardContainer = document.getElementById("cardContainer-" + type);
-        if (!cardContainer) continue;
 
         // Parcourir la liste d'images et créer les card dynamiquement
         imageList.forEach(imageObj => {
@@ -134,11 +133,6 @@ function createByType(imageMap) {
             image.src = imageObj.url;
             image.className = "zoom-trigger"
             card.appendChild(image);
-
-            const agrandir = document.createElement("div");
-            agrandir.textContent = "Agrandir";
-            agrandir.className = "agrandir";
-            card.appendChild(agrandir);
 
             const title = document.createElement("h5");
             title.textContent = imageObj.name;
