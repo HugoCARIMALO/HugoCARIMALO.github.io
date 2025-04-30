@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
             initLeftRightButtonForFullScreenImage(imageMap);
         });
 
-        initScrollButtonVoirTravaux();
+        initModernButtonVoirTravaux();
     }
 });
 
@@ -474,15 +474,64 @@ function initZoomImage() {
 
 
 
-function initScrollButtonVoirTravaux() {
+function initModernButtonVoirTravaux() {
     const button = document.getElementById('button-voir-travaux');
     if (!button) return;
 
+    // Ajouter la classe d'animation au chargement
+    button.classList.add('pulse-animation');
+
+    // Arrêter l'animation de pulse après le premier clic
     button.addEventListener('click', function() {
+        button.classList.remove('pulse-animation');
+
+        // Effet de vague au clic
+        const rect = button.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+
+        button.style.setProperty('--ripple-x', x + 'px');
+        button.style.setProperty('--ripple-y', y + 'px');
+
+        // Faire défiler en douceur vers la section des travaux
         const target = document.getElementById('travaux');
         if (target) {
-            target.scrollIntoView({ behavior: 'smooth' });
+            target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
         }
+    });
+
+    // Effet de flottement continu
+    let floatInterval;
+
+    button.addEventListener('mouseenter', function() {
+        // Arrêter l'animation de pulse si elle est encore active
+        button.classList.remove('pulse-animation');
+
+        // Ajouter un effet de flottement subtil
+        let floatUp = true;
+        let position = 0;
+
+        clearInterval(floatInterval);
+
+        floatInterval = setInterval(() => {
+            if (floatUp) {
+                position += 0.3;
+                if (position >= 5) floatUp = false;
+            } else {
+                position -= 0.3;
+                if (position <= 0) floatUp = true;
+            }
+
+            button.style.transform = `translateY(-${position}px)`;
+        }, 30);
+    });
+
+    button.addEventListener('mouseleave', function() {
+        clearInterval(floatInterval);
+        button.style.transform = '';
     });
 }
 

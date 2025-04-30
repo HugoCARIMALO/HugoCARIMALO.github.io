@@ -17,22 +17,121 @@
 }
 
 
+/* Style amélioré pour le bouton Voir mes travaux */
 .button-voir-travaux {
-    margin-top: 25px;
-    padding: 4px 25px 4px 10px;
+    margin-top: 30px;
+    padding: 12px 25px 12px 20px;
     display: flex;
-    justify-content: space-around;
-    flex-direction: row;
-    gap: 25px;
+    justify-content: space-between;
     align-items: center;
     background-color: var(--button-voir-travaux-background-color);
-    border-radius: 22px;
-
-    font-weight: 500;
     color: var(--button-voir-travaux-color);
-    font-size: 21px;
-
+    font-weight: 600;
+    font-size: 20px;
+    position: relative;
+    overflow: hidden;
+    border: 2px solid transparent;
+    border-radius: 30px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
     cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.button-voir-travaux img {
+    width: 22px;
+    height: 22px;
+    margin-right: 15px;
+    transition: transform 0.5s ease;
+}
+
+.button-voir-travaux:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    background-color: var(--navy);
+    color: var(--floral-white);
+    border: 2px solid var(--sand);
+}
+
+.button-voir-travaux:hover img {
+    transform: translateY(3px) rotate(90deg);
+}
+
+.button-voir-travaux:active {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Effet de vague au clic */
+.button-voir-travaux::after {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    background-image: radial-gradient(circle, var(--sand) 10%, transparent 10.01%);
+    background-repeat: no-repeat;
+    background-position: 50%;
+    transform: scale(10, 10);
+    opacity: 0;
+    transition: transform 0.5s, opacity 1s;
+}
+
+.button-voir-travaux:active::after {
+    transform: scale(0, 0);
+    opacity: 0.5;
+    transition: 0s;
+}
+
+/* Animation au survol pour le texte */
+.button-voir-travaux .button-text {
+    position: relative;
+    transition: all 0.4s ease;
+}
+
+.button-voir-travaux:hover .button-text {
+    letter-spacing: 1px;
+}
+
+/* Effet de brillance au survol */
+.button-voir-travaux::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(
+            to right,
+            rgba(255, 255, 255, 0) 0%,
+            rgba(255, 255, 255, 0.3) 50%,
+            rgba(255, 255, 255, 0) 100%
+    );
+    transform: skewX(-25deg);
+    transition: left 0.8s ease;
+}
+
+.button-voir-travaux:hover::before {
+    left: 150%;
+}
+
+/* Pulse animation for attracting attention */
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(220, 201, 175, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(220, 201, 175, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(220, 201, 175, 0);
+    }
+}
+
+.pulse-animation {
+    animation: pulse 2s infinite;
 }
 
 
