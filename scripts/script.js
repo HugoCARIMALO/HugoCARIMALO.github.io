@@ -5,8 +5,13 @@ document.addEventListener("DOMContentLoaded", function () {
     // Ajouter le header et le footer
     loadHeaderFooter().then(() => {
         setSVGColor(localStorage.getItem("themeMode") || "dark-mode");
+
+        // Initialiser le menu burger après chargement du header
+        initMobileMenu();
+
         console.log("Header et footer chargés")
     });
+
 
     // si la page est index.html
     if (window.location.pathname.endsWith("index.html") || window.location.pathname === "/") {
@@ -547,4 +552,68 @@ function CallMeButtonHightlight(callMeButton) {
             telephone.classList.remove('highlight');
         }, 5000);
     });
+}
+
+
+/* Fonction pour initialiser le menu burger */
+function initMobileMenu() {
+    const burgerButton = document.getElementById('burger-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const closeButton = document.getElementById('close-menu');
+    const body = document.body;
+
+    // Créer un overlay pour l'arrière-plan
+    const overlay = document.createElement('div');
+    overlay.className = 'menu-overlay';
+    body.appendChild(overlay);
+
+    // Fonction pour ouvrir le menu
+    function openMenu() {
+        mobileMenu.classList.add('open');
+        overlay.classList.add('open');
+        body.style.overflow = 'hidden'; // Empêcher le défilement de la page
+    }
+
+    // Fonction pour fermer le menu
+    function closeMenu() {
+        mobileMenu.classList.remove('open');
+        overlay.classList.remove('open');
+        body.style.overflow = ''; // Rétablir le défilement
+    }
+
+    // Écouteurs d'événements
+    if (burgerButton) {
+        burgerButton.addEventListener('click', openMenu);
+    }
+
+    if (closeButton) {
+        closeButton.addEventListener('click', closeMenu);
+    }
+
+    // Fermer le menu en cliquant sur l'overlay
+    overlay.addEventListener('click', closeMenu);
+
+    // Fermer le menu en cliquant sur un lien
+    const mobileNavItems = document.querySelectorAll('.mobile-nav-item');
+    mobileNavItems.forEach(item => {
+        item.addEventListener('click', closeMenu);
+    });
+
+    // Synchroniser le toggle de thème mobile avec le toggle principal
+    const checkboxMobile = document.getElementById('checkbox-mobile');
+    if (checkboxMobile) {
+        // Initialiser l'état du toggle mobile
+        let themeMode = localStorage.getItem("themeMode") || "dark-mode";
+        checkboxMobile.checked = themeMode === "light-mode";
+
+        // Synchroniser le toggle mobile avec le toggle principal
+        checkboxMobile.addEventListener('change', function() {
+            toggleMode();
+            // Mettre à jour l'état du checkbox principal (s'il existe)
+            const checkbox = document.getElementById('checkbox');
+            if (checkbox) {
+                checkbox.checked = checkboxMobile.checked;
+            }
+        });
+    }
 }
