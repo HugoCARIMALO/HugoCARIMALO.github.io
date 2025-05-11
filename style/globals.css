@@ -1147,3 +1147,36 @@ input:-webkit-autofill:focus {
         margin: 10px;
     }
 }
+
+/* Correction de l'alignement dans la box-right */
+.box-right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+/* Ajustement du theme-switch-wrapper pour qu'il s'aligne correctement */
+.theme-switch-wrapper {
+    display: flex;
+    align-items: center;
+    margin: 0 15px;  /* Uniformiser les marges avec les autres éléments */
+}
+
+/* S'assurer que le bouton appelez-moi est bien aligné */
+.button-appelez-moi.button-header {
+    margin: 0 0 0 10px;  /* Réduire la marge à gauche pour le rapprocher du switch */
+}
+
+/* Correction spécifique pour la version bureau uniquement */
+@media screen and (min-width: 769px) {
+    .theme-switch-wrapper {
+        height: 35px;  /* Même hauteur que le bouton appelez-moi */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .box-right {
+        gap: 5px;  /* Espace uniforme entre les éléments */
+    }
+}
