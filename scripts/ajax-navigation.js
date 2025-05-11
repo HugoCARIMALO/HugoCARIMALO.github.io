@@ -1,4 +1,4 @@
-/* Implémentation plus avancée utilisant AJAX - à ajouter dans un nouveau fichier ajax-navigation.js */
+/* Implémentation plus avancée utilisant AJAX - pour ajax-navigation.js */
 
 document.addEventListener("DOMContentLoaded", function() {
     initAjaxNavigation();
@@ -35,6 +35,92 @@ function initAjaxNavigation() {
         });
     }
 
+    // Fonction pour afficher l'indicateur de chargement
+    function showLoadingIndicator() {
+        // Vérifier si un indicateur existe déjà
+        if (document.querySelector('.loading-indicator')) {
+            return;
+        }
+
+        // Créer l'indicateur de chargement
+        const loadingIndicator = document.createElement('div');
+        loadingIndicator.className = 'loading-indicator';
+        loadingIndicator.innerHTML = '<div class="spinner"></div>';
+
+        // Ajouter au body
+        document.body.appendChild(loadingIndicator);
+
+        // Empêcher le défilement pendant le chargement
+        document.body.style.overflow = 'hidden';
+    }
+
+    // Fonction pour masquer l'indicateur de chargement
+    function hideLoadingIndicator() {
+        const indicator = document.querySelector('.loading-indicator');
+        if (indicator) {
+            // Ajouter une classe pour l'animation de sortie
+            indicator.classList.add('fade-out');
+
+            // Supprimer après la fin de l'animation
+            setTimeout(() => {
+                if (indicator.parentNode) {
+                    indicator.parentNode.removeChild(indicator);
+                }
+                // Rétablir le défilement
+                document.body.style.overflow = '';
+            }, 300);
+        }
+    }
+
+    // Fonction pour extraire et appliquer les feuilles de style spécifiques à la page
+    function updatePageSpecificStyles(htmlDoc, targetUrl) {
+        // Trouver toutes les feuilles de style dans le document chargé
+        const newStylesheets = Array.from(htmlDoc.querySelectorAll('link[rel="stylesheet"]'))
+            .map(link => link.getAttribute('href'));
+
+        // Trouver les feuilles de style actuelles
+        const currentStylesheets = Array.from(document.querySelectorAll('link[rel="stylesheet"]'))
+            .map(link => link.getAttribute('href'));
+
+        // Ajouter les feuilles de style manquantes
+        newStylesheets.forEach(stylesheet => {
+            if (!currentStylesheets.includes(stylesheet)) {
+                const link = document.createElement('link');
+                link.rel = 'stylesheet';
+                link.href = stylesheet;
+                document.head.appendChild(link);
+                console.log(`Feuille de style ajoutée: ${stylesheet}`);
+            }
+        });
+
+        // Identifier la page actuelle
+        const pageName = targetUrl.split('/').pop() || 'index.html';
+
+        // Activer/désactiver les CSS spécifiques en fonction de la page
+        const cssMap = {
+            'index.html': 'style/travaux.css',
+            'contact.html': 'style/contact.css',
+            'about.html': 'style/about.css'
+            // Ajoutez d'autres pages si nécessaire
+        };
+
+        // Désactiver tous les CSS spécifiques
+        Object.values(cssMap).forEach(cssPath => {
+            document.querySelectorAll(`link[href="${cssPath}"]`).forEach(link => {
+                link.disabled = true;
+            });
+        });
+
+        // Activer uniquement le CSS correspondant à la page actuelle
+        const currentPageCss = cssMap[pageName];
+        if (currentPageCss) {
+            document.querySelectorAll(`link[href="${currentPageCss}"]`).forEach(link => {
+                link.disabled = false;
+            });
+            console.log(`CSS activé pour ${pageName}: ${currentPageCss}`);
+        }
+    }
+
     // Intercepter les clics sur les liens de navigation
     document.body.addEventListener('click', function(e) {
         // Trouver le lien cliqué
@@ -55,7 +141,7 @@ function initAjaxNavigation() {
         // Afficher l'indicateur de chargement
         showLoadingIndicator();
 
-        // Ajouter un état de chargement au contenu principal
+        // Ajouter un état de chargement
         const mainContent = document.getElementById('main-content');
         if (mainContent) {
             mainContent.style.opacity = '0.5';
@@ -64,7 +150,6 @@ function initAjaxNavigation() {
         // Charger le nouveau contenu via AJAX
         fetch(url)
             .then(response => {
-                // Vérifier si la réponse est OK (statut 200-299)
                 if (!response.ok) {
                     throw new Error(`Erreur HTTP: ${response.status}`);
                 }
@@ -93,6 +178,8 @@ function initAjaxNavigation() {
                         }
                         currentNode = currentNode.nextSibling;
                     }
+                } else {
+                    throw new Error("Impossible de trouver header-container ou footer-container dans la page cible");
                 }
 
                 // Mettre à jour l'URL dans l'historique
@@ -108,49 +195,56 @@ function initAjaxNavigation() {
                         mainContent.style.opacity = '1';
                     }
 
-                    // Masquer l'indicateur de chargement
-                    hideLoadingIndicator();
-
                     // Réinitialiser les scripts pour la nouvelle page
                     reinitializeScripts();
 
-                    // Faire défiler en haut de la page
+                    // Faire défiler vers le haut de la page
                     window.scrollTo(0, 0);
+
+                    // Masquer l'indicateur de chargement
+                    hideLoadingIndicator();
                 }, 300);
             })
             .catch(error => {
                 console.error('Erreur lors du chargement de la page:', error);
 
-                // Message d'erreur convivial pour l'utilisateur
+                // Message d'erreur convivial
                 if (mainContent) {
                     mainContent.innerHTML = `
-                    <div class="ajax-error">
-                        <h3>Erreur de chargement</h3>
-                        <p>Une erreur est survenue lors du chargement de la page.</p>
-                        <button onclick="window.location.href='${url}'">Réessayer</button>
-                    </div>
-                `;
+                        <div class="ajax-error">
+                            <h3>Erreur de chargement</h3>
+                            <p>Une erreur est survenue lors du chargement de la page.</p>
+                            <button onclick="window.location.href='${url}'">Réessayer</button>
+                        </div>
+                    `;
                     mainContent.style.opacity = '1';
                 }
 
-                // Masquer l'indicateur de chargement même en cas d'erreur
+                // Masquer l'indicateur de chargement
                 hideLoadingIndicator();
+
+                // Si l'erreur est grave, naviguer traditionnellement après un délai
+                /* setTimeout(() => {
+                    window.location.href = url;
+                }, 2000); */
             });
     });
 
     // Gérer les boutons retour/avant du navigateur
-    window.addEventListener('popstate', function(event) {
+    window.addEventListener('popstate', function() {
         // Afficher l'indicateur de chargement
         showLoadingIndicator();
 
+        // Ajouter un état de chargement
         const mainContent = document.getElementById('main-content');
         if (mainContent) {
             mainContent.style.opacity = '0.5';
         }
 
-        // Utiliser location.href comme URL cible
+        // Utiliser l'URL actuelle du navigateur
         const targetUrl = location.href;
 
+        // Charger la page correspondante à l'état actuel de l'historique
         fetch(targetUrl)
             .then(response => {
                 if (!response.ok) {
@@ -165,7 +259,7 @@ function initAjaxNavigation() {
                 // Mettre à jour les styles spécifiques à la page
                 updatePageSpecificStyles(doc, targetUrl);
 
-                // Extraire le contenu principal comme précédemment
+                // Extraire le contenu principal
                 let newContent = '';
                 const headerContainer = doc.getElementById('header-container');
                 const footerContainer = doc.getElementById('footer-container');
@@ -178,6 +272,8 @@ function initAjaxNavigation() {
                         }
                         currentNode = currentNode.nextSibling;
                     }
+                } else {
+                    throw new Error("Impossible de trouver header-container ou footer-container dans la page cible");
                 }
 
                 // Mettre à jour le titre
@@ -190,25 +286,24 @@ function initAjaxNavigation() {
                         mainContent.style.opacity = '1';
                     }
 
-                    // Masquer l'indicateur de chargement
-                    hideLoadingIndicator();
-
                     // Réinitialiser les scripts
                     reinitializeScripts();
 
-                    // Faire défiler en haut de la page
+                    // Faire défiler vers le haut de la page
                     window.scrollTo(0, 0);
+
+                    // Masquer l'indicateur de chargement
+                    hideLoadingIndicator();
                 }, 300);
             })
             .catch(error => {
                 console.error('Erreur lors du chargement de la page:', error);
 
-                // En cas d'erreur grave, recharger la page normalement
+                // En cas d'erreur, recharger la page complètement
                 hideLoadingIndicator();
                 window.location.reload();
             });
     });
-
 }
 
 // Fonction pour réinitialiser les scripts nécessaires après le chargement du contenu
@@ -222,19 +317,30 @@ function reinitializeScripts() {
     // Réinitialiser les écouteurs d'événements communs
     const callMeButtons = document.getElementsByName("button-appelez-moi");
     for (let i = 0; i < callMeButtons.length; i++) {
-        CallMeButtonHightlight(callMeButtons[i]);
+        if (typeof CallMeButtonHightlight === 'function') {
+            CallMeButtonHightlight(callMeButtons[i]);
+        }
     }
 
     // Mettre à jour le thème
     let themeMode = localStorage.getItem("themeMode") || "dark-mode";
-    setSVGColor(themeMode);
+    if (typeof setSVGColor === 'function') {
+        setSVGColor(themeMode);
+    }
+
+    // Initialiser le menu mobile s'il existe
+    if (typeof initMobileMenu === 'function') {
+        initMobileMenu();
+    }
 
     // Scripts spécifiques aux pages
     switch(pageName) {
         case '':
         case 'index.html':
             console.log('Initialisation des scripts pour la page d\'accueil');
-            hideFullScreenImage();
+            if (typeof hideFullScreenImage === 'function') {
+                hideFullScreenImage();
+            }
 
             if (typeof getMapImages === 'function') {
                 getMapImages().then(imageMap => {
@@ -245,8 +351,9 @@ function reinitializeScripts() {
                 }).catch(err => console.error('Erreur lors du chargement des images:', err));
             }
 
-            if (typeof initScrollButtonVoirTravaux === 'function')
-                initScrollButtonVoirTravaux();
+            if (typeof initModernButtonVoirTravaux === 'function') {
+                initModernButtonVoirTravaux();
+            }
             break;
 
         case 'contact.html':
@@ -276,118 +383,4 @@ function reinitializeScripts() {
             console.warn(`La fonction ${funcName} n'est pas définie`);
         }
     });
-}
-
-// Fonction pour extraire et appliquer les feuilles de style spécifiques à la page
-function updatePageSpecificStyles(htmlDoc, targetUrl) {
-    // Trouver toutes les feuilles de style dans le document chargé
-    const newStylesheets = Array.from(htmlDoc.querySelectorAll('link[rel="stylesheet"]'))
-        .map(link => link.getAttribute('href'));
-
-    // Trouver les feuilles de style actuelles
-    const currentStylesheets = Array.from(document.querySelectorAll('link[rel="stylesheet"]'))
-        .map(link => link.getAttribute('href'));
-
-    // Ajouter les feuilles de style manquantes
-    newStylesheets.forEach(stylesheet => {
-        if (!currentStylesheets.includes(stylesheet)) {
-            const link = document.createElement('link');
-            link.rel = 'stylesheet';
-            link.href = stylesheet;
-            document.head.appendChild(link);
-            console.log(`Feuille de style ajoutée: ${stylesheet}`);
-        }
-    });
-
-    // Identifier la page actuelle
-    const pageName = targetUrl.split('/').pop() || 'index.html';
-
-    // Activer/désactiver les CSS spécifiques en fonction de la page
-    const cssMap = {
-        'index.html': 'style/travaux.css',
-        'contact.html': 'style/contact.css',
-        'about.html': 'style/about.css'
-        // Ajoutez d'autres pages si nécessaire
-    };
-
-    // Désactiver tous les CSS spécifiques
-    Object.values(cssMap).forEach(cssPath => {
-        document.querySelectorAll(`link[href="${cssPath}"]`).forEach(link => {
-            link.disabled = true;
-        });
-    });
-
-    // Activer uniquement le CSS correspondant à la page actuelle
-    const currentPageCss = cssMap[pageName];
-    if (currentPageCss) {
-        document.querySelectorAll(`link[href="${currentPageCss}"]`).forEach(link => {
-            link.disabled = false;
-        });
-        console.log(`CSS activé pour ${pageName}: ${currentPageCss}`);
-    }
-}
-
-
-
-// Dans la fonction de traitement du clic:
-fetch(url)
-    .then(response => response.text())
-    .then(html => {
-        // Créer un DOM temporaire pour extraire le contenu
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, 'text/html');
-
-        // Mettre à jour les styles spécifiques à la page
-        updatePageSpecificStyles(doc, url);
-
-        // Le reste du code de traitement...
-    })
-// ...
-
-// Et dans le gestionnaire popstate également:
-fetch(location.href)
-    .then(response => response.text())
-    .then(html => {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, 'text/html');
-
-        // Mettre à jour les styles spécifiques à la page
-        updatePageSpecificStyles(doc, location.href);
-
-        // Le reste du code de traitement...
-    })
-
-// Fonction pour créer et afficher l'indicateur de chargement
-function showLoadingIndicator() {
-    // Vérifier si un indicateur existe déjà
-    if (document.querySelector('.loading-indicator')) {
-        return;
-    }
-
-    // Créer l'indicateur de chargement
-    const loadingIndicator = document.createElement('div');
-    loadingIndicator.className = 'loading-indicator';
-    loadingIndicator.innerHTML = '<div class="spinner"></div>';
-
-    // Ajouter au body
-    document.body.appendChild(loadingIndicator);
-
-    // Empêcher le défilement pendant le chargement
-    document.body.style.overflow = 'hidden';
-}
-
-// Fonction pour masquer l'indicateur de chargement
-function hideLoadingIndicator() {
-    const indicator = document.querySelector('.loading-indicator');
-    if (indicator) {
-        // Ajouter une classe pour l'animation de sortie
-        indicator.classList.add('fade-out');
-
-        // Supprimer après la fin de l'animation
-        setTimeout(() => {
-            document.body.removeChild(indicator);
-            // Rétablir le défilement
-            document.body.style.overflow = '';
-        }, 300);
-    }
 }
