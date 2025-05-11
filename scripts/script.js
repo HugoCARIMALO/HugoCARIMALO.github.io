@@ -189,7 +189,6 @@ function initLeftRightButtonForFullScreenImage(imageMap) {
     const rightButton = document.querySelector('.fullScreen-header img[src="img/caretCircleRight.svg"]');
     const fullScreenImage = document.getElementById('fullScreen-image');
     const imageTitle = document.getElementById('image-title');
-    const imageContainer = document.getElementById('fullScreen-image-block');
 
     if (!leftButton || !rightButton || !fullScreenImage || !imageTitle) {
         return;
@@ -416,6 +415,37 @@ function initZoomImage() {
             hideFullScreenImage();
         }
     });
+
+    // Rendre les cartes d'images accessibles au clavier
+    const cards = document.querySelectorAll('.card');
+    cards.forEach(card => {
+        // Ajouter la navigation au clavier
+        card.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter' || event.key === ' ') {
+                // Simuler un clic sur l'image
+                const image = card.querySelector('img.zoom-trigger');
+                if (image) {
+                    const clickEvent = new MouseEvent('click', {
+                        bubbles: true,
+                        cancelable: true,
+                        view: window
+                    });
+                    image.dispatchEvent(clickEvent);
+                }
+            }
+        });
+    });
+
+    // Rendre les boutons de navigation accessibles au clavier
+    const navButtons = document.querySelectorAll('.fullScreen-buttons');
+    navButtons.forEach(button => {
+        button.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter' || event.key === ' ') {
+                button.click();
+                event.preventDefault();
+            }
+        });
+    });
 }
 
 /* Initialisation du bouton "Voir mes travaux" avec animations */
@@ -515,6 +545,8 @@ function initMobileMenu() {
     // Fonction pour ouvrir le menu
     function openMenu() {
         mobileMenu.classList.add('open');
+        burgerButton.setAttribute('aria-expanded', 'true');
+        mobileMenu.setAttribute('aria-hidden', 'false');
         overlay.classList.add('open');
         body.style.overflow = 'hidden'; // Empêcher le défilement de la page
     }
@@ -522,6 +554,8 @@ function initMobileMenu() {
     // Fonction pour fermer le menu
     function closeMenu() {
         mobileMenu.classList.remove('open');
+        burgerButton.setAttribute('aria-expanded', 'false');
+        mobileMenu.setAttribute('aria-hidden', 'true');
         overlay.classList.remove('open');
         body.style.overflow = ''; // Rétablir le défilement
     }

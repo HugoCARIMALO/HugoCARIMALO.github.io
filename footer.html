@@ -15,23 +15,22 @@
         <a class="btn footer-text" href="mailto:contact@embellir37.fr" id="sendEmail"><img class="footer-info-img" src="img/mail.svg"/> contact@embellir37.fr</a>
     </div>
 
-    <form action="https://api.web3forms.com/submit" method="POST">
-
+    <form action="https://api.web3forms.com/submit" method="POST" role="form" aria-label="Formulaire de contact">
         <input type="hidden" name="access_key" value="d03b2c98-db1b-4a94-aa64-879d9b6b4cdd">
         <div class="footer-list">
-            <h3 class="footer-title">CONTACT</h3>
+            <h3 class="footer-title" id="contact-form-title">CONTACT</h3>
             <div class="footer-contact-top">
-                <input type="text" name="Prenom Nom" placeholder="Prénom nom" required>
-                <input type="text" name="email" placeholder="E-mail" required>
+                <input type="text" name="Prenom Nom" placeholder="Prénom nom" required aria-required="true" aria-labelledby="contact-form-title">
+                <input type="text" name="email" placeholder="E-mail" required aria-required="true" aria-labelledby="contact-form-title">
             </div>
 
             <div>
-                <textarea class="form-message" maxlength="500" name="message" placeholder="Rédigez votre message ici..." required></textarea>
+                <textarea class="form-message" maxlength="500" name="message" placeholder="Rédigez votre message ici..." required aria-required="true" aria-labelledby="contact-form-title"></textarea>
             </div>
             <div class="footer-contact-top">
                 <input class="button-envoyer" type="submit" value="Envoyer">
 
-                <button name="button-appelez-moi" class="button-appelez-moi" type="button">
+                <button name="button-appelez-moi" class="button-appelez-moi" type="button" aria-label="Mettre en évidence le numéro de téléphone">
                     <div class="text-wrapper-2">Appelez-moi</div>
                 </button>
             </div>

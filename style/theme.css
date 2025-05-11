@@ -33,7 +33,7 @@
     --footer-title: var(--floral-white);
 
     --input-background-color: var(--chambray);
-    --input-text: var(--lavender);
+    --input-text: var(--floral-white);
     --input-envoyer-background-color: var(--sand);
     --input-envoyer-color: var(--chambray);
 
@@ -84,7 +84,7 @@
     --footer-title: var(--floral-white);
 
     --input-background-color: var(--chambray-light);
-    --input-text: var(--lavender);
+    --input-text: var(--navy);
     --input-envoyer-background-color: var(--sand);
     --input-envoyer-color: var(--chambray);
 
@@ -93,7 +93,7 @@
     --contact-input-background-color: var(--sand);
     --contact-input-envoyer-background-color: var(--sand);
     --contact-input-envoyer-border-color: var(--navy);
-    --contact-input-envoyer-color: var(--sand);
+    --contact-input-envoyer-color: var(--navy);
     --contact-input-text: var(--navy);
     --text-hover: var(--floral-white);
 

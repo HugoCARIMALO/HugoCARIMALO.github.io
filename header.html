@@ -1,5 +1,5 @@
 <!-- Nouveau code HTML pour le header avec menu burger à droite -->
-<header class="header">
+<header class="header" role="banner">
     <!-- Logo à gauche -->
     <svg id="logo" class="logo" width="158" height="50" viewBox="0 0 158 50" fill="none" xmlns="http://www.w3.org/2000/svg">
         <svg id="logo-mobile" class="logo" width="158" height="50" viewBox="0 0 158 50" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -36,7 +36,7 @@
     </svg>
 
     <!-- Menu de navigation principal (masqué en mobile) -->
-    <nav class="menu">
+    <nav class="menu" role="navigation" aria-label="Navigation principale">
         <a class="btn btn-2" href="index.html">Travaux</a>
         <a class="btn btn-2" href="contact.html">Contact</a>
         <a class="btn btn-2" href="about.html">A propos</a>
@@ -47,8 +47,8 @@
         <!-- Wrapper du switch avec alignement corrigé -->
         <div class="theme-switch-wrapper">
             <label class="theme-switch" for="checkbox">
-                <input type="checkbox" id="checkbox" />
-                <div class="slider round">
+                <input type="checkbox" id="checkbox" aria-label="Changer le thème" />
+                <div class="slider round" role="switch" aria-checked="false">
                     <div class="toggle-icons">
                         <!-- Icônes du thème (identiques à l'original) -->
                         <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -78,14 +78,14 @@
     <!-- Conteneur du menu mobile (menu burger à droite) -->
     <div class="mobile-menu-container">
         <!-- Bouton burger -->
-        <button class="burger-button" id="burger-button">
+        <button class="burger-button" id="burger-button" aria-expanded="false" aria-controls="mobile-menu" aria-label="Menu">
             <span class="burger-line"></span>
             <span class="burger-line"></span>
             <span class="burger-line"></span>
         </button>
 
         <!-- Menu mobile qui s'ouvre depuis la gauche -->
-        <div class="mobile-menu" id="mobile-menu">
+        <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
             <div class="mobile-menu-header">
                 <!-- Theme switch remplace le logo -->
                 <div class="theme-switch-wrapper">
@@ -113,13 +113,13 @@
                     </label>
                 </div>
                 <!-- Bouton fermer -->
-                <button class="close-menu" id="close-menu">
+                <button class="close-menu" id="close-menu" aria-label="Fermer le menu">
                     <span class="close-line"></span>
                     <span class="close-line"></span>
                 </button>
             </div>
             <!-- Navigation mobile avec textes agrandis -->
-            <nav class="mobile-nav">
+            <nav class="mobile-nav" aria-label="Navigation mobile">
                 <a class="mobile-nav-item" href="index.html">Travaux</a>
                 <a class="mobile-nav-item" href="contact.html">Contact</a>
                 <a class="mobile-nav-item" href="about.html">A propos</a>

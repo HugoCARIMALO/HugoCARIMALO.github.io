@@ -75,14 +75,15 @@
 <!-- Fond flouté -->
 <div class="overlay" id="overlay"></div>
 
+
 <!-- Image agrandie -->
-<div class="fullScreen-image-block" id="fullScreen-image-block">
+<div class="fullScreen-image-block" id="fullScreen-image-block" role="dialog" aria-modal="true" aria-label="Image agrandie">
     <div class="fullScreen-header">
-        <img class="fullScreen-buttons" src="img/caretCircleLeft.svg" />
-        <p class="image-title" id="image-title"></p>
-        <img class="fullScreen-buttons" src="img/caretCircleRight.svg" />
+        <img class="fullScreen-buttons" src="img/caretCircleLeft.svg" alt="Image précédente" role="button" tabindex="0" aria-label="Image précédente" />
+        <p class="image-title" id="image-title" aria-live="polite"></p>
+        <img class="fullScreen-buttons" src="img/caretCircleRight.svg" alt="Image suivante" role="button" tabindex="0" aria-label="Image suivante" />
     </div>
-    <img src="" alt="Zoomed Image" id="fullScreen-image" class="fullScreen-image">
+    <img src="" alt="Image agrandie" id="fullScreen-image" class="fullScreen-image">
 </div>
 
 

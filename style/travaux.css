@@ -463,3 +463,12 @@
 .fullScreen-buttons:active {
     transform: scale(0.95);
 }
+
+.js-focus-visible :focus:not(.focus-visible) {
+    outline: none;
+}
+
+.js-focus-visible .focus-visible {
+    outline: 3px solid var(--sand);
+    outline-offset: 2px;
+}
