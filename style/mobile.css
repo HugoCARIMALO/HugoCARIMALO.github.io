@@ -269,4 +269,39 @@
         padding: 30px 15px;
         margin: 20px auto;
     }
+
+    /* Modifications du footer pour ne montrer que la section INFOS en mobile */
+    .footer .footer-list:first-child {
+        display: none; /* Cache la première section (MENU) */
+    }
+
+    .footer .footer-list:last-child {
+        display: none; /* Cache la dernière section (CONTACT) */
+    }
+
+    .footer form {
+        display: none; /* Cache le formulaire de contact dans le footer */
+    }
+
+    /* Assurer que la section INFOS est bien visible et centrée */
+    .footer .footer-list:nth-child(2) {
+        width: 100%;
+        margin: 0 auto;
+        text-align: center;
+    }
+
+    /* Centrer les icônes et le texte pour l'info */
+    .footer .footer-list:nth-child(2) .footer-text {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 10px 0;
+    }
+
+    /* Ajuster la taille des icônes en mobile */
+    .footer-info-img {
+        min-width: 25px;
+        min-height: 25px;
+        margin-right: 10px;
+    }
 }
