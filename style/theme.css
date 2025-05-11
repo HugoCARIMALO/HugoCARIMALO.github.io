@@ -1,0 +1,101 @@
+.dark-mode {
+    --h1: var(--floral-white);
+    --h2: var(--sand);
+    --h3: var(--floral-white);
+    --h4: var(--sand);
+    --h5: var(--sand);
+
+    --scrollbar-track: var(--sand);
+    --scrollbar-thumb: var(--chambray);
+    --scrollbar-thumb-hover: var(--navy);
+
+    --header: var(--navy);
+    --menu-button-hover: var(--floral-white);
+    --button-header: var(--sand);
+    --menu-color: var(--sand);
+    --button-appelez-moi-background-color: var(--chambray);
+    --button-appelez-moi-color: var(--sand);
+
+    --toggle-background: var(--chambray);
+    --toggle-button: var(--floral-white);
+    --toggle-icon-active: var(--floral-white);
+    --toggle-icon-inactive: var(--lavender);
+    --toggle-hover-glow: var(--floral-white);
+    --toggle-border: var(--sand);
+
+    --landing-page: var(--chambray);
+    --button-voir-travaux-background-color: var(--sand);
+    --button-voir-travaux-color: var(--chambray);
+    --travaux: var(--lapis);
+    --travaux-title: var(--floral-white);
+
+    --footer: var(--navy);
+    --footer-title: var(--floral-white);
+
+    --input-background-color: var(--chambray);
+    --input-text: var(--lavender);
+    --input-envoyer-background-color: var(--sand);
+    --input-envoyer-color: var(--chambray);
+
+    --contact: var(--chambray);
+    --contact-title-color: var(--floral-white);
+    --contact-input-background-color: var(--chambray-light);
+    --contact-input-envoyer-background-color: var(--chambray-light);
+    --contact-input-envoyer-border-color: var(--sand);
+    --contact-input-envoyer-color: var(--sand);
+    --contact-input-text: var(--lavender);
+    --text-hover: var(--floral-white);
+
+    --about-description: var(--floral-white);
+}
+
+.light-mode {
+    --h1: var(--navy);
+    --h2: var(--chambray);
+    --h3: var(--sand);
+    --h4: var(--sand);
+    --h5: var(--chambray);
+
+    --scrollbar-track: var(--sand);
+    --scrollbar-thumb: var(--chambray);
+    --scrollbar-thumb-hover: var(--navy);
+
+    --header: var(--linen);
+    --menu-button-hover: var(--navy);
+    --button-header: var(--navy);
+    --menu-color: var(--chambray);
+    --button-appelez-moi-background-color: var(--sand);
+    --button-appelez-moi-color: var(--chambray);
+
+    --toggle-background: var(--chambray);
+    --toggle-button: var(--floral-white);
+    --toggle-icon-active: var(--floral-white);
+    --toggle-icon-inactive: var(--sand);
+    --toggle-hover-glow: var(--floral-white);
+    --toggle-border: var(--sand);
+
+    --landing-page: var(--linen);
+    --button-voir-travaux-background-color: var(--sand);
+    --button-voir-travaux-color: var(--chambray);
+    --travaux: var(--floral-white);
+    --travaux-title: var(--navy);
+
+    --footer: var(--chambray);
+    --footer-title: var(--floral-white);
+
+    --input-background-color: var(--chambray-light);
+    --input-text: var(--lavender);
+    --input-envoyer-background-color: var(--sand);
+    --input-envoyer-color: var(--chambray);
+
+    --contact: var(--linen);
+    --contact-title-color: var(--navy);
+    --contact-input-background-color: var(--sand);
+    --contact-input-envoyer-background-color: var(--sand);
+    --contact-input-envoyer-border-color: var(--navy);
+    --contact-input-envoyer-color: var(--sand);
+    --contact-input-text: var(--navy);
+    --text-hover: var(--floral-white);
+
+    --about-description: var(--navy);
+}
