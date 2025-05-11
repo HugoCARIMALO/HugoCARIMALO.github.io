@@ -1,7 +1,3 @@
-
-/************************************ LANDING TOP ************************************/
-
-
 .landing-page {
     display: flex;
     flex-wrap: wrap;
@@ -16,8 +12,6 @@
     margin: 20px 0;
 }
 
-
-/* Style amélioré pour le bouton Voir mes travaux */
 .button-voir-travaux {
     margin-top: 30px;
     padding: 12px 25px 12px 20px;
@@ -61,7 +55,6 @@
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
-/* Effet de vague au clic */
 .button-voir-travaux::after {
     content: "";
     display: block;
@@ -85,7 +78,6 @@
     transition: 0s;
 }
 
-/* Animation au survol pour le texte */
 .button-voir-travaux .button-text {
     position: relative;
     transition: all 0.4s ease;
@@ -95,7 +87,6 @@
     letter-spacing: 1px;
 }
 
-/* Effet de brillance au survol */
 .button-voir-travaux::before {
     content: '';
     position: absolute;
@@ -117,41 +108,11 @@
     left: 150%;
 }
 
-/* Pulse animation for attracting attention */
-@keyframes pulse {
-    0% {
-        box-shadow: 0 0 0 0 rgba(220, 201, 175, 0.7);
-    }
-    70% {
-        box-shadow: 0 0 0 10px rgba(220, 201, 175, 0);
-    }
-    100% {
-        box-shadow: 0 0 0 0 rgba(220, 201, 175, 0);
-    }
-}
-
-.pulse-animation {
-    animation: pulse 2s infinite;
-}
-
-
 .landing-logo {
     width: 45%;
     min-width: 300px;
     margin: 15px;
 }
-
-
-
-@keyframes scrollAnimation {
-    from {
-        scroll-behavior: smooth;
-    }
-}
-
-
-/************************************ TRAVAUX ************************************/
-
 
 .travaux {
     flex-direction: column;
@@ -164,9 +125,8 @@
     color: var(--travaux-title);
 }
 
-
 .cardContainer {
-    overflow: auto; /* Ajoute une barre de défilement */
+    overflow: auto;
     white-space: nowrap;
 }
 
@@ -175,7 +135,7 @@
     display: inline-block;
     margin-right: 20px;
     width: 28%;
-    overflow: hidden; /* Pour contenir l'effet de zoom */
+    overflow: hidden;
     border-radius: 12px;
 }
 
@@ -187,8 +147,8 @@
 }
 
 .card:hover img {
-    transform: scale(1.05); /* Léger effet de zoom au survol */
-    filter: brightness(80%); /* Assombrit légèrement l'image */
+    transform: scale(1.05);
+    filter: brightness(80%);
 }
 
 .card::after {
@@ -205,7 +165,7 @@
     background-size: contain;
     opacity: 0;
     transition: opacity 0.3s ease, transform 0.3s ease;
-    pointer-events: none; /* Permet de cliquer à travers l'icône */
+    pointer-events: none;
 }
 
 .card:hover::after {
@@ -217,9 +177,6 @@
     margin: 10px 0 20px 0;
 }
 
-
-
-/* Overlay avec transition de fond */
 .overlay {
     display: none;
     position: fixed;
@@ -227,19 +184,18 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 24, 76, 0); /* Commence transparent */
+    background: rgba(0, 24, 76, 0);
     z-index: 1;
-    backdrop-filter: blur(0px); /* Commence sans flou */
+    backdrop-filter: blur(0px);
     cursor: pointer;
     transition: background 0.4s ease-in-out, backdrop-filter 0.4s ease-in-out;
 }
 
 .overlay.visible {
-    background: rgba(0, 24, 76, 0.7); /* Finit avec l'opacité complète */
-    backdrop-filter: blur(3px); /* Finit avec le flou complet */
+    background: rgba(0, 24, 76, 0.7);
+    backdrop-filter: blur(3px);
 }
 
-/* Bloc d'image avec transition d'opacité */
 .fullScreen-image-block {
     display: none;
     flex-direction: column;
@@ -252,15 +208,14 @@
     bottom: 0;
     z-index: 2;
     pointer-events: none;
-    opacity: 0; /* Commence transparent */
+    opacity: 0;
     transition: opacity 0.4s ease-in-out;
 }
 
 .fullScreen-image-block.visible {
-    opacity: 1; /* Finit complètement visible */
+    opacity: 1;
 }
 
-/* En-tête avec transition */
 .fullScreen-header {
     display: flex;
     justify-content: space-between;
@@ -269,10 +224,10 @@
     max-width: 900px;
     padding: 15px 20px;
     margin-bottom: 15px;
-    background-color: rgba(0, 24, 76, 0.9); /* Fond plus opaque */
-    border: 2px solid var(--sand); /* Bordure pour mieux se démarquer */
+    background-color: rgba(0, 24, 76, 0.9);
+    border: 2px solid var(--sand);
     border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); /* Ombre portée plus prononcée */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
     pointer-events: auto;
     z-index: 3;
     transform: translateY(-20px);
@@ -287,7 +242,7 @@
 
 .image-title {
     color: var(--sand);
-    font-size: 1.4em; /* Taille réduite */
+    font-size: 1.4em;
     font-weight: 600;
     text-align: center;
     margin: 0;
@@ -305,7 +260,6 @@
     opacity: 0;
 }
 
-/* Image avec transitions améliorées */
 .fullScreen-image {
     max-height: 80vh;
     max-width: 90vw;
@@ -318,10 +272,9 @@
 
 .fullScreen-image.visible {
     opacity: 1;
-    transform: scale(1); /* Finit à l'échelle normale */
+    transform: scale(1);
 }
 
-/* Animation pour l'image sortante vers la gauche */
 .fullScreen-image.exit-left {
     opacity: 0;
     transform: translate(-40px, 0) scale(0.85);
@@ -330,7 +283,6 @@
             transform 0.35s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
-/* Animation pour l'image sortante vers la droite */
 .fullScreen-image.exit-right {
     opacity: 0;
     transform: translate(40px, 0) scale(0.85);
@@ -339,7 +291,6 @@
             transform 0.35s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
-/* Animation pour l'image entrante depuis la gauche */
 .fullScreen-image.enter-left {
     opacity: 0;
     transform: translate(-40px, 0) scale(0.85);
@@ -348,7 +299,6 @@
             transform 0.45s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
-/* Animation pour l'image entrante depuis la droite */
 .fullScreen-image.enter-right {
     opacity: 0;
     transform: translate(40px, 0) scale(0.85);
@@ -357,36 +307,28 @@
             transform 0.45s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
-/* Animation plus douce pour les boutons de navigation */
 .fullScreen-buttons {
     cursor: pointer;
-    width: 40px; /* Légèrement plus grands */
+    width: 40px;
     height: 40px;
     padding: 5px;
-    filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.4)); /* Ombre portée sur les icônes */
+    filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.4));
     transition: transform 0.2s ease, opacity 0.2s ease, filter 0.3s ease;
 }
 
 .fullScreen-buttons:hover {
     transform: scale(1.15);
-    filter: drop-shadow(0 0 4px rgba(255, 249, 244, 0.6)); /* Halo clair au survol */
+    filter: drop-shadow(0 0 4px rgba(255, 249, 244, 0.6));
 }
 
 .fullScreen-buttons:active {
     transform: scale(0.95);
 }
 
-/* Désactiver temporairement les boutons pendant les transitions */
 .fullScreen-buttons.disabled {
     opacity: 0.5;
     pointer-events: none;
     cursor: default;
-}
-
-.fullScreen-image {
-    opacity: 1;
-    transform: scale(1);
-    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
 }
 
 .fullScreen-image.slide-out-left {
@@ -414,25 +356,3 @@
     }
 }
 
-/* Améliorations des boutons de navigation */
-.fullScreen-buttons {
-    cursor: pointer;
-    transition: transform 0.2s ease;
-}
-
-.fullScreen-buttons:hover {
-    transform: scale(1.15);
-}
-
-.fullScreen-buttons:active {
-    transform: scale(0.95);
-}
-
-/* Effet du titre */
-.image-title {
-    transition: opacity 0.2s ease;
-}
-
-.image-title.changing {
-    opacity: 0;
-}
