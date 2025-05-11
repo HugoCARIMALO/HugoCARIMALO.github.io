@@ -1103,3 +1103,47 @@ input:-webkit-autofill:focus {
     }
 }
 
+/* Modifications pour le menu mobile */
+
+/* 1. Réarrangement du header pour le mobile */
+@media screen and (max-width: 768px) {
+    /* Inverser l'ordre des éléments du menu burger (le mettre à droite) */
+    .header {
+        flex-direction: row-reverse;
+        justify-content: space-between;
+    }
+
+    /* Ajuster le minilogoanthony à gauche */
+    .header .logo {
+        margin-right: auto;
+    }
+
+    /* Faire venir le menu déroulant de la gauche au lieu de la droite */
+    .mobile-menu {
+        right: auto;
+        left: -100%;
+        transition: left 0.4s ease;
+    }
+
+    .mobile-menu.open {
+        right: auto;
+        left: 0;
+    }
+
+    /* Augmenter la taille des textes de navigation */
+    .mobile-nav-item {
+        font-size: 24px;
+        padding: 20px 0;
+    }
+
+    /* Style pour le logo dans le bas du menu */
+    .mobile-menu-footer .menu-logo {
+        width: 180px;
+        margin: 20px auto;
+    }
+
+    /* Ajustements pour le switch de thème dans le menu */
+    .mobile-menu-header .theme-switch-wrapper {
+        margin: 10px;
+    }
+}
