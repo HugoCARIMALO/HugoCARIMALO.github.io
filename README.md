@@ -55,7 +55,8 @@ Le site comprendra une page d'accueil, une page de contact, une page de présent
 9. **Optimisation du site pour les appareils mobiles** (Estimation : 10 heures) A faire
     - Ajouter des styles CSS pour rendre le site responsive sur les appareils mobiles.
     - Tester le site sur différents appareils mobiles pour s'assurer de sa compatibilité.
-
+    - Permettre aux utilisateurs de pouvoir appuyer sur le numéro de téléphone pour appeller direfctement sur mobile.
+    - 
 ## Technologies utilisées
 
 - HTML
