@@ -1,0 +1,21 @@
+/* critical.css */
+:root {
+    --navy: #00184c;
+    --floral-white: #FFF9F4;
+    --linen: #FFF1E1;
+}
+
+html.dark-mode {
+    background-color: var(--navy);
+    color: var(--floral-white);
+}
+
+html.light-mode {
+    background-color: var(--linen);
+    color: var(--navy);
+}
+
+/* Cache le contenu jusqu'à ce que les styles soient chargés */
+html:not(.styles-loaded) body {
+    visibility: hidden;
+}
