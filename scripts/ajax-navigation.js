@@ -1,10 +1,8 @@
-/* Implémentation plus avancée utilisant AJAX - pour ajax-navigation.js */
+/* Implémentation optimisée utilisant AJAX - ajax-navigation.js */
 
 document.addEventListener("DOMContentLoaded", function() {
     initAjaxNavigation();
 });
-
-
 
 function initAjaxNavigation() {
     // Créer un conteneur pour le contenu principal s'il n'existe pas
@@ -12,6 +10,11 @@ function initAjaxNavigation() {
         // Envelopper le contenu principal (tout ce qui est entre header et footer)
         const header = document.getElementById('header-container');
         const footer = document.getElementById('footer-container');
+
+        if (!header || !footer) {
+            console.error("Header ou footer non trouvé, impossible d'initialiser la navigation AJAX");
+            return;
+        }
 
         // Regrouper tous les éléments entre le header et le footer
         const mainContentWrapper = document.createElement('div');
@@ -37,16 +40,29 @@ function initAjaxNavigation() {
         });
     }
 
-    // Fonction pour afficher l'indicateur de chargement
+    // Fonction améliorée pour afficher l'indicateur de chargement
     function showLoadingIndicator() {
         // Vérifier si un indicateur existe déjà
         if (document.querySelector('.loading-indicator')) {
             return;
         }
 
+        // Masquer immédiatement le contenu principal pour éviter le clignotement
+        const mainContent = document.getElementById('main-content');
+        if (mainContent) {
+            // Appliquer un fondu instantané
+            mainContent.style.transition = 'none';
+            mainContent.style.opacity = '0';
+            // Forcer un reflow pour appliquer immédiatement le style
+            void mainContent.offsetWidth;
+        }
+
+        // Déterminer le thème actuel
+        const themeMode = document.body.classList.contains('light-mode') ? 'light-mode' : 'dark-mode';
+
         // Créer l'indicateur de chargement
         const loadingIndicator = document.createElement('div');
-        loadingIndicator.className = 'loading-indicator';
+        loadingIndicator.className = `loading-indicator ${themeMode}`; // Ajouter la classe du thème
         loadingIndicator.innerHTML = '<div class="spinner"></div>';
 
         // Ajouter au body
@@ -56,9 +72,22 @@ function initAjaxNavigation() {
         document.body.style.overflow = 'hidden';
     }
 
-    // Fonction pour masquer l'indicateur de chargement
-    function hideLoadingIndicator() {
+    // Fonction modifiée pour masquer l'indicateur de chargement
+    function hideLoadingIndicator(newContent = null) {
+        console.log("hideLoadingIndicator appelé", newContent ? "avec contenu" : "sans contenu");
+
         const indicator = document.querySelector('.loading-indicator');
+        const mainContent = document.getElementById('main-content');
+
+        console.log("mainContent trouvé:", !!mainContent);
+        console.log("indicator trouvé:", !!indicator);
+
+        // Si un nouveau contenu est fourni, le préparer en arrière-plan
+        if (newContent && mainContent) {
+            console.log("Insertion du nouveau contenu");
+            mainContent.innerHTML = newContent;
+        }
+
         if (indicator) {
             // Ajouter une classe pour l'animation de sortie
             indicator.classList.add('fade-out');
@@ -68,9 +97,23 @@ function initAjaxNavigation() {
                 if (indicator.parentNode) {
                     indicator.parentNode.removeChild(indicator);
                 }
+
+                // Maintenant, afficher le contenu avec une transition douce
+                if (mainContent) {
+                    mainContent.style.transition = 'opacity 0.4s ease';
+                    mainContent.style.opacity = '1';
+                }
+
                 // Rétablir le défilement
                 document.body.style.overflow = '';
             }, 300);
+        } else {
+            // Si pas d'indicateur, afficher quand même le contenu
+            if (mainContent) {
+                mainContent.style.transition = 'opacity 0.4s ease';
+                mainContent.style.opacity = '1';
+            }
+            document.body.style.overflow = '';
         }
     }
 
@@ -140,14 +183,11 @@ function initAjaxNavigation() {
 
         e.preventDefault();
 
-        // Afficher l'indicateur de chargement
+        // Afficher l'indicateur de chargement immédiatement (masque le contenu)
         showLoadingIndicator();
 
-        // Ajouter un état de chargement
-        const mainContent = document.getElementById('main-content');
-        if (mainContent) {
-            mainContent.style.opacity = '0.5';
-        }
+        // Faire défiler vers le haut de la page immédiatement
+        window.scrollTo(0, 0);
 
         // Charger le nouveau contenu via AJAX
         fetch(url)
@@ -190,45 +230,40 @@ function initAjaxNavigation() {
                 // Mettre à jour le titre de la page
                 document.title = doc.title;
 
-                // Insérer le nouveau contenu avec une transition
+                // Masquer l'indicateur et afficher le nouveau contenu
+                hideLoadingIndicator(newContent);
+
+                // Réinitialiser les scripts pour la nouvelle page
+                // Léger délai pour s'assurer que le DOM est prêt
                 setTimeout(() => {
-                    if (mainContent) {
-                        mainContent.innerHTML = newContent;
-                        mainContent.style.opacity = '1';
-                    }
-
-                    // Réinitialiser les scripts pour la nouvelle page
                     reinitializeScripts();
-
-                    // Faire défiler vers le haut de la page
-                    window.scrollTo(0, 0);
-
-                    // Masquer l'indicateur de chargement
-                    hideLoadingIndicator();
-                }, 300);
+                }, 100);
             })
             .catch(error => {
                 console.error('Erreur lors du chargement de la page:', error);
 
-                // Message d'erreur convivial
+                const mainContent = document.getElementById('main-content');
                 if (mainContent) {
-                    mainContent.innerHTML = `
+                    // Préparer le message d'erreur
+                    const errorContent = `
                         <div class="ajax-error">
                             <h3>Erreur de chargement</h3>
                             <p>Une erreur est survenue lors du chargement de la page.</p>
                             <button onclick="window.location.href='${url}'">Réessayer</button>
                         </div>
                     `;
-                    mainContent.style.opacity = '1';
+
+                    // Afficher l'erreur avec la fonction hideLoadingIndicator
+                    hideLoadingIndicator(errorContent);
+                } else {
+                    // Si mainContent n'existe pas, juste masquer l'indicateur
+                    hideLoadingIndicator();
+
+                    // En cas d'erreur grave, naviguer traditionnellement après un court délai
+                    setTimeout(() => {
+                        window.location.href = url;
+                    }, 500);
                 }
-
-                // Masquer l'indicateur de chargement
-                hideLoadingIndicator();
-
-                // Si l'erreur est grave, naviguer traditionnellement après un délai
-                /* setTimeout(() => {
-                    window.location.href = url;
-                }, 2000); */
             });
     });
 
@@ -237,11 +272,8 @@ function initAjaxNavigation() {
         // Afficher l'indicateur de chargement
         showLoadingIndicator();
 
-        // Ajouter un état de chargement
-        const mainContent = document.getElementById('main-content');
-        if (mainContent) {
-            mainContent.style.opacity = '0.5';
-        }
+        // Faire défiler vers le haut de la page immédiatement
+        window.scrollTo(0, 0);
 
         // Utiliser l'URL actuelle du navigateur
         const targetUrl = location.href;
@@ -281,22 +313,13 @@ function initAjaxNavigation() {
                 // Mettre à jour le titre
                 document.title = doc.title;
 
-                // Insérer le nouveau contenu
+                // Masquer l'indicateur et afficher le nouveau contenu
+                hideLoadingIndicator(newContent);
+
+                // Réinitialiser les scripts
                 setTimeout(() => {
-                    if (mainContent) {
-                        mainContent.innerHTML = newContent;
-                        mainContent.style.opacity = '1';
-                    }
-
-                    // Réinitialiser les scripts
                     reinitializeScripts();
-
-                    // Faire défiler vers le haut de la page
-                    window.scrollTo(0, 0);
-
-                    // Masquer l'indicateur de chargement
-                    hideLoadingIndicator();
-                }, 300);
+                }, 100);
             })
             .catch(error => {
                 console.error('Erreur lors du chargement de la page:', error);
@@ -305,6 +328,22 @@ function initAjaxNavigation() {
                 hideLoadingIndicator();
                 window.location.reload();
             });
+    });
+
+    // Initialiser le préchargement des liens pour améliorer la réactivité
+    initLinkPreloading();
+}
+
+// Fonction pour précharger les pages au survol des liens
+function initLinkPreloading() {
+    document.querySelectorAll('a[href]:not([href^="#"]):not([href^="http"]):not([href^="mailto:"])').forEach(link => {
+        link.addEventListener('mouseenter', function() {
+            const url = this.getAttribute('href');
+            if (url) {
+                // Précharger la page sans l'afficher
+                fetch(url).catch(() => {}); // Ignorer les erreurs silencieusement
+            }
+        });
     });
 }
 
@@ -371,6 +410,9 @@ function reinitializeScripts() {
         default:
             console.log(`Aucune initialisation spécifique pour ${pageName}`);
     }
+
+    // Réinitialiser le préchargement des liens après chaque changement de page
+    setTimeout(initLinkPreloading, 500);
 
     // Vérifier si les fonctions globales existent avant de les appeler
     const functions = [

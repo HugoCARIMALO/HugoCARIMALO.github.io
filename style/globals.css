@@ -982,3 +982,124 @@ input:-webkit-autofill:focus {
         margin: 20px auto;
     }
 }
+
+/* Styles de base pour l'indicateur de chargement */
+.loading-indicator {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.3s ease;
+}
+
+/* Variante en mode sombre - utilisera les couleurs du mode sombre */
+.dark-mode .loading-indicator {
+    background-color: rgba(0, 24, 76, 0.92); /* Bleu navy très opaque */
+    backdrop-filter: blur(5px);
+}
+
+/* Variante en mode clair - utilisera les couleurs du mode clair */
+.light-mode .loading-indicator {
+    background-color: rgba(255, 241, 225, 0.92); /* Linen très opaque */
+    backdrop-filter: blur(5px);
+}
+
+/* Animation du spinner avec variations selon le thème */
+.spinner {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border-width: 5px;
+    border-style: solid;
+    animation: spin 1s linear infinite;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Spinner en mode sombre */
+.dark-mode .spinner {
+    border-color: var(--sand);
+    border-top-color: transparent;
+}
+
+/* Spinner en mode clair */
+.light-mode .spinner {
+    border-color: var(--navy);
+    border-top-color: transparent;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Animation de fondu pour la sortie de l'indicateur */
+.loading-indicator.fade-out {
+    opacity: 0;
+}
+
+/* Styles pour le contenu principal pour éviter les sauts */
+#main-content {
+    opacity: 1;
+    transition: opacity 0.4s ease;
+    min-height: 300px;
+}
+
+/* Style pour le message d'erreur AJAX */
+.ajax-error {
+    text-align: center;
+    padding: 40px 20px;
+    background-color: var(--linen);
+    border-radius: 10px;
+    margin: 30px auto;
+    max-width: 600px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.ajax-error h3 {
+    color: var(--chambray);
+    margin-bottom: 15px;
+}
+
+.ajax-error p {
+    margin-bottom: 20px;
+    color: var(--navy);
+}
+
+.ajax-error button {
+    background-color: var(--sand);
+    color: var(--navy);
+    border: none;
+    padding: 10px 25px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.ajax-error button:hover {
+    background-color: var(--navy);
+    color: var(--sand);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Version mobile des styles */
+@media screen and (max-width: 768px) {
+    .spinner {
+        width: 50px;
+        height: 50px;
+        border-width: 4px;
+    }
+
+    .ajax-error {
+        padding: 30px 15px;
+        margin: 20px auto;
+    }
+}
+

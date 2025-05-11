@@ -20,6 +20,56 @@
     <!-- Scripts -->
     <script src="scripts/ajax-navigation.js"></script>
     <script src="scripts/script.js"></script>
+    <script>
+        // Appliquer le thème dès que possible pour éviter le flash
+        (function() {
+            // Récupérer le thème actuel
+            const themeMode = localStorage.getItem('themeMode') || 'dark-mode';
+
+            // Appliquer immédiatement au body
+            if (themeMode === 'light-mode') {
+                document.documentElement.classList.add('light-mode');
+                document.documentElement.classList.remove('dark-mode');
+            } else {
+                document.documentElement.classList.add('dark-mode');
+                document.documentElement.classList.remove('light-mode');
+            }
+
+            // Ajouter des styles immédiats
+            const style = document.createElement('style');
+            style.textContent = `
+            body.dark-mode {
+                background-color: #00184c !important; /* navy */
+                color: #FFF9F4 !important; /* floral-white */
+            }
+
+            body.light-mode {
+                background-color: #FFF1E1 !important; /* linen */
+                color: #00184c !important; /* navy */
+            }
+
+            /* Éviter tout flash blanc */
+            body {
+                transition: background-color 0.3s ease;
+                visibility: hidden;
+            }
+
+            /* Le reste des styles sera appliqué quand tout sera chargé */
+            .js-loaded body {
+                visibility: visible;
+            }
+        `;
+
+            document.head.appendChild(style);
+
+            // Marquer comme chargé après un court délai
+            window.addEventListener('DOMContentLoaded', function() {
+                setTimeout(function() {
+                    document.documentElement.classList.add('js-loaded');
+                }, 10);
+            });
+        })();
+    </script>
 </head>
 <body>
 <!-- Conteneur pour le header  -->
