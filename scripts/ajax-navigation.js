@@ -4,6 +4,8 @@ document.addEventListener("DOMContentLoaded", function() {
     initAjaxNavigation();
 });
 
+
+
 function initAjaxNavigation() {
     // Créer un conteneur pour le contenu principal s'il n'existe pas
     if (!document.getElementById('main-content')) {

@@ -617,3 +617,117 @@ function initMobileMenu() {
         });
     }
 }
+
+function debugBurgerMenu() {
+    console.log("=== Débogage du menu burger ===");
+
+    // Vérifier si les éléments du menu burger existent dans le DOM
+    const burgerButton = document.getElementById('burger-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const mobileMenuContainer = document.querySelector('.mobile-menu-container');
+
+    console.log("Éléments du menu burger trouvés dans le DOM :");
+    console.log("- Bouton burger (#burger-button):", !!burgerButton);
+    console.log("- Menu mobile (#mobile-menu):", !!mobileMenu);
+    console.log("- Conteneur du menu (.mobile-menu-container):", !!mobileMenuContainer);
+
+    // Vérifier les styles CSS appliqués
+    if (mobileMenuContainer) {
+        const computedStyle = window.getComputedStyle(mobileMenuContainer);
+        console.log("Styles du conteneur du menu burger :");
+        console.log("- display:", computedStyle.display);
+        console.log("- visibility:", computedStyle.visibility);
+        console.log("- opacity:", computedStyle.opacity);
+        console.log("- position:", computedStyle.position);
+        console.log("- z-index:", computedStyle.zIndex);
+
+        // Tester si le media query est actif
+        const isMobile = window.matchMedia("(max-width: 768px)").matches;
+        console.log("- Media query mobile actif:", isMobile);
+
+        // Si le conteneur existe mais n'est pas visible en mode mobile
+        if (isMobile && computedStyle.display === "none") {
+            console.log("⚠️ Problème détecté : Le conteneur existe mais est masqué même en mode mobile");
+            console.log("  → Vérifier que la media query dans le CSS est correcte");
+        }
+    }
+
+    // Vérifier les événements
+    if (burgerButton) {
+        const hasClickListeners = burgerButton.onclick !== null ||
+            burgerButton.getAttribute('onclick') !== null;
+        console.log("Événements :");
+        console.log("- Bouton burger a des gestionnaires d'événements:", hasClickListeners);
+
+        // Simuler temporairement un clic
+        console.log("- Test d'un clic sur le bouton burger...");
+        try {
+            // Créer un événement de clic et le dispatcher
+            const clickEvent = new MouseEvent('click', {
+                bubbles: true,
+                cancelable: true,
+                view: window
+            });
+
+            // Mémoriser l'état actuel pour voir s'il change
+            const menuVisibleBefore = mobileMenu && window.getComputedStyle(mobileMenu).right !== "-100%";
+
+            // Dispatcher l'événement
+            burgerButton.dispatchEvent(clickEvent);
+
+            // Vérifier si l'état a changé
+            setTimeout(() => {
+                const menuVisibleAfter = mobileMenu && window.getComputedStyle(mobileMenu).right !== "-100%";
+                console.log("  → Clic simulé résultat:", menuVisibleBefore !== menuVisibleAfter ? "Menu a changé d'état" : "Aucun effet visible");
+
+                // Si le test a ouvert le menu, le refermer
+                if (!menuVisibleBefore && menuVisibleAfter && mobileMenu) {
+                    mobileMenu.classList.remove('open');
+                    console.log("  → Menu refermé après le test");
+                }
+            }, 100);
+        } catch (e) {
+            console.log("  → Erreur lors du test de clic:", e.message);
+        }
+    }
+
+    // Vérifier l'initialisation du menu mobile
+    console.log("Fonction initMobileMenu :");
+    console.log("- Existe:", typeof initMobileMenu === 'function');
+
+    if (typeof initMobileMenu === 'function') {
+        console.log("- initMobileMenu est appelée dans DOMContentLoaded:",
+            document.readyState === "complete" ? "Document déjà chargé" : "Document en cours de chargement");
+    }
+
+    console.log("=== Fin du débogage du menu burger ===");
+
+    // Suggérer des corrections
+    console.log("\nSuggestions pour résoudre les problèmes :");
+
+    if (!mobileMenuContainer) {
+        console.log("1. Vérifier que le HTML du menu burger est bien présent dans header.html");
+        console.log("   → Ajouter le code HTML du menu burger juste après <header class=\"header\">");
+    }
+
+    if (mobileMenuContainer && window.getComputedStyle(mobileMenuContainer).display === "none" &&
+        window.matchMedia("(max-width: 768px)").matches) {
+        console.log("2. Corriger la règle CSS qui masque le conteneur du menu burger en mode mobile");
+        console.log("   → Vérifier dans globals.css la media query et la règle pour .mobile-menu-container");
+    }
+
+    if (!burgerButton || !mobileMenu) {
+        console.log("3. Vérifier que les IDs 'burger-button' et 'mobile-menu' sont correctement définis");
+    }
+
+    if (typeof initMobileMenu !== 'function') {
+        console.log("4. Vérifier que la fonction initMobileMenu est bien définie dans script.js");
+        console.log("   → Assurez-vous que le code JavaScript du menu burger est inclus");
+    }
+}
+
+// Exécuter le débogage après le chargement complet de la page
+window.addEventListener('load', function() {
+    // Attendre un peu pour s'assurer que tout est initialisé
+    setTimeout(debugBurgerMenu, 500);
+});
