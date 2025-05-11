@@ -189,6 +189,7 @@ function initLeftRightButtonForFullScreenImage(imageMap) {
     const rightButton = document.querySelector('.fullScreen-header img[src="img/caretCircleRight.svg"]');
     const fullScreenImage = document.getElementById('fullScreen-image');
     const imageTitle = document.getElementById('image-title');
+    const imageContainer = document.getElementById('fullScreen-image-block');
 
     if (!leftButton || !rightButton || !fullScreenImage || !imageTitle) {
         return;
@@ -206,7 +207,21 @@ function initLeftRightButtonForFullScreenImage(imageMap) {
     let currentIndex = 0;
     let isTransitioning = false;
 
-    // Fonction pour changer d'image avec une animation
+    // Précharger toutes les images pour éviter le clignotement
+    function preloadImages() {
+        images.forEach(img => {
+            const preloadLink = document.createElement('link');
+            preloadLink.rel = 'preload';
+            preloadLink.as = 'image';
+            preloadLink.href = img.url;
+            document.head.appendChild(preloadLink);
+        });
+    }
+
+    // Appeler la fonction de préchargement
+    preloadImages();
+
+    // Fonction pour changer d'image avec une animation améliorée
     function changeImage(direction) {
         if (isTransitioning) return;
         isTransitioning = true;
@@ -226,32 +241,30 @@ function initLeftRightButtonForFullScreenImage(imageMap) {
         // Faire disparaître le titre
         imageTitle.classList.add('changing');
 
-        // Attendre la fin de l'animation de sortie
+        // Attendre un court instant pour l'animation de sortie
         setTimeout(() => {
-            // Changer l'image source
+            // Remplacer la source de l'image
             fullScreenImage.src = images[newIndex].url;
+
+            // Remettre l'image visible avec l'animation d'entrée
+            fullScreenImage.classList.remove('slide-out-left', 'slide-out-right');
+            fullScreenImage.classList.add('slide-in');
 
             // Mettre à jour le titre
             setTimeout(() => {
                 imageTitle.textContent = images[newIndex].name;
                 imageTitle.classList.remove('changing');
-            }, 100);
-
-            // Retirer les classes d'animation précédentes
-            fullScreenImage.classList.remove('slide-out-left', 'slide-out-right');
-
-            // Ajouter l'animation d'entrée
-            fullScreenImage.classList.add('slide-in');
+            }, 150);
 
             // Sauvegarder le nouvel index
             currentIndex = newIndex;
 
-            // Réinitialiser après la transition
+            // Réinitialiser après la fin de l'animation
             setTimeout(() => {
                 fullScreenImage.classList.remove('slide-in');
                 isTransitioning = false;
-            }, 300);
-        }, 300);
+            }, 350);
+        }, 250);
     }
 
     // Événement pour le bouton gauche

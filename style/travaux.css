@@ -356,3 +356,110 @@
     }
 }
 
+
+.fullScreen-image {
+    max-height: 80vh;
+    max-width: 90vw;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 8px;
+    pointer-events: auto;
+    will-change: opacity, transform;
+    transition: opacity 0.3s ease;
+}
+
+/* Animation de sortie vers la gauche */
+.fullScreen-image.slide-out-left {
+    opacity: 0;
+    transform: translateX(-50px) scale(0.9);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+/* Animation de sortie vers la droite */
+.fullScreen-image.slide-out-right {
+    opacity: 0;
+    transform: translateX(50px) scale(0.9);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+/* Animation d'entrée */
+.fullScreen-image.slide-in {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+    animation: fadeScaleIn 0.35s ease forwards;
+}
+
+@keyframes fadeScaleIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Amélioration de l'animation du titre */
+.image-title {
+    color: var(--sand);
+    font-size: 1.4em;
+    font-weight: 600;
+    text-align: center;
+    margin: 0;
+    padding: 5px 15px;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 70%;
+    letter-spacing: 0.5px;
+    transition: opacity 0.2s ease;
+}
+
+.image-title.changing {
+    opacity: 0;
+}
+
+/* Centrage parfait de l'image */
+.fullScreen-image-block {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s ease-in-out;
+}
+
+.fullScreen-image-block.visible {
+    opacity: 1;
+}
+
+/* Amélioration des boutons de navigation */
+.fullScreen-buttons {
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    padding: 5px;
+    filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.4));
+    transition: transform 0.2s ease, opacity 0.2s ease, filter 0.3s ease;
+    opacity: 0.9;
+}
+
+.fullScreen-buttons:hover {
+    transform: scale(1.15);
+    filter: drop-shadow(0 0 4px rgba(255, 249, 244, 0.6));
+    opacity: 1;
+}
+
+.fullScreen-buttons:active {
+    transform: scale(0.95);
+}
