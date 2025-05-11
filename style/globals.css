@@ -900,3 +900,97 @@ input:-webkit-autofill:focus {
 .mobile-menu-container {
     display: none;
 }
+
+/* Conteneur de l'indicateur de chargement */
+.loading-indicator {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 24, 76, 0.5); /* Fond semi-transparent bleu foncé */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Au-dessus de tout le contenu */
+    backdrop-filter: blur(3px); /* Effet de flou sur le fond */
+}
+
+/* Animation du spinner */
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid var(--sand); /* Couleur de la bordure */
+    border-radius: 50%;
+    border-top-color: transparent; /* Partie invisible pour créer l'effet */
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Pour les appareils mobiles, un spinner plus petit */
+@media screen and (max-width: 768px) {
+    .spinner {
+        width: 40px;
+        height: 40px;
+        border-width: 4px;
+    }
+}
+
+.loading-indicator {
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.loading-indicator.fade-out {
+    opacity: 0;
+}
+
+/* Style pour le message d'erreur AJAX */
+.ajax-error {
+    text-align: center;
+    padding: 40px 20px;
+    background-color: var(--linen);
+    border-radius: 10px;
+    margin: 30px auto;
+    max-width: 600px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.ajax-error h3 {
+    color: var(--chambray);
+    margin-bottom: 15px;
+}
+
+.ajax-error p {
+    margin-bottom: 20px;
+    color: var(--navy);
+}
+
+.ajax-error button {
+    background-color: var(--sand);
+    color: var(--navy);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.ajax-error button:hover {
+    background-color: var(--navy);
+    color: var(--sand);
+    transform: translateY(-2px);
+}
+
+/* Version mobile */
+@media screen and (max-width: 768px) {
+    .ajax-error {
+        padding: 30px 15px;
+        margin: 20px auto;
+    }
+}

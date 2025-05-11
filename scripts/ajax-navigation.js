@@ -52,17 +52,31 @@ function initAjaxNavigation() {
 
         e.preventDefault();
 
-        // Ajouter un état de chargement
+        // Afficher l'indicateur de chargement
+        showLoadingIndicator();
+
+        // Ajouter un état de chargement au contenu principal
         const mainContent = document.getElementById('main-content');
-        mainContent.style.opacity = '0.5';
+        if (mainContent) {
+            mainContent.style.opacity = '0.5';
+        }
 
         // Charger le nouveau contenu via AJAX
         fetch(url)
-            .then(response => response.text())
+            .then(response => {
+                // Vérifier si la réponse est OK (statut 200-299)
+                if (!response.ok) {
+                    throw new Error(`Erreur HTTP: ${response.status}`);
+                }
+                return response.text();
+            })
             .then(html => {
                 // Créer un DOM temporaire pour extraire le contenu
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(html, 'text/html');
+
+                // Mettre à jour les styles spécifiques à la page
+                updatePageSpecificStyles(doc, url);
 
                 // Extraire le contenu principal
                 let newContent = '';
@@ -89,31 +103,67 @@ function initAjaxNavigation() {
 
                 // Insérer le nouveau contenu avec une transition
                 setTimeout(() => {
-                    mainContent.innerHTML = newContent;
-                    mainContent.style.opacity = '1';
+                    if (mainContent) {
+                        mainContent.innerHTML = newContent;
+                        mainContent.style.opacity = '1';
+                    }
+
+                    // Masquer l'indicateur de chargement
+                    hideLoadingIndicator();
 
                     // Réinitialiser les scripts pour la nouvelle page
                     reinitializeScripts();
+
+                    // Faire défiler en haut de la page
+                    window.scrollTo(0, 0);
                 }, 300);
             })
             .catch(error => {
                 console.error('Erreur lors du chargement de la page:', error);
-                // En cas d'erreur, naviguer traditionnellement
-                window.location.href = url;
+
+                // Message d'erreur convivial pour l'utilisateur
+                if (mainContent) {
+                    mainContent.innerHTML = `
+                    <div class="ajax-error">
+                        <h3>Erreur de chargement</h3>
+                        <p>Une erreur est survenue lors du chargement de la page.</p>
+                        <button onclick="window.location.href='${url}'">Réessayer</button>
+                    </div>
+                `;
+                    mainContent.style.opacity = '1';
+                }
+
+                // Masquer l'indicateur de chargement même en cas d'erreur
+                hideLoadingIndicator();
             });
     });
 
     // Gérer les boutons retour/avant du navigateur
-    window.addEventListener('popstate', function() {
-        // Charger la page correspondante à l'état actuel de l'historique
-        const mainContent = document.getElementById('main-content');
-        mainContent.style.opacity = '0.5';
+    window.addEventListener('popstate', function(event) {
+        // Afficher l'indicateur de chargement
+        showLoadingIndicator();
 
-        fetch(location.href)
-            .then(response => response.text())
+        const mainContent = document.getElementById('main-content');
+        if (mainContent) {
+            mainContent.style.opacity = '0.5';
+        }
+
+        // Utiliser location.href comme URL cible
+        const targetUrl = location.href;
+
+        fetch(targetUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Erreur HTTP: ${response.status}`);
+                }
+                return response.text();
+            })
             .then(html => {
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(html, 'text/html');
+
+                // Mettre à jour les styles spécifiques à la page
+                updatePageSpecificStyles(doc, targetUrl);
 
                 // Extraire le contenu principal comme précédemment
                 let newContent = '';
@@ -135,18 +185,30 @@ function initAjaxNavigation() {
 
                 // Insérer le nouveau contenu
                 setTimeout(() => {
-                    mainContent.innerHTML = newContent;
-                    mainContent.style.opacity = '1';
+                    if (mainContent) {
+                        mainContent.innerHTML = newContent;
+                        mainContent.style.opacity = '1';
+                    }
+
+                    // Masquer l'indicateur de chargement
+                    hideLoadingIndicator();
 
                     // Réinitialiser les scripts
                     reinitializeScripts();
+
+                    // Faire défiler en haut de la page
+                    window.scrollTo(0, 0);
                 }, 300);
             })
             .catch(error => {
                 console.error('Erreur lors du chargement de la page:', error);
+
+                // En cas d'erreur grave, recharger la page normalement
+                hideLoadingIndicator();
                 window.location.reload();
             });
     });
+
 }
 
 // Fonction pour réinitialiser les scripts nécessaires après le chargement du contenu
@@ -217,9 +279,6 @@ function reinitializeScripts() {
 }
 
 // Fonction pour extraire et appliquer les feuilles de style spécifiques à la page
-// Ajouter cette fonction à votre fichier ajax-navigation.js
-
-// Fonction pour extraire et appliquer les feuilles de style spécifiques à la page
 function updatePageSpecificStyles(htmlDoc, targetUrl) {
     // Trouver toutes les feuilles de style dans le document chargé
     const newStylesheets = Array.from(htmlDoc.querySelectorAll('link[rel="stylesheet"]'))
@@ -268,7 +327,7 @@ function updatePageSpecificStyles(htmlDoc, targetUrl) {
     }
 }
 
-// Modifiez la partie fetch de votre code pour inclure l'appel à cette fonction:
+
 
 // Dans la fonction de traitement du clic:
 fetch(url)
@@ -297,3 +356,38 @@ fetch(location.href)
 
         // Le reste du code de traitement...
     })
+
+// Fonction pour créer et afficher l'indicateur de chargement
+function showLoadingIndicator() {
+    // Vérifier si un indicateur existe déjà
+    if (document.querySelector('.loading-indicator')) {
+        return;
+    }
+
+    // Créer l'indicateur de chargement
+    const loadingIndicator = document.createElement('div');
+    loadingIndicator.className = 'loading-indicator';
+    loadingIndicator.innerHTML = '<div class="spinner"></div>';
+
+    // Ajouter au body
+    document.body.appendChild(loadingIndicator);
+
+    // Empêcher le défilement pendant le chargement
+    document.body.style.overflow = 'hidden';
+}
+
+// Fonction pour masquer l'indicateur de chargement
+function hideLoadingIndicator() {
+    const indicator = document.querySelector('.loading-indicator');
+    if (indicator) {
+        // Ajouter une classe pour l'animation de sortie
+        indicator.classList.add('fade-out');
+
+        // Supprimer après la fin de l'animation
+        setTimeout(() => {
+            document.body.removeChild(indicator);
+            // Rétablir le défilement
+            document.body.style.overflow = '';
+        }, 300);
+    }
+}
