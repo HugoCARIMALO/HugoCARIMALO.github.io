@@ -5,15 +5,10 @@ document.addEventListener("DOMContentLoaded", function () {
     // Ajouter le header et le footer
     loadHeaderFooter().then(() => {
         setSVGColor(localStorage.getItem("themeMode") || "dark-mode");
-
-        // Initialiser le menu burger après chargement du header
         initMobileMenu();
-
-        console.log("Header et footer chargés")
     });
 
-
-    // si la page est index.html
+    // Si la page est index.html
     if (window.location.pathname.endsWith("index.html") || window.location.pathname === "/") {
         hideFullScreenImage();
 
@@ -21,50 +16,46 @@ document.addEventListener("DOMContentLoaded", function () {
             createByType(imageMap);
             initZoomImage();
             initLeftRightButtonForFullScreenImage(imageMap);
-        });
+        }).catch(error => console.error("Erreur lors du chargement des images:", error));
 
         initModernButtonVoirTravaux();
     }
 });
 
-/* Fonction pour charger le header et le footer avec le nouveau toggle */
+/* Fonction pour charger le header et le footer avec le toggle */
 async function loadHeaderFooter() {
     try {
-        // Recuperer le contenu du header et du footer et les ajouter dans les div correspondantes
-        headerData = await fetch('header.html').then(response => response.text());
-        footerData = await fetch('footer.html').then(response => response.text());
+        // Récupérer le contenu du header et du footer
+        const headerData = await fetch('header.html').then(response => response.text());
+        const footerData = await fetch('footer.html').then(response => response.text());
         document.getElementById('header-container').innerHTML = headerData;
         document.getElementById('footer-container').innerHTML = footerData;
 
         // Initialiser l'état du toggle switch
         const checkbox = document.getElementById('checkbox');
         if (checkbox) {
-            let themeMode = localStorage.getItem("themeMode") || "dark-mode";
+            const themeMode = localStorage.getItem("themeMode") || "dark-mode";
             checkbox.checked = themeMode === "light-mode";
-
-            // Ajouter un écouteur d'événement pour le toggle
             checkbox.addEventListener('change', toggleMode);
         }
 
-        // Appliquer les couleurs au logo SVG après que le header est chargé
-        let themeMode = localStorage.getItem("themeMode") || "dark-mode";
-        setSVGColor(themeMode);
+        // Appliquer les couleurs au logo SVG
+        setSVGColor(localStorage.getItem("themeMode") || "dark-mode");
 
-        // Gestion des butons appelez-moi (there is multiple)
-        const callMeButton = document.getElementsByName("button-appelez-moi")
-        for (let i = 0; i < callMeButton.length; i++) {
-            CallMeButtonHightlight(callMeButton[i]);
+        // Gestion des boutons appelez-moi
+        const callMeButtons = document.getElementsByName("button-appelez-moi");
+        for (let i = 0; i < callMeButtons.length; i++) {
+            CallMeButtonHightlight(callMeButtons[i]);
         }
-
     } catch (error) {
         console.error("Erreur lors du chargement du header ou du footer", error);
     }
 }
 
-/* Fonction pour initialiser le mode sombre ou clair avec le nouveau toggle */
+/* Fonction pour initialiser le mode sombre ou clair */
 function initLightDarkMode() {
     const body = document.body;
-    let themeMode = localStorage.getItem("themeMode") || "dark-mode";
+    const themeMode = localStorage.getItem("themeMode") || "dark-mode";
 
     body.classList.toggle("dark-mode", themeMode === "dark-mode");
     body.classList.toggle("light-mode", themeMode === "light-mode");
@@ -78,13 +69,12 @@ function initLightDarkMode() {
     localStorage.setItem("themeMode", themeMode);
 }
 
-/* Fonction pour activer le mode sombre ou clair avec le nouveau toggle */
+/* Fonction pour activer le mode sombre ou clair */
 function toggleMode() {
     const body = document.body;
     let themeMode = localStorage.getItem("themeMode") || "dark-mode";
 
     themeMode = themeMode === "dark-mode" ? "light-mode" : "dark-mode";
-
     localStorage.setItem("themeMode", themeMode);
 
     body.classList.toggle("dark-mode");
@@ -100,43 +90,39 @@ function toggleMode() {
     setSVGColor(themeMode);
 }
 
+/* Fonction pour définir la couleur du SVG en fonction du thème */
 function setSVGColor(themeMode) {
-    let rootStyle = getComputedStyle(document.documentElement);
+    const rootStyle = getComputedStyle(document.documentElement);
     const style = rootStyle.getPropertyValue(themeMode === "dark-mode" ? '--sand' : '--navy').trim();
 
     // Sélectionner tous les éléments 'path' dans le logo SVG
     const logoPaths = document.querySelectorAll("#logo path");
 
-    // Vérifier si les éléments path du logo existent
     if (logoPaths && logoPaths.length > 0) {
         // Changer la couleur de remplissage de chaque élément 'path'
         logoPaths.forEach(path => {
             path.style.fill = style;
         });
     } else {
-        console.log("Logo paths not found, will try again later");
-        // Si les éléments path ne sont pas encore chargés, réessayer après un court délai
+        // Réessayer après un court délai si les éléments path ne sont pas encore chargés
         setTimeout(() => setSVGColor(themeMode), 100);
     }
 }
 
-
-/* Fonction pour créer les cards dynamiquement
-    * @param {Object} imageMap - Objet contenant les images par type
-*/
+/* Fonction pour créer les cards dynamiquement */
 function createByType(imageMap) {
     for (const [type, imageList] of Object.entries(imageMap)) {
         const cardContainer = document.getElementById("cardContainer-" + type);
+        if (!cardContainer) continue;
 
-        // Parcourir la liste d'images et créer les card dynamiquement
+        // Parcourir la liste d'images et créer les cards dynamiquement
         imageList.forEach(imageObj => {
-
             const card = document.createElement("div");
             card.className = "card";
 
             const image = document.createElement("img");
             image.src = imageObj.url;
-            image.className = "zoom-trigger"
+            image.className = "zoom-trigger";
             card.appendChild(image);
 
             const title = document.createElement("h5");
@@ -149,6 +135,7 @@ function createByType(imageMap) {
     }
 }
 
+/* Fonction pour récupérer les images depuis GitHub */
 async function getMapImages() {
     const url = "https://api.github.com/repos/HugoCARIMALO/embellir37.fr/git/trees/main?recursive=true";
 
@@ -166,48 +153,35 @@ async function getMapImages() {
         throw new Error("Erreur lors de la récupération des données: " + jsonData.message);
     }
 
-    try {
-        jsonData.tree.forEach(element => {
-            if (element.type === "blob") {
-                const fileName = element.path.split('/').pop();
-                const directory = element.path.split('/')[0];
+    jsonData.tree.forEach(element => {
+        if (element.type === "blob") {
+            const fileName = element.path.split('/').pop();
+            const directory = element.path.split('/')[0];
 
-                if (!imageMap[directory]) {
-                    imageMap[directory] = [];
-                }
-
-                const imageUrl = fileNameToURL(directory + '/' + fileName);
-                const imageName = fileName.replace(/\.[^/.]+$/, "");
-
-                // Ajouter l'URL de l'image à la liste globale
-                imageMap[directory].push({ name: imageName, url: imageUrl });
+            if (!imageMap[directory]) {
+                imageMap[directory] = [];
             }
-        });
 
-        return imageMap;
-    } catch (error) {
-        throw new Error("Erreur lors de la conversion des données JSON: " + error.message);
-    }
+            const imageUrl = fileNameToURL(directory + '/' + fileName);
+            const imageName = fileName.replace(/\.[^/.]+$/, "");
+
+            // Ajouter l'URL de l'image à la liste
+            imageMap[directory].push({ name: imageName, url: imageUrl });
+        }
+    });
+
+    return imageMap;
 }
 
-
+/* Convertir un nom de fichier en URL GitHub */
 function fileNameToURL(fileName) {
     return `https://raw.githubusercontent.com/HugoCARIMALO/embellir37.fr/main/${encodeURIComponent(fileName)}`;
 }
 
+/* Convertir une URL en nom de fichier */
 function URLToFileName(url) {
     return decodeURIComponent(url).split('/').pop().replace(/\.[^/.]+$/, "");
 }
-
-
-
-
-
-
-
-
-
-
 
 /* Fonction pour initialiser les boutons gauche/droite pour la navigation entre images */
 function initLeftRightButtonForFullScreenImage(imageMap) {
@@ -217,20 +191,17 @@ function initLeftRightButtonForFullScreenImage(imageMap) {
     const imageTitle = document.getElementById('image-title');
 
     if (!leftButton || !rightButton || !fullScreenImage || !imageTitle) {
-        console.error('Navigation buttons or image elements not found');
         return;
     }
 
-    // Ordonner les images par catégorie puis par ordre alphabétique
+    // Ordonner les images par catégorie
     const orderedCategories = ["Pavage", "Dallage", "Portail", "Cloture", "Assainissement"];
     const images = orderedCategories.flatMap(category => {
         if (imageMap[category]) {
-            return imageMap[category].sort((a, b) => a.name.localeCompare(b.name)).map(imageObj => imageObj);
+            return imageMap[category].sort((a, b) => a.name.localeCompare(b.name));
         }
         return [];
     });
-
-    console.log("Images disponibles pour la navigation:", images.length);
 
     let currentIndex = 0;
     let isTransitioning = false;
@@ -324,35 +295,7 @@ function initLeftRightButtonForFullScreenImage(imageMap) {
     });
 }
 
-// Bonus: Utiliser ce code pour déboguer les problèmes de navigation
-function debugImageNavigation(imageMap) {
-    console.log("--- Debug Image Navigation ---");
-
-    // Vérifier le contenu de imageMap
-    console.log("Categories in imageMap:", Object.keys(imageMap));
-
-    // Compter le total d'images
-    let totalImages = 0;
-    for (const category in imageMap) {
-        console.log(`Category ${category} has ${imageMap[category].length} images`);
-        totalImages += imageMap[category].length;
-    }
-    console.log(`Total images: ${totalImages}`);
-
-    // Vérifier les éléments du DOM
-    console.log("fullScreen-image element:", document.getElementById('fullScreen-image'));
-    console.log("Left button:", document.querySelector('.fullScreen-header img[src="img/caretCircleLeft.svg"]'));
-    console.log("Right button:", document.querySelector('.fullScreen-header img[src="img/caretCircleRight.svg"]'));
-
-    // Afficher la première image de chaque catégorie
-    for (const category in imageMap) {
-        if (imageMap[category].length > 0) {
-            console.log(`First image in ${category}:`, imageMap[category][0]);
-        }
-    }
-}
-
-/* Fonction pour afficher l'image en plein écran avec transitions améliorées */
+/* Fonction pour afficher l'image en plein écran avec transitions */
 function showFullScreenImage(imageUrl, imageTitle, overlay, zoomedImage, zoomedImageBlock, zoomedTitle) {
     // Réinitialiser les classes de l'image principale
     zoomedImage.className = 'fullScreen-image';
@@ -382,12 +325,9 @@ function showFullScreenImage(imageUrl, imageTitle, overlay, zoomedImage, zoomedI
     setTimeout(() => {
         zoomedImage.classList.add('visible');
     }, 50);
-
-    // Mise à jour de l'index courant dans initLeftRightButtonForFullScreenImage
-    // sera faite automatiquement lors du prochain clic sur les boutons de navigation
 }
 
-/* Fonction pour masquer l'image en plein écran avec transitions améliorées */
+/* Fonction pour masquer l'image en plein écran avec transitions */
 function hideFullScreenImage() {
     const overlay = document.getElementById('overlay');
     const zoomedImageBlock = document.getElementById('fullScreen-image-block');
@@ -421,49 +361,43 @@ function hideFullScreenImage() {
     }, 150);
 }
 
-/* Initialisation adaptée pour utiliser les nouvelles transitions */
+/* Initialisation du zoom sur les images */
 function initZoomImage() {
     const overlay = document.getElementById('overlay');
     const zoomedImageBlock = document.getElementById('fullScreen-image-block');
     const zoomedImage = document.getElementById('fullScreen-image');
     const zoomedTitle = document.getElementById('image-title');
-
-    // Get all card containers
     const cardContainers = document.querySelectorAll('.cardContainer');
 
-    // Error handling
-    if (!overlay || !zoomedImageBlock || !zoomedImage || !zoomedTitle || !cardContainers) {
-        console.error('One or more elements could not be found in the DOM.');
+    // Vérification des éléments
+    if (!overlay || !zoomedImageBlock || !zoomedImage || !zoomedTitle || !cardContainers.length) {
         return;
     }
 
-    // Add an event listener to each card container
+    // Ajouter un écouteur d'événement à chaque conteneur de carte
     cardContainers.forEach(container => {
         container.addEventListener('click', function(event) {
-            // Check if the clicked element is a zoom trigger
+            // Vérifier si l'élément cliqué est une image
             if (!event.target.classList.contains('zoom-trigger')) {
                 return;
             }
 
-            // Retrieve the attributes of the clicked image
+            // Récupérer les attributs de l'image cliquée
             const imageUrl = event.target.src;
-
-            // get the title of the image
             const imageTitle = URLToFileName(event.target.src);
 
             showFullScreenImage(imageUrl, imageTitle, overlay, zoomedImage, zoomedImageBlock, zoomedTitle);
         });
     });
 
-    // Add an event listener to hide the zoomed image when clicking on the overlay
+    // Ajouter un écouteur d'événement pour fermer l'image zoomée en cliquant sur l'overlay
     overlay.addEventListener('click', function(event) {
-        // S'assurer que le clic est bien sur l'overlay et pas sur l'image ou les boutons
         if (event.target === overlay) {
             hideFullScreenImage();
         }
     });
 
-    // Ajout d'un écouteur d'événement pour la touche Échap
+    // Ajouter un écouteur d'événement pour la touche Échap
     document.addEventListener('keydown', function(event) {
         if (event.key === 'Escape' && overlay.style.display === 'block') {
             hideFullScreenImage();
@@ -471,14 +405,7 @@ function initZoomImage() {
     });
 }
 
-
-
-
-
-
-
-
-
+/* Initialisation du bouton "Voir mes travaux" avec animations */
 function initModernButtonVoirTravaux() {
     const button = document.getElementById('button-voir-travaux');
     if (!button) return;
@@ -487,7 +414,7 @@ function initModernButtonVoirTravaux() {
     button.classList.add('pulse-animation');
 
     // Arrêter l'animation de pulse après le premier clic
-    button.addEventListener('click', function() {
+    button.addEventListener('click', function(event) {
         button.classList.remove('pulse-animation');
 
         // Effet de vague au clic
@@ -540,7 +467,7 @@ function initModernButtonVoirTravaux() {
     });
 }
 
-
+/* Fonction pour mettre en évidence le numéro de téléphone */
 function CallMeButtonHightlight(callMeButton) {
     callMeButton.addEventListener('click', function() {
         const telephone = document.getElementById('telephone');
@@ -548,24 +475,29 @@ function CallMeButtonHightlight(callMeButton) {
 
         telephone.scrollIntoView({ behavior: 'smooth' });
         telephone.classList.add('highlight');
+
         setTimeout(() => {
             telephone.classList.remove('highlight');
         }, 5000);
     });
 }
 
-
-/* Fonction pour initialiser le menu burger */
+/* Initialisation du menu mobile */
 function initMobileMenu() {
     const burgerButton = document.getElementById('burger-button');
     const mobileMenu = document.getElementById('mobile-menu');
     const closeButton = document.getElementById('close-menu');
     const body = document.body;
 
+    if (!burgerButton || !mobileMenu) return;
+
     // Créer un overlay pour l'arrière-plan
-    const overlay = document.createElement('div');
-    overlay.className = 'menu-overlay';
-    body.appendChild(overlay);
+    let overlay = document.querySelector('.menu-overlay');
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.className = 'menu-overlay';
+        body.appendChild(overlay);
+    }
 
     // Fonction pour ouvrir le menu
     function openMenu() {
@@ -582,9 +514,7 @@ function initMobileMenu() {
     }
 
     // Écouteurs d'événements
-    if (burgerButton) {
-        burgerButton.addEventListener('click', openMenu);
-    }
+    burgerButton.addEventListener('click', openMenu);
 
     if (closeButton) {
         closeButton.addEventListener('click', closeMenu);
@@ -609,7 +539,7 @@ function initMobileMenu() {
         // Synchroniser le toggle mobile avec le toggle principal
         checkboxMobile.addEventListener('change', function() {
             toggleMode();
-            // Mettre à jour l'état du checkbox principal (s'il existe)
+            // Mettre à jour l'état du checkbox principal
             const checkbox = document.getElementById('checkbox');
             if (checkbox) {
                 checkbox.checked = checkboxMobile.checked;
@@ -617,117 +547,3 @@ function initMobileMenu() {
         });
     }
 }
-
-function debugBurgerMenu() {
-    console.log("=== Débogage du menu burger ===");
-
-    // Vérifier si les éléments du menu burger existent dans le DOM
-    const burgerButton = document.getElementById('burger-button');
-    const mobileMenu = document.getElementById('mobile-menu');
-    const mobileMenuContainer = document.querySelector('.mobile-menu-container');
-
-    console.log("Éléments du menu burger trouvés dans le DOM :");
-    console.log("- Bouton burger (#burger-button):", !!burgerButton);
-    console.log("- Menu mobile (#mobile-menu):", !!mobileMenu);
-    console.log("- Conteneur du menu (.mobile-menu-container):", !!mobileMenuContainer);
-
-    // Vérifier les styles CSS appliqués
-    if (mobileMenuContainer) {
-        const computedStyle = window.getComputedStyle(mobileMenuContainer);
-        console.log("Styles du conteneur du menu burger :");
-        console.log("- display:", computedStyle.display);
-        console.log("- visibility:", computedStyle.visibility);
-        console.log("- opacity:", computedStyle.opacity);
-        console.log("- position:", computedStyle.position);
-        console.log("- z-index:", computedStyle.zIndex);
-
-        // Tester si le media query est actif
-        const isMobile = window.matchMedia("(max-width: 768px)").matches;
-        console.log("- Media query mobile actif:", isMobile);
-
-        // Si le conteneur existe mais n'est pas visible en mode mobile
-        if (isMobile && computedStyle.display === "none") {
-            console.log("⚠️ Problème détecté : Le conteneur existe mais est masqué même en mode mobile");
-            console.log("  → Vérifier que la media query dans le CSS est correcte");
-        }
-    }
-
-    // Vérifier les événements
-    if (burgerButton) {
-        const hasClickListeners = burgerButton.onclick !== null ||
-            burgerButton.getAttribute('onclick') !== null;
-        console.log("Événements :");
-        console.log("- Bouton burger a des gestionnaires d'événements:", hasClickListeners);
-
-        // Simuler temporairement un clic
-        console.log("- Test d'un clic sur le bouton burger...");
-        try {
-            // Créer un événement de clic et le dispatcher
-            const clickEvent = new MouseEvent('click', {
-                bubbles: true,
-                cancelable: true,
-                view: window
-            });
-
-            // Mémoriser l'état actuel pour voir s'il change
-            const menuVisibleBefore = mobileMenu && window.getComputedStyle(mobileMenu).right !== "-100%";
-
-            // Dispatcher l'événement
-            burgerButton.dispatchEvent(clickEvent);
-
-            // Vérifier si l'état a changé
-            setTimeout(() => {
-                const menuVisibleAfter = mobileMenu && window.getComputedStyle(mobileMenu).right !== "-100%";
-                console.log("  → Clic simulé résultat:", menuVisibleBefore !== menuVisibleAfter ? "Menu a changé d'état" : "Aucun effet visible");
-
-                // Si le test a ouvert le menu, le refermer
-                if (!menuVisibleBefore && menuVisibleAfter && mobileMenu) {
-                    mobileMenu.classList.remove('open');
-                    console.log("  → Menu refermé après le test");
-                }
-            }, 100);
-        } catch (e) {
-            console.log("  → Erreur lors du test de clic:", e.message);
-        }
-    }
-
-    // Vérifier l'initialisation du menu mobile
-    console.log("Fonction initMobileMenu :");
-    console.log("- Existe:", typeof initMobileMenu === 'function');
-
-    if (typeof initMobileMenu === 'function') {
-        console.log("- initMobileMenu est appelée dans DOMContentLoaded:",
-            document.readyState === "complete" ? "Document déjà chargé" : "Document en cours de chargement");
-    }
-
-    console.log("=== Fin du débogage du menu burger ===");
-
-    // Suggérer des corrections
-    console.log("\nSuggestions pour résoudre les problèmes :");
-
-    if (!mobileMenuContainer) {
-        console.log("1. Vérifier que le HTML du menu burger est bien présent dans header.html");
-        console.log("   → Ajouter le code HTML du menu burger juste après <header class=\"header\">");
-    }
-
-    if (mobileMenuContainer && window.getComputedStyle(mobileMenuContainer).display === "none" &&
-        window.matchMedia("(max-width: 768px)").matches) {
-        console.log("2. Corriger la règle CSS qui masque le conteneur du menu burger en mode mobile");
-        console.log("   → Vérifier dans globals.css la media query et la règle pour .mobile-menu-container");
-    }
-
-    if (!burgerButton || !mobileMenu) {
-        console.log("3. Vérifier que les IDs 'burger-button' et 'mobile-menu' sont correctement définis");
-    }
-
-    if (typeof initMobileMenu !== 'function') {
-        console.log("4. Vérifier que la fonction initMobileMenu est bien définie dans script.js");
-        console.log("   → Assurez-vous que le code JavaScript du menu burger est inclus");
-    }
-}
-
-// Exécuter le débogage après le chargement complet de la page
-window.addEventListener('load', function() {
-    // Attendre un peu pour s'assurer que tout est initialisé
-    setTimeout(debugBurgerMenu, 500);
-});
