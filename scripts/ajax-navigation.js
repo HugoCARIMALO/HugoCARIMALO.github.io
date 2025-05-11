@@ -86,6 +86,11 @@ function initAjaxNavigation() {
         if (newContent && mainContent) {
             console.log("Insertion du nouveau contenu");
             mainContent.innerHTML = newContent;
+
+            // S'assurer que le contenu est visible immédiatement si l'indicateur n'existe pas
+            if (!indicator) {
+                mainContent.style.opacity = '1';
+            }
         }
 
         if (indicator) {
@@ -100,7 +105,9 @@ function initAjaxNavigation() {
 
                 // Maintenant, afficher le contenu avec une transition douce
                 if (mainContent) {
+                    // Restaurer la transition normale
                     mainContent.style.transition = 'opacity 0.4s ease';
+                    // S'assurer que l'opacité est définie à 1
                     mainContent.style.opacity = '1';
                 }
 
@@ -110,10 +117,25 @@ function initAjaxNavigation() {
         } else {
             // Si pas d'indicateur, afficher quand même le contenu
             if (mainContent) {
+                // Restaurer la transition normale
                 mainContent.style.transition = 'opacity 0.4s ease';
+                // S'assurer que l'opacité est définie à 1
                 mainContent.style.opacity = '1';
             }
             document.body.style.overflow = '';
+        }
+    }
+
+// Ajouter également une fonction de sécurité à exécuter après le chargement complet
+// Ajouter cette fonction à la fin de scripts/ajax-navigation.js
+
+    function ensureContentVisibility() {
+        // Fonction de sécurité pour s'assurer que le contenu est toujours visible
+        const mainContent = document.getElementById('main-content');
+        if (mainContent && window.getComputedStyle(mainContent).opacity < '1') {
+            console.log("Correction d'opacité appliquée");
+            mainContent.style.transition = 'opacity 0.4s ease';
+            mainContent.style.opacity = '1';
         }
     }
 
@@ -427,4 +449,18 @@ function reinitializeScripts() {
             console.warn(`La fonction ${funcName} n'est pas définie`);
         }
     });
+
+    // Ajout de la vérification de visibilité après toutes les initialisations
+    setTimeout(ensureContentVisibility, 1000);
+    setTimeout(ensureContentVisibility, 2000); // Double vérification après 2 secondes
+}
+
+function ensureContentVisibility() {
+    // Fonction de sécurité pour s'assurer que le contenu est toujours visible
+    const mainContent = document.getElementById('main-content');
+    if (mainContent && window.getComputedStyle(mainContent).opacity < '1') {
+        console.log("Correction d'opacité appliquée");
+        mainContent.style.transition = 'opacity 0.4s ease';
+        mainContent.style.opacity = '1';
+    }
 }
