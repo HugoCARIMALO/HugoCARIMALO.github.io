@@ -411,6 +411,7 @@ function reinitializeScripts() {
                     if (typeof initZoomImage === 'function') initZoomImage();
                     if (typeof initLeftRightButtonForFullScreenImage === 'function')
                         initLeftRightButtonForFullScreenImage(imageMap);
+                    if (typeof enhanceCardScrolling == 'function') enhanceCardScrolling();
                 }).catch(err => console.error('Erreur lors du chargement des images:', err));
             }
 

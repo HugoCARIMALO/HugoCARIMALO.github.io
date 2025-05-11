@@ -594,3 +594,114 @@ function initMobileMenu() {
         });
     }
 }
+
+/**
+ * Fonction à ajouter dans script.js pour améliorer le défilement sur mobile
+ */
+function enhanceCardScrolling() {
+    // Ne s'applique que sur mobile
+    if (window.innerWidth > 768) return;
+
+    // Sélectionner tous les conteneurs de cartes
+    const cardContainers = document.querySelectorAll('.cardContainer');
+
+    cardContainers.forEach(container => {
+        // Vérifier si le conteneur est déjà initialisé
+        if (container.dataset.scrollEnhanced) return;
+
+        // Marquer le conteneur comme initialisé
+        container.dataset.scrollEnhanced = true;
+
+        // Indicateur pour savoir si on est en train de défiler
+        let isScrolling = false;
+        let startX, startScrollLeft;
+
+        // Événement pour commencer le défilement manuel
+        container.addEventListener('mousedown', function(e) {
+            isScrolling = true;
+            startX = e.pageX - container.offsetLeft;
+            startScrollLeft = container.scrollLeft;
+            container.style.cursor = 'grabbing';
+        });
+
+        // Événement tactile pour mobiles/tablettes
+        container.addEventListener('touchstart', function(e) {
+            isScrolling = true;
+            startX = e.touches[0].pageX - container.offsetLeft;
+            startScrollLeft = container.scrollLeft;
+        }, { passive: true });
+
+        // Défilement en fonction du mouvement
+        container.addEventListener('mousemove', function(e) {
+            if (!isScrolling) return;
+            e.preventDefault();
+            const x = e.pageX - container.offsetLeft;
+            const walk = (x - startX) * 2; // Vitesse de défilement
+            container.scrollLeft = startScrollLeft - walk;
+        });
+
+        // Événement tactile pour le défilement
+        container.addEventListener('touchmove', function(e) {
+            if (!isScrolling) return;
+            const x = e.touches[0].pageX - container.offsetLeft;
+            const walk = (x - startX) * 2; // Vitesse de défilement
+            container.scrollLeft = startScrollLeft - walk;
+        }, { passive: true });
+
+        // Arrêter le défilement
+        container.addEventListener('mouseup', function() {
+            isScrolling = false;
+            container.style.cursor = 'grab';
+        });
+
+        container.addEventListener('mouseleave', function() {
+            isScrolling = false;
+            container.style.cursor = '';
+        });
+
+        container.addEventListener('touchend', function() {
+            isScrolling = false;
+        });
+
+        // Appliquer un style "grab" pour indiquer que le défilement est possible
+        container.style.cursor = 'grab';
+
+        // Flèches d'indication de défilement (optionnel)
+        if (container.scrollWidth > container.clientWidth) {
+            const scrollHint = document.createElement('div');
+            scrollHint.className = 'scroll-hint';
+            scrollHint.innerHTML = '<span>←</span><span>→</span>';
+            scrollHint.style.cssText = `
+                position: absolute;
+                right: 15px;
+                top: 50%;
+                transform: translateY(-50%);
+                background: rgba(0,0,0,0.5);
+                color: white;
+                padding: 5px 10px;
+                border-radius: 20px;
+                font-size: 18px;
+                opacity: 0.7;
+                pointer-events: none;
+                z-index: 2;
+            `;
+
+            // Ajouter l'indication et la faire disparaître après quelques secondes
+            container.style.position = 'relative';
+            container.appendChild(scrollHint);
+
+            setTimeout(() => {
+                scrollHint.style.opacity = '0';
+                scrollHint.style.transition = 'opacity 0.5s ease';
+
+                // Supprimer après la transition
+                setTimeout(() => {
+                    if (scrollHint.parentNode) {
+                        scrollHint.parentNode.removeChild(scrollHint);
+                    }
+                }, 500);
+            }, 3000);
+        }
+    });
+}
+
