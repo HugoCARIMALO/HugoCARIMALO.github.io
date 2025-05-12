@@ -23,7 +23,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 /* Fonction pour charger le header et le footer avec le toggle */
-/* Fonction pour charger le header et le footer avec le toggle */
 async function loadHeaderFooter() {
     try {
         // Récupérer le contenu du header et du footer
@@ -51,6 +50,9 @@ async function loadHeaderFooter() {
 
         // Initialiser le numéro de téléphone
         initPhoneNumber();
+
+        // Améliorer le footer sur mobile
+        enhanceFooterForMobile();
     } catch (error) {
         console.error("Erreur lors du chargement du header ou du footer", error);
     }
@@ -782,5 +784,59 @@ function initPhoneNumber() {
                 .catch(err => console.error('Erreur lors de la copie:', err));
         });
     }
+}
+
+/**
+ * Fonction pour améliorer l'expérience du footer sur les appareils mobiles
+ */
+function enhanceFooterForMobile() {
+    // Vérifier si on est sur mobile
+    if (window.innerWidth > 768) return;
+
+    // Améliorer l'apparence du numéro de téléphone
+    const telephoneElement = document.getElementById('telephone');
+
+    if (telephoneElement) {
+        // Assurer que le téléphone a un style distinct
+        telephoneElement.style.position = 'relative';
+
+        // Ajouter un feedback visuel lors du tap
+        telephoneElement.addEventListener('touchstart', function() {
+            this.style.backgroundColor = 'rgba(220, 201, 175, 0.4)';
+        });
+
+        telephoneElement.addEventListener('touchend', function() {
+            this.style.backgroundColor = '';
+        });
+    }
+
+    // Améliorer les icônes pour s'assurer qu'elles sont bien chargées
+    const footerIcons = document.querySelectorAll('.footer-info-img');
+    footerIcons.forEach(icon => {
+        // Vérifier si l'image est chargée
+        if (!icon.complete) {
+            icon.onload = function() {
+                // Assurer que l'icône est bien dimensionnée après chargement
+                this.style.width = '24px';
+                this.style.height = '24px';
+            };
+        } else {
+            // Si déjà chargée, appliquer directement les styles
+            icon.style.width = '24px';
+            icon.style.height = '24px';
+        }
+    });
+
+    // Ajouter un effet de feedback tactile à tous les éléments du footer
+    const footerElements = document.querySelectorAll('.footer-text');
+    footerElements.forEach(element => {
+        element.addEventListener('touchstart', function() {
+            this.style.transform = 'scale(0.98)';
+        });
+
+        element.addEventListener('touchend', function() {
+            this.style.transform = '';
+        });
+    });
 }
 

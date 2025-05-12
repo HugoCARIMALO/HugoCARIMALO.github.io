@@ -401,6 +401,11 @@ function reinitializeScripts() {
         initMobileMenu();
     }
 
+    // Améliorer le footer sur mobile
+    if (typeof enhanceFooterForMobile === 'function') {
+        enhanceFooterForMobile();
+    }
+
     // Scripts spécifiques aux pages
     switch(pageName) {
         case '':
@@ -448,7 +453,8 @@ function reinitializeScripts() {
         'initLightDarkMode',
         'toggleMode',
         'setSVGColor',
-        'CallMeButtonHightlight'
+        'CallMeButtonHightlight',
+        'enhanceFooterForMobile'  // Ajout de la nouvelle fonction
     ];
 
     functions.forEach(funcName => {
@@ -461,6 +467,7 @@ function reinitializeScripts() {
     setTimeout(ensureContentVisibility, 1000);
     setTimeout(ensureContentVisibility, 2000); // Double vérification après 2 secondes
 }
+
 
 function ensureContentVisibility() {
     // Fonction de sécurité pour s'assurer que le contenu est toujours visible

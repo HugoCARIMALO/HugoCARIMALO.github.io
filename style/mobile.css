@@ -181,8 +181,9 @@
     /* Footer */
     .footer {
         flex-direction: column;
-        padding: 5%;
+        padding: 30px 20px;
         gap: 30px;
+        background-color: var(--footer);
     }
 
     .footer-list {
@@ -196,6 +197,76 @@
 
     .footer-contact-top input {
         width: 100%;
+    }
+
+    /* Modifications pour le footer sur mobile */
+    .footer .footer-list:nth-child(2) {
+        width: 100%;
+        margin: 0 auto;
+        text-align: center;
+    }
+
+    .footer-text {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 15px 0;
+        padding: 10px;
+        font-size: 18px;
+        border-radius: 8px;
+        transition: background-color 0.3s ease;
+    }
+
+    .footer-text:hover, .footer-text:active {
+        background-color: rgba(220, 201, 175, 0.2);
+    }
+
+    .footer-info-img {
+        width: 24px;
+        height: 24px;
+        margin-right: 12px;
+        vertical-align: middle;
+    }
+
+    .footer-title {
+        font-size: 28px;
+        text-align: center;
+        margin: 15px 0;
+        padding-bottom: 10px;
+        border-bottom: 1px solid var(--sand);
+    }
+
+    #telephone {
+        position: relative;
+        color: var(--sand);
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    #telephone.highlight {
+        background-color: rgba(220, 201, 175, 0.2);
+        animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+        0% { background-color: rgba(220, 201, 175, 0.2); }
+        50% { background-color: rgba(220, 201, 175, 0.4); }
+        100% { background-color: rgba(220, 201, 175, 0.2); }
+    }
+
+    #telephone::after {
+        content: 'Appeler';
+        position: absolute;
+        right: 10px;
+        bottom: -5px;
+        background-color: var(--sand);
+        color: var(--navy);
+        font-size: 12px;
+        font-weight: bold;
+        padding: 3px 8px;
+        border-radius: 12px;
+        opacity: 1;
+        transform: scale(1);
     }
 
     /* Page Contact */
