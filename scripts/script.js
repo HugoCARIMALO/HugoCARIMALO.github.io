@@ -23,6 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 /* Fonction pour charger le header et le footer avec le toggle */
+/* Fonction pour charger le header et le footer avec le toggle */
 async function loadHeaderFooter() {
     try {
         // Récupérer le contenu du header et du footer
@@ -47,6 +48,9 @@ async function loadHeaderFooter() {
         for (let i = 0; i < callMeButtons.length; i++) {
             CallMeButtonHightlight(callMeButtons[i]);
         }
+
+        // Initialiser le numéro de téléphone
+        initPhoneNumber();
     } catch (error) {
         console.error("Erreur lors du chargement du header ou du footer", error);
     }
@@ -519,8 +523,12 @@ function CallMeButtonHightlight(callMeButton) {
         telephone.scrollIntoView({ behavior: 'smooth' });
         telephone.classList.add('highlight');
 
+        // Ajouter une animation de pulsation
+        telephone.classList.add('pulse-animation');
+
         setTimeout(() => {
             telephone.classList.remove('highlight');
+            telephone.classList.remove('pulse-animation');
         }, 5000);
     });
 }
@@ -703,5 +711,65 @@ function enhanceCardScrolling() {
             }, 3000);
         }
     });
+}
+
+/* Fonction pour détecter si l'utilisateur est sur un appareil mobile */
+function isMobileDevice() {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+        (window.innerWidth <= 768);
+}
+
+/* Fonction pour initialiser le comportement du numéro de téléphone */
+function initPhoneNumber() {
+    const telephoneElement = document.getElementById('telephone');
+
+    if (!telephoneElement) return;
+
+    // Si c'est un appareil mobile, ajouter le lien d'appel
+    if (isMobileDevice()) {
+        telephoneElement.setAttribute('href', 'tel:0668630716');
+        telephoneElement.classList.add('mobile-phone');
+    } else {
+        // Sur desktop, copier le numéro dans le presse-papier au clic
+        telephoneElement.removeAttribute('href'); // Enlever href s'il existe
+        telephoneElement.style.cursor = 'pointer';
+
+        telephoneElement.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            // Extraire le numéro de téléphone du texte
+            const phoneNumber = this.textContent.trim().replace(/[^0-9.]/g, '');
+
+            // Copier dans le presse-papier
+// Copier dans le presse-papier
+            navigator.clipboard.writeText(phoneNumber)
+                .then(() => {
+                    // Notifier l'utilisateur
+                    const notification = document.createElement('div');
+                    notification.className = 'copy-notification';
+                    notification.textContent = 'Numéro copié !';
+                    document.body.appendChild(notification);
+
+                    // Animer l'élément téléphone
+                    this.classList.add('copied');
+
+                    // Forcer un reflow avant d'ajouter la classe active
+                    void notification.offsetWidth;
+                    notification.classList.add('active');
+
+                    // Supprimer après animation
+                    setTimeout(() => {
+                        notification.classList.add('fade-out');
+                        setTimeout(() => {
+                            if (notification.parentNode) {
+                                notification.parentNode.removeChild(notification);
+                            }
+                            this.classList.remove('copied');
+                        }, 500);
+                    }, 2000);
+                })
+                .catch(err => console.error('Erreur lors de la copie:', err));
+        });
+    }
 }
 

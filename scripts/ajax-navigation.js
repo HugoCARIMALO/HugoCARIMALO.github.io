@@ -412,6 +412,7 @@ function reinitializeScripts() {
                     if (typeof initLeftRightButtonForFullScreenImage === 'function')
                         initLeftRightButtonForFullScreenImage(imageMap);
                     if (typeof enhanceCardScrolling == 'function') enhanceCardScrolling();
+                    if (typeof initPhoneNumber === 'function') initPhoneNumber();
                 }).catch(err => console.error('Erreur lors du chargement des images:', err));
             }
 

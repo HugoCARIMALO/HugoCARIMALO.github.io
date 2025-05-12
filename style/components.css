@@ -366,3 +366,95 @@ input:-webkit-autofill:focus {
     transform: translateY(-2px);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
+
+/* Styles pour la notification de copie */
+.copy-notification {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    /* Utiliser seulement translateX pour le centrage horizontal, pas dans l'animation */
+    transform: translateX(-50%);
+    background-color: var(--navy);
+    color: var(--sand);
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    /* Ne pas utiliser d'animation forwards qui pourrait causer des problèmes */
+    opacity: 0;
+    margin-bottom: -10px;
+    transition: opacity 0.3s ease, margin-bottom 0.3s ease;
+}
+
+/* Utiliser une classe active au lieu d'animations */
+.copy-notification.active {
+    opacity: 1;
+    margin-bottom: 0;
+}
+
+.copy-notification.fade-out {
+    opacity: 0;
+    margin-bottom: -10px;
+}
+
+/* Effets sur le numéro de téléphone */
+#telephone {
+    position: relative;
+    padding: 5px;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+/* Effet de copie sur desktop */
+#telephone.copied {
+    background-color: rgba(220, 201, 175, 0.3);
+    animation: pulseHighlight 1s ease;
+}
+
+@keyframes pulseHighlight {
+    0% { background-color: rgba(220, 201, 175, 0.3); }
+    50% { background-color: rgba(220, 201, 175, 0.6); }
+    100% { background-color: rgba(220, 201, 175, 0.3); }
+}
+
+/* Styles spécifiques pour mobile */
+.mobile-phone {
+    text-decoration: underline;
+    font-weight: 600;
+}
+
+/* Indication visuelle de l'action */
+#telephone::after {
+    content: 'Copier';
+    position: absolute;
+    background-color: var(--sand);
+    color: var(--navy);
+    font-size: 12px;
+    padding: 3px 8px;
+    border-radius: 10px;
+    right: -5px;
+    bottom: -5px;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: all 0.3s ease;
+    pointer-events: none;
+}
+
+#telephone:hover::after {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Sur appareils mobiles, montrer "Appeler" au lieu de "Copier" */
+.mobile-phone::after {
+    content: 'Appeler' !important;
+}
+
+@media screen and (max-width: 768px) {
+    #telephone::after {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
