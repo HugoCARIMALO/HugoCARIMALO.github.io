@@ -197,9 +197,14 @@ function initAjaxNavigation() {
             if (!target || target === document.body) return;
         }
 
-        // Ne pas traiter les liens externes, les ancres ou les mailto
+        // Ne pas traiter les liens externes, les ancres, les mailto ou les tel
         const url = target.getAttribute('href');
-        if (!url || url.startsWith('#') || url.startsWith('http') || url.startsWith('mailto:')) {
+        if (!url ||
+            url.startsWith('#') ||
+            url.startsWith('http') ||
+            url.startsWith('mailto:') ||
+            url.startsWith('tel:') ||  // Ajouter cette ligne
+            target.hasAttribute('data-bypass-ajax')) { // Ajouter cette ligne
             return;
         }
 

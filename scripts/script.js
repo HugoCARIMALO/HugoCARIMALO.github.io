@@ -725,13 +725,25 @@ function initPhoneNumber() {
 
     if (!telephoneElement) return;
 
-    // Si c'est un appareil mobile, ajouter le lien d'appel
+    // Si c'est un appareil mobile, configurer le lien d'appel
     if (isMobileDevice()) {
         telephoneElement.setAttribute('href', 'tel:0668630716');
         telephoneElement.classList.add('mobile-phone');
+
+        // Important: Empêcher la navigation AJAX pour les liens téléphoniques
+        telephoneElement.setAttribute('data-bypass-ajax', 'true');
+
+        // Écouter le clic directement pour éviter les conflits
+        telephoneElement.addEventListener('click', function(e) {
+            // Empêcher la gestion par l'AJAX
+            e.stopPropagation();
+
+            // Naviguer directement vers le lien téléphonique
+            window.location.href = this.getAttribute('href');
+        });
     } else {
         // Sur desktop, copier le numéro dans le presse-papier au clic
-        telephoneElement.removeAttribute('href'); // Enlever href s'il existe
+        telephoneElement.removeAttribute('href');
         telephoneElement.style.cursor = 'pointer';
 
         telephoneElement.addEventListener('click', function(e) {
@@ -741,7 +753,6 @@ function initPhoneNumber() {
             const phoneNumber = this.textContent.trim().replace(/[^0-9.]/g, '');
 
             // Copier dans le presse-papier
-// Copier dans le presse-papier
             navigator.clipboard.writeText(phoneNumber)
                 .then(() => {
                     // Notifier l'utilisateur
