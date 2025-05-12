@@ -364,3 +364,21 @@
         min-width: 220px;
     }
 }
+
+@media screen and (max-width: 900px) and (min-width: 769px) {
+    .header {
+        padding: 15px 2%; /* Réduire le padding horizontal */
+    }
+
+    .menu {
+        gap: 20px; /* Réduire l'espacement entre les éléments du menu */
+    }
+
+    .box-right {
+        min-width: auto; /* Permettre à la boîte de droite de rétrécir */
+    }
+
+    .theme-switch-wrapper {
+        margin: 25px 5px; /* Réduire les marges */
+    }
+}

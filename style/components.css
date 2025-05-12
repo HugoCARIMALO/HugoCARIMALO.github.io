@@ -7,13 +7,14 @@
 }
 
 .btn-2 {
-    font-size: 19px;
+    font-size: clamp(16px, 1.5vw, 19px);
     font-weight: 600;
     line-height: 45px;
     max-width: 160px;
     text-transform: uppercase;
     color: var(--button-header);
     letter-spacing: 1px;
+    white-space: nowrap;
 }
 
 .btn-2:hover,

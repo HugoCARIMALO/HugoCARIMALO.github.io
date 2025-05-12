@@ -15,15 +15,16 @@
 }
 
 .menu {
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     flex-direction: row;
-    min-width: 375px;
-    width: 35%;
+    min-width: auto;
+    width: auto;
     display: flex;
     justify-content: center;
-    gap: 50px;
+    gap: clamp(20px, 4vw, 50px);
     align-items: center;
     text-align: center;
+    margin: 0 20px;
 }
 
 .box-right {
