@@ -47,6 +47,10 @@
     --text-hover: var(--floral-white);
 
     --about-description: var(--floral-white);
+
+    --mobile-menu-bg: var(--chambray);
+    --mobile-menu-text: var(--sand);
+    --mobile-menu-close: var(--sand);
 }
 
 .light-mode {
@@ -98,4 +102,8 @@
     --text-hover: var(--floral-white);
 
     --about-description: var(--navy);
+
+    --mobile-menu-bg: var(--floral-white);
+    --mobile-menu-text: var(--navy);
+    --mobile-menu-close: var(--navy);
 }
