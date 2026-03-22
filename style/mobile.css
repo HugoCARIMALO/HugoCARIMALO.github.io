@@ -33,6 +33,13 @@
         display: none;
     }
 
+    /* Header normal (non transparent) sur les pages about et contact */
+    .page-about .header,
+    .page-contact .header {
+        position: relative;
+        background-color: var(--header);
+    }
+
     /* Menu Burger */
     .mobile-menu-container {
         display: block !important;
@@ -265,8 +272,8 @@
     /* Footer */
     .footer {
         flex-direction: column;
-        padding: 30px 20px;
-        gap: 30px;
+        padding: 15px 20px;
+        gap: 10px;
         background-color: var(--footer);
     }
 
@@ -294,9 +301,9 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        margin: 15px 0;
-        padding: 10px;
-        font-size: 18px;
+        margin: 0;
+        padding: 6px;
+        font-size: 16px;
         border-radius: 8px;
         transition: background-color 0.3s ease;
     }
@@ -313,10 +320,10 @@
     }
 
     .footer-title {
-        font-size: 28px;
+        font-size: 24px;
         text-align: center;
-        margin: 15px 0;
-        padding-bottom: 10px;
+        margin: 5px 0;
+        padding-bottom: 5px;
         border-bottom: 1px solid var(--sand);
     }
 
@@ -339,18 +346,7 @@
     }
 
     #telephone::after {
-        content: 'Appeler';
-        position: absolute;
-        right: 10px;
-        bottom: -5px;
-        background-color: var(--sand);
-        color: var(--navy);
-        font-size: 12px;
-        font-weight: bold;
-        padding: 3px 8px;
-        border-radius: 12px;
-        opacity: 1;
-        transform: scale(1);
+        display: none;
     }
 
     /* Page Contact */
@@ -380,18 +376,43 @@
     /* Page À propos */
     .about {
         flex-direction: column;
-        padding: 5%;
-        text-align: center;
+        padding: 8px 20px 10px !important;
+        text-align: left;
+    }
+
+    .about-title {
+        display: block !important;
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--h1);
+        margin: 10px 0;
+        text-align: left;
+        white-space: nowrap;
+    }
+
+    .about-bonjour-desktop {
+        display: none;
+    }
+
+    .about-photo-wrapper {
+        width: 100% !important;
+        height: 180px;
+        overflow: hidden;
+        border-radius: 8px;
+        margin-bottom: 15px;
     }
 
     .about .image {
-        width: 70%;
-        margin-bottom: 20px;
+        width: 100% !important;
+        height: auto !important;
+        border-radius: 8px;
+        margin-top: -5%;
     }
 
     .about .description {
         width: 100%;
-        font-size: 16px;
+        font-size: 14px;
+        text-align: left;
     }
 
     /* Ajustements pour les images plein écran */
@@ -450,7 +471,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        margin: 10px 0;
+        margin: 0;
     }
 
     /* Ajuster la taille des icônes en mobile */

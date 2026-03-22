@@ -378,6 +378,11 @@ function reinitializeScripts() {
         enhanceFooterForMobile();
     }
 
+    // Mettre à jour la classe du body selon la page
+    document.body.classList.remove('page-about', 'page-contact');
+    if (pageName === 'about.html') document.body.classList.add('page-about');
+    if (pageName === 'contact.html') document.body.classList.add('page-contact');
+
     // Scripts spécifiques aux pages
     switch(pageName) {
         case '':

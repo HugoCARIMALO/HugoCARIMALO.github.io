@@ -28,13 +28,17 @@
 #main-content {
     opacity: 1;
     transition: opacity 0.4s ease;
-    min-height: 300px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
-#main-content {
-    opacity: 1;
-    transition: opacity 0.4s ease;
-    min-height: 300px; /* Hauteur minimale pour éviter le rétrécissement */
+.page-about #main-content {
+    background-color: var(--landing-page);
+}
+
+.page-contact #main-content {
+    background-color: var(--contact);
 }
 
 /* Améliorer les transitions pour les chargements de page */

@@ -1,13 +1,29 @@
 .about {
     display: flex;
+    flex: 1;
     flex-wrap: wrap;
     justify-content: space-around;
     padding: 3% 3%;
     background-color: var(--landing-page);
+    align-items: center;
+    align-content: center;
+}
+
+.about-title {
+    display: none;
+}
+
+.about-bonjour-desktop {
+    font-weight: 700;
+}
+
+.about-photo-wrapper {
+    width: 30%;
+    overflow: visible;
 }
 
 .image {
-    width: 30%;
+    width: 100%;
     height: auto;
     border-radius: 15%;
     border-width: 0;
@@ -18,8 +34,4 @@
     font-weight: 400;
     color: var(--about-description);
     font-size: 20px;
-}
-
-.span {
-    font-weight: 700;
 }
