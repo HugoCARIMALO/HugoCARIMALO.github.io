@@ -4,16 +4,29 @@
         display: none;
     }
 
-    .header .logo {
-        width: 120px;
-        height: 40px;
-        margin: 10px;
-    }
 
     .header {
-        flex-direction: row-reverse;
+        flex-direction: row;
         justify-content: space-between;
         padding: 5px 15px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 10;
+        background-color: transparent;
+        box-sizing: border-box;
+        overflow: hidden;
+    }
+
+    .header .logo {
+        display: none !important;
+    }
+
+    .header .header-seal {
+        display: block;
+        width: 45px;
+        height: 45px;
     }
 
     .box-right {
@@ -155,20 +168,87 @@
         visibility: visible;
     }
 
-    /* Landing page */
+    /* Landing page mobile */
+    .landing-group,
+    .landing-logo {
+        display: none !important;
+    }
+
+    .landing-mobile {
+        display: flex !important;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        max-width: 100%;
+        padding: 30px 20px;
+        gap: 10px;
+        box-sizing: border-box;
+        margin: 0 auto;
+    }
+
     .landing-page {
         flex-direction: column;
-        padding: 5% 5%;
+        flex-wrap: nowrap;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        position: relative;
+        height: 400px;
+        min-height: unset;
+        background-color: transparent !important;
+        overflow: hidden;
     }
 
-    .landing-logo {
-        width: 80%;
-        min-width: 220px;
+    .landing-mobile-bg {
+        display: block !important;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: 0;
     }
 
-    .landing-group h1 {
-        font-size: 32px;
+    .landing-mobile-overlay {
+        display: block !important;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: var(--landing-mobile-overlay);
+        z-index: 1;
+    }
+
+    .landing-mobile-logo {
+        width: 70%;
+        max-width: 280px;
+        margin-top: 20px;
+    }
+
+    .landing-mobile-subtitle {
+        color: var(--sand);
+        font-size: 14px;
+        letter-spacing: 3px;
+        margin: 5px 0;
         text-align: center;
+    }
+
+    .landing-mobile-services {
+        color: var(--floral-white);
+        font-size: 12px;
+        letter-spacing: 1px;
+        margin: 5px 0 15px;
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    .landing-mobile .button-voir-travaux {
+        margin-top: 10px;
     }
 
     /* Section Travaux */
@@ -454,6 +534,20 @@
     .theme-switch-wrapper {
         margin: 25px 5px; /* Réduire les marges */
     }
+}
+
+/* Landing mobile : hidden by default (desktop) */
+.landing-mobile {
+    display: none;
+}
+
+.header-seal {
+    display: none;
+}
+
+.landing-mobile-bg,
+.landing-mobile-overlay {
+    display: none;
 }
 
 /* Ajout dans style/mobile.css */

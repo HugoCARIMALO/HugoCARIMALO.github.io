@@ -459,6 +459,17 @@ function initModernButtonVoirTravaux() {
     const button = document.getElementById('button-voir-travaux');
     if (!button) return;
 
+    // Bouton mobile : même comportement scroll
+    const buttonMobile = document.getElementById('button-voir-travaux-mobile');
+    if (buttonMobile) {
+        buttonMobile.addEventListener('click', function() {
+            const target = document.getElementById('travaux');
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    }
+
     // Ajouter la classe d'animation au chargement
     button.classList.add('pulse-animation');
 

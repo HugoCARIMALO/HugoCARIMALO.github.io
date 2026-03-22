@@ -51,6 +51,8 @@
     --mobile-menu-bg: var(--chambray);
     --mobile-menu-text: var(--sand);
     --mobile-menu-close: var(--sand);
+
+    --landing-mobile-overlay: rgba(0, 24, 76, 0.65);
 }
 
 .light-mode {
@@ -106,4 +108,6 @@
     --mobile-menu-bg: var(--floral-white);
     --mobile-menu-text: var(--navy);
     --mobile-menu-close: var(--navy);
+
+    --landing-mobile-overlay: rgba(0, 24, 76, 0.6);
 }
