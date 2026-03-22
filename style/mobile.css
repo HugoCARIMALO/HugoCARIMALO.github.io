@@ -240,7 +240,7 @@
 
     .landing-mobile-services {
         color: var(--floral-white);
-        font-size: 12px;
+        font-size: 3.5vw;
         letter-spacing: 1px;
         margin: 5px 0 15px;
         text-align: center;
@@ -249,6 +249,7 @@
 
     .landing-mobile .button-voir-travaux {
         margin-top: 10px;
+        font-size: 4.5vw;
     }
 
     /* Section Travaux */
