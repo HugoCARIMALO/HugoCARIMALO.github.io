@@ -97,13 +97,16 @@ function initAjaxNavigation() {
         const newStylesheets = Array.from(htmlDoc.querySelectorAll('link[rel="stylesheet"]'))
             .map(link => link.getAttribute('href'));
 
-        // Trouver les feuilles de style actuelles
+        // Trouver les feuilles de style actuelles (sans query string pour la comparaison)
         const currentStylesheets = Array.from(document.querySelectorAll('link[rel="stylesheet"]'))
-            .map(link => link.getAttribute('href'));
+            .map(link => link.getAttribute('href'))
+            .filter(Boolean);
 
         // Ajouter les feuilles de style manquantes
         newStylesheets.forEach(stylesheet => {
-            if (!currentStylesheets.includes(stylesheet)) {
+            const base = stylesheet.split('?')[0];
+            const alreadyLoaded = currentStylesheets.some(s => s.split('?')[0] === base);
+            if (!alreadyLoaded) {
                 const link = document.createElement('link');
                 link.rel = 'stylesheet';
                 link.href = stylesheet;
@@ -125,16 +128,20 @@ function initAjaxNavigation() {
 
         // Désactiver tous les CSS spécifiques
         Object.values(cssMap).forEach(cssPath => {
-            document.querySelectorAll(`link[href="${cssPath}"]`).forEach(link => {
-                link.disabled = true;
+            document.querySelectorAll('link[rel="stylesheet"]').forEach(link => {
+                if (link.getAttribute('href') && link.getAttribute('href').split('?')[0].endsWith(cssPath)) {
+                    link.disabled = true;
+                }
             });
         });
 
         // Activer uniquement le CSS correspondant à la page actuelle
         const currentPageCss = cssMap[pageName];
         if (currentPageCss) {
-            document.querySelectorAll(`link[href="${currentPageCss}"]`).forEach(link => {
-                link.disabled = false;
+            document.querySelectorAll('link[rel="stylesheet"]').forEach(link => {
+                if (link.getAttribute('href') && link.getAttribute('href').split('?')[0].endsWith(currentPageCss)) {
+                    link.disabled = false;
+                }
             });
             console.log(`CSS activé pour ${pageName}: ${currentPageCss}`);
         }
